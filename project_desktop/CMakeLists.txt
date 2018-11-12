@@ -3,12 +3,22 @@ project(Desktop)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_subdirectory(../project_core build_core)
+set(CORE_PROJECT_PATH "${CMAKE_SOURCE_DIR}/../project_core")
+
+add_subdirectory(${CORE_PROJECT_PATH} build_core)
 
 add_executable(desktop
     src/main.cpp
     src/native_renderer.cpp
     src/native_renderer.h
 )
+
+add_custom_target(copy_resources ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CORE_PROJECT_PATH}/resources
+    ${CMAKE_CURRENT_BINARY_DIR}/resources
+)
+
+add_dependencies(desktop copy_resources)
 
 target_link_libraries(desktop core)

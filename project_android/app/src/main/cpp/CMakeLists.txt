@@ -5,7 +5,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -Wall")
 
 message(${CMAKE_C_FLAGS})
 
-add_subdirectory(../../../../../project_core build_core)
+set(CORE_PROJECT_PATH "../../../../../project_core")
+
+add_subdirectory(${CORE_PROJECT_PATH} build_core)
 
 add_library(a2d_android_native SHARED jni_bindings.cpp native_renderer.h native_renderer.cpp)
 

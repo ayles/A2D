@@ -28,6 +28,15 @@ android {
     }
 }
 
+task copyAssets(type: Copy) {
+    description = 'Copy resources to assets folder'
+    from '../../project_core/resources'
+    into 'src/main/assets'
+}
+
+preBuild.dependsOn copyAssets
+
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:28.0.0'
