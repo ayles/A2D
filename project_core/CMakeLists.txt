@@ -3,11 +3,12 @@ project(Core)
 
 set(CMAKE_CXX_STANDARD 11)
 
-include_directories(../engine/include)
+add_subdirectory(../engine build_engine)
 
 add_library(core
     src/root_component.h
     src/root_component.cpp
 )
 
+target_link_libraries(core a2d)
 target_include_directories(core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

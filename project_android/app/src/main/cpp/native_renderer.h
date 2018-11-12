@@ -7,16 +7,11 @@
 
 #include <A2D/core.h>
 #include <A2D/renderer.h>
+#include <A2D/glsl_shader.h>
 
 #include <GLES2/gl2.h>
 
 #include <iostream>
-#include <A2D/glsl_shader.h>
-#include <android/log.h>
-
-#define  LOG_TAG    "native_renderer"
-#define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
-#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 
 namespace a2d {
 
@@ -30,6 +25,8 @@ namespace a2d {
             if (initialized) return initialized;
 
             a2d::Renderer::Initialize();
+
+            a2d::Engine::GetLogger()->info("{} {}", "OpenGL ES version:", glGetString(GL_VERSION));
 
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -87,8 +84,6 @@ namespace a2d {
 
             glClearColor(a2d::Renderer::clear_color.x, a2d::Renderer::clear_color.y, a2d::Renderer::clear_color.z, a2d::Renderer::clear_color.w);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            LOGI("drawn");
 
             // draw here
             shader->Bind();

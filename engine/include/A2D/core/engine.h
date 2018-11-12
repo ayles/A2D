@@ -10,6 +10,8 @@
 #include <A2D/math.h>
 #include <A2D/core/components/camera.h>
 
+#include <spdlog/spdlog.h>
+
 namespace a2d {
 
 class Engine {
@@ -21,6 +23,7 @@ public:
     static pCamera GetCamera();
     static void SetCamera(pCamera camera);
     static float GetDeltaTime();
+    static std::shared_ptr<spdlog::logger> GetLogger();
 
     Engine() = delete;
 
@@ -37,6 +40,7 @@ private:
     static float delta_time;
     static pObject2D root;
     static pCamera camera;
+    static std::shared_ptr<spdlog::logger> logger;
 };
 
 } //namespace a2d

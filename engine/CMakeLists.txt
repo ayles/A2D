@@ -8,8 +8,8 @@ set(A2D_SOURCES
         src/math/vector3.cpp
         src/math/vector4.cpp
         src/math/matrix4.cpp
-        src/engine.cpp
-        src/object2d.cpp
+        src/core/engine.cpp
+        src/core/object2d.cpp
         src/component.cpp
         src/core/components/sprite.cpp
         src/renderer.cpp
@@ -34,8 +34,8 @@ set(A2D_HEADERS
 add_library(a2d STATIC ${A2D_SOURCES} ${A2D_HEADERS})
 target_include_directories(a2d PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-add_subdirectory(../project_core build_core)
-target_link_libraries(a2d core)
+add_subdirectory(thirdparty/spdlog)
+target_link_libraries(a2d spdlog)
 
 if (ANDROID)
 

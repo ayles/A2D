@@ -22,9 +22,12 @@ bool a2d::Renderer::Initialize() {
 }
 
 bool a2d::Renderer::PrepareDraw()  {
-    float half_height = a2d::Engine::camera->size / 2.0f;
-    float ratio = (float)a2d::Renderer::width / a2d::Renderer::height;
-    a2d::Engine::camera->SetOrtho2D(-half_height * ratio, half_height * ratio, -half_height, half_height);
+    if (a2d::Engine::camera) {
+        float half_height = a2d::Engine::camera->size / 2.0f;
+        float ratio = (float) a2d::Renderer::width / a2d::Renderer::height;
+        a2d::Engine::camera->SetOrtho2D(-half_height * ratio, half_height * ratio, -half_height,
+                                        half_height);
+    }
     return true;
 }
 

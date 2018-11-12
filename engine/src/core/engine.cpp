@@ -5,18 +5,33 @@
 #include <A2D/renderer.h>
 #include <A2D/core/engine.h>
 
+#ifdef __ANDROID__
+#include <spdlog/sinks/android_sink.h>
+#else
+#include <spdlog/sinks/stdout_sinks.h>
+#endif
+
 #include <chrono>
 #include <cmath>
-#include <root_component.h>
+
 
 a2d::pObject2D a2d::Engine::root = new Object2D;
 a2d::pCamera a2d::Engine::camera = nullptr;
+std::shared_ptr<spdlog::logger> a2d::Engine::logger = nullptr;
 float a2d::Engine::delta_time = 0.0f;
 
 bool a2d::Engine::Initialize() {
     // Important for hierarchical activate/disable
     root->is_active = true;
-    root->AddComponent<RootComponent>();
+
+#ifdef __ANDROID__
+    logger = spdlog::android_logger_mt("logger", "a2d_log");
+#else
+    logger = spdlog::stdout_logger_mt("logger");
+#endif
+
+    logger->set_level(spdlog::level::info);
+    logger->set_pattern("%+");
 
     return true;
 }
@@ -73,4 +88,8 @@ a2d::pCamera a2d::Engine::GetCamera() {
 
 void a2d::Engine::SetCamera(a2d::pCamera camera) {
     Engine::camera = camera;
+}
+
+std::shared_ptr<spdlog::logger> a2d::Engine::GetLogger() {
+    return logger;
 }

@@ -5,7 +5,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -Wall")
 
 message(${CMAKE_C_FLAGS})
 
-add_subdirectory(../../../../../Engine engine_build)
+add_subdirectory(../../../../../project_core build_core)
 
 add_library(a2d_android_native SHARED jni_bindings.cpp native_renderer.h native_renderer.cpp)
 
@@ -15,5 +15,5 @@ target_link_libraries(a2d_android_native
     EGL
     GLESv2
     log
-    a2d
+    core
 )

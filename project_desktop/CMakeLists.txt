@@ -3,7 +3,7 @@ project(Desktop)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_subdirectory(../engine engine_build)
+add_subdirectory(../project_core build_core)
 
 add_executable(desktop
     src/main.cpp
@@ -11,4 +11,4 @@ add_executable(desktop
     src/native_renderer.h
 )
 
-target_link_libraries(desktop a2d)
+target_link_libraries(desktop core)

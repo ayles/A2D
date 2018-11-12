@@ -29,17 +29,17 @@ public:
         a2d::Renderer::Initialize();
 
         glfwSetErrorCallback([](int id, const char *description) {
-            std::cerr << description << std::endl;
+            a2d::Engine::GetLogger()->error(description);
         });
 
         if (!glfwInit()) {
-            std::cerr << "Couldn't init glfw" << std::endl;
+            a2d::Engine::GetLogger()->error("Couldn't init glfw");
             return initialized;
         }
 
         window = glfwCreateWindow(640, 480, "A2D", nullptr, nullptr);
         if (!window) {
-            std::cerr << "Couldn't create window" << std::endl;
+            a2d::Engine::GetLogger()->error("Couldn't create window");
             glfwTerminate();
             return initialized;
         }
@@ -51,11 +51,11 @@ public:
         GLenum glew_init_status = glewInit();
 
         if (glew_init_status != GLEW_OK) {
-            std::cerr << glewGetErrorString(glew_init_status) << std::endl;
+            a2d::Engine::GetLogger()->error(glewGetErrorString(glew_init_status));
             return initialized;
         }
 
-        std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
+        a2d::Engine::GetLogger()->info("{} {}", "OpenGL version:", glGetString(GL_VERSION));
 
         auto update_camera = [](GLFWwindow *window, int width, int height) {
             ResolutionChanged(width, height);

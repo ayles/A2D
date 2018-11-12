@@ -32,7 +32,6 @@ public:
 
     void Update() override {
         f += a2d::Engine::GetDeltaTime();
-        std::cout << a2d::Engine::GetDeltaTime() << std::endl;
         if (std::sin(f * 100) < 0) {
             o1->SetLayer(0);
             o2->SetLayer(1);

@@ -7,6 +7,7 @@
 
 #include <A2D/core.h>
 #include <A2D/renderer.h>
+#include <root_component.h>
 #include "native_renderer.h"
 
 #define  LOG_TAG    "a2d_android"
@@ -18,8 +19,10 @@ extern "C" {
 
 JNIEXPORT jboolean JNICALL
 Java_com_selya_a2d_GL2JNI_initialize(JNIEnv *env, jclass type) {
-    return (jboolean) (a2d::Engine::Initialize() &&
-           a2d::NativeRenderer::Initialize());
+    if (!a2d::Engine::Initialize()) return JNI_FALSE;
+    a2d::Engine::GetRoot()->AddComponent<a2d::RootComponent>();
+    if (!a2d::NativeRenderer::Initialize()) return JNI_FALSE;
+    return JNI_TRUE;
 }
 
 JNIEXPORT jboolean JNICALL

@@ -2,38 +2,67 @@
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true" buildAllGenerated="true">
     <generated>
+      <config projectName="Desktop" targetName="ContinuousCoverage" />
       <config projectName="Desktop" targetName="clipboard" />
       <config projectName="Desktop" targetName="simple" />
-      <config projectName="Desktop" targetName="cursor" />
+      <config projectName="Desktop" targetName="NightlyTest" />
       <config projectName="Desktop" targetName="core" />
-      <config projectName="Desktop" targetName="wave" />
-      <config projectName="Desktop" targetName="reopen" />
-      <config projectName="Desktop" targetName="timeout" />
-      <config projectName="Desktop" targetName="title" />
       <config projectName="Desktop" targetName="sharing" />
-      <config projectName="Desktop" targetName="iconify" />
       <config projectName="Desktop" targetName="threads" />
-      <config projectName="Desktop" targetName="lodepng" />
-      <config projectName="Desktop" targetName="icon" />
-      <config projectName="Desktop" targetName="uninstall" />
-      <config projectName="Desktop" targetName="glfw" />
+      <config projectName="Desktop" targetName="ContinuousStart" />
+      <config projectName="Desktop" targetName="NightlyCoverage" />
       <config projectName="Desktop" targetName="events" />
       <config projectName="Desktop" targetName="heightmap" />
-      <config projectName="Desktop" targetName="gears" />
       <config projectName="Desktop" targetName="particles" />
+      <config projectName="Desktop" targetName="gears" />
+      <config projectName="Desktop" targetName="ExperimentalMemCheck" />
       <config projectName="Desktop" targetName="joysticks" />
-      <config projectName="Desktop" targetName="splitview" />
-      <config projectName="Desktop" targetName="a2d" />
+      <config projectName="Desktop" targetName="Nightly" />
+      <config projectName="Desktop" targetName="Experimental" />
       <config projectName="Desktop" targetName="glfwinfo" />
+      <config projectName="Desktop" targetName="spdlog_headers_for_ide" />
+      <config projectName="Desktop" targetName="NightlyBuild" />
+      <config projectName="Desktop" targetName="ExperimentalSubmit" />
+      <config projectName="Desktop" targetName="NightlySubmit" />
+      <config projectName="Desktop" targetName="monitors" />
+      <config projectName="Desktop" targetName="ExperimentalConfigure" />
+      <config projectName="Desktop" targetName="ContinuousSubmit" />
+      <config projectName="Desktop" targetName="cursor" />
+      <config projectName="Desktop" targetName="reopen" />
+      <config projectName="Desktop" targetName="timeout" />
+      <config projectName="Desktop" targetName="wave" />
+      <config projectName="Desktop" targetName="NightlyMemCheck" />
+      <config projectName="Desktop" targetName="title" />
+      <config projectName="Desktop" targetName="iconify" />
+      <config projectName="Desktop" targetName="ExperimentalStart" />
+      <config projectName="Desktop" targetName="ContinuousUpdate" />
+      <config projectName="Desktop" targetName="ExperimentalBuild" />
+      <config projectName="Desktop" targetName="NightlyStart" />
+      <config projectName="Desktop" targetName="ContinuousMemCheck" />
+      <config projectName="Desktop" targetName="lodepng" />
+      <config projectName="Desktop" targetName="NightlyMemoryCheck" />
+      <config projectName="Desktop" targetName="icon" />
+      <config projectName="Desktop" targetName="ContinuousTest" />
+      <config projectName="Desktop" targetName="Continuous" />
+      <config projectName="Desktop" targetName="uninstall" />
+      <config projectName="Desktop" targetName="glfw" />
+      <config projectName="Desktop" targetName="ContinuousConfigure" />
+      <config projectName="Desktop" targetName="ExperimentalCoverage" />
+      <config projectName="Desktop" targetName="splitview" />
+      <config projectName="Desktop" targetName="NightlyUpdate" />
+      <config projectName="Desktop" targetName="a2d" />
       <config projectName="Desktop" targetName="windows" />
       <config projectName="Desktop" targetName="desktop" />
       <config projectName="Desktop" targetName="boing" />
+      <config projectName="Desktop" targetName="ExperimentalUpdate" />
       <config projectName="Desktop" targetName="empty" />
       <config projectName="Desktop" targetName="tearing" />
+      <config projectName="Desktop" targetName="NightlyConfigure" />
       <config projectName="Desktop" targetName="glew" />
+      <config projectName="Desktop" targetName="ContinuousBuild" />
       <config projectName="Desktop" targetName="msaa" />
+      <config projectName="Desktop" targetName="ExperimentalTest" />
       <config projectName="Desktop" targetName="gamma" />
-      <config projectName="Desktop" targetName="monitors" />
     </generated>
   </component>
   <component name="CMakeSettings">
@@ -42,7 +71,30 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="af16b39f-c6ae-4f62-8fa6-64dbe0bd6568" name="Default Changelist" comment="" />
+    <list default="true" id="af16b39f-c6ae-4f62-8fa6-64dbe0bd6568" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../engine/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../engine/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../engine/include/A2D/core/engine.h" beforeDir="false" afterPath="$PROJECT_DIR$/../engine/include/A2D/core/engine.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../engine/src/engine.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../engine/src/core/engine.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../engine/src/glsl_shader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../engine/src/glsl_shader.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../engine/src/object2d.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../engine/src/core/object2d.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../engine/src/renderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../engine/src/renderer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../project_android/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/../project_android/.idea/caches/build_file_checksums.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../project_android/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../project_android/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../project_android/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../project_android/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../project_android/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../project_android/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../project_android/.idea/runConfigurations.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../project_android/.idea/runConfigurations.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../project_android/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../project_android/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../project_android/app/src/main/cpp/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../project_android/app/src/main/cpp/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../project_android/app/src/main/cpp/jni_bindings.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../project_android/app/src/main/cpp/jni_bindings.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../project_android/app/src/main/cpp/native_renderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/../project_android/app/src/main/cpp/native_renderer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../project_core/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../project_core/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../project_core/src/root_component.h" beforeDir="false" afterPath="$PROJECT_DIR$/../project_core/src/root_component.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/native_renderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/native_renderer.h" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -101,99 +153,90 @@
     <session id="-1802645693">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
+          <entry key="project.closed" value="2" />
+          <entry key="project.open.time.4" value="2" />
           <entry key="project.open.time.5" value="1" />
-          <entry key="project.opened" value="1" />
+          <entry key="project.opened" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="cpp" value="7" />
-          <entry key="h" value="12" />
-          <entry key="txt" value="4" />
+          <entry key="cpp" value="14" />
+          <entry key="h" value="20" />
+          <entry key="txt" value="12" />
           <entry key="xutility" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="CMakeLists.txt" value="4" />
-          <entry key="ObjectiveC" value="20" />
+          <entry key="CMakeLists.txt" value="12" />
+          <entry key="ObjectiveC" value="35" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="cpp" value="896" />
-          <entry key="h" value="1036" />
-          <entry key="txt" value="82" />
+          <entry key="cpp" value="1610" />
+          <entry key="h" value="1384" />
+          <entry key="txt" value="174" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="CMakeLists.txt" value="82" />
-          <entry key="ObjectiveC" value="1932" />
+          <entry key="CMakeLists.txt" value="174" />
+          <entry key="ObjectiveC" value="2994" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+    <leaf>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../engine/src/engine.cpp">
+        <entry file="file://$PROJECT_DIR$/src/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="16" column="40" selection-start-line="16" selection-start-column="40" selection-end-line="16" selection-end-column="40" />
+            <state relative-caret-position="204">
+              <caret line="12" column="63" selection-start-line="12" selection-start-column="63" selection-end-line="12" selection-end-column="63" />
               <folding>
-                <element signature="e#42#67#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../project_core/src/root_component.cpp">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../engine/CMakeLists.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1">
-              <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../engine/include/A2D/core/object2d.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="116">
-              <caret line="56" selection-start-line="56" selection-end-line="56" />
-              <folding>
-                <element signature="e#89#117#0" expanded="true" />
-                <element signature="e#839#848#0" expanded="true" />
-                <element signature="e#1379#1388#0" expanded="true" />
+                <element signature="e#42#63#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../engine/src/object2d.cpp">
+        <entry file="file://$PROJECT_DIR$/../project_core/src/root_component.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="39" column="40" selection-start-line="39" selection-start-column="40" selection-end-line="39" selection-end-column="40" />
+            <state relative-caret-position="273">
+              <caret line="22" column="51" selection-start-line="22" selection-start-column="51" selection-end-line="22" selection-end-column="51" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../engine/include/A2D/core/engine.h">
+        <entry file="file://$PROJECT_DIR$/../engine/src/glsl_shader.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
+            <state relative-caret-position="377">
+              <caret line="74" column="31" selection-start-line="74" selection-start-column="31" selection-end-line="74" selection-end-column="31" />
               <folding>
-                <element signature="e#85#112#0" expanded="true" />
+                <element signature="e#42#70#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/native_renderer.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="8" selection-start-line="8" selection-end-line="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/native_renderer.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="850">
+              <caret line="57" column="92" lean-forward="true" selection-start-line="57" selection-start-column="92" selection-end-line="57" selection-end-column="92" />
             </state>
           </provider>
         </entry>
@@ -201,29 +244,44 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../engine/src/renderer.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
+            <state relative-caret-position="-65">
               <caret line="10" selection-start-line="10" selection-end-line="10" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../engine/include/A2D/renderer.h">
+        <entry file="file://$PROJECT_DIR$/../engine/include/A2D/core/engine.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="32" column="70" selection-start-line="32" selection-start-column="70" selection-end-line="32" selection-end-column="70" />
+            <state relative-caret-position="425">
+              <caret line="25" column="54" selection-start-line="25" selection-start-column="54" selection-end-line="25" selection-end-column="54" />
               <folding>
-                <element signature="e#85#106#0" expanded="true" />
+                <element signature="e#85#112#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../engine/src/core/engine.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="289">
+              <caret line="26" column="18" lean-forward="true" selection-start-line="26" selection-start-column="18" selection-end-line="26" selection-end-column="18" />
+              <folding>
+                <element signature="e#42#67#0" expanded="true" />
+                <element signature="e#117#155#0" expanded="true" />
+                <element signature="e#209#226#0" expanded="true" />
+                <element signature="e#621#677#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../project_core/CMakeLists.txt">
+        <entry file="file://$PROJECT_DIR$/../engine/CMakeLists.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="39" selection-start-line="12" selection-start-column="39" selection-end-line="12" selection-end-column="39" />
+            <state relative-caret-position="349">
+              <caret line="37" column="33" selection-start-line="37" selection-start-column="33" selection-end-line="37" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -241,7 +299,12 @@
     <findStrings>
       <find>glble</find>
       <find>clear_color</find>
+      <find>std</find>
+      <find>std::cout</find>
     </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -257,7 +320,6 @@
         <option value="$PROJECT_DIR$/../Engine/src/component.cpp" />
         <option value="$PROJECT_DIR$/src/native_renderer.cpp" />
         <option value="$PROJECT_DIR$/../Engine/include/A2D/core/component.h" />
-        <option value="$PROJECT_DIR$/src/main.cpp" />
         <option value="$PROJECT_DIR$/../Engine/include/A2D/core/components/camera.h" />
         <option value="$PROJECT_DIR$/../Engine/include/A2D/core/engine.h" />
         <option value="$PROJECT_DIR$/src/native_shader.h" />
@@ -276,7 +338,6 @@
         <option value="$PROJECT_DIR$/../Engine/src/glsl_shader.cpp" />
         <option value="$PROJECT_DIR$/../Engine/src/engine.cpp" />
         <option value="$PROJECT_DIR$/../engine/include/A2D/core/intrusive_ptr.h" />
-        <option value="$PROJECT_DIR$/src/native_renderer.h" />
         <option value="$PROJECT_DIR$/../engine/include/A2D/core/component.h" />
         <option value="$PROJECT_DIR$/../engine/include/A2D/core/object2d.h" />
         <option value="$PROJECT_DIR$/../engine/src/object2d.cpp" />
@@ -289,7 +350,12 @@
         <option value="$PROJECT_DIR$/../project_core/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/../engine/src/engine.cpp" />
         <option value="$PROJECT_DIR$/../engine/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/src/main.cpp" />
+        <option value="$PROJECT_DIR$/../engine/include/A2D/core/engine.h" />
         <option value="$PROJECT_DIR$/../project_core/src/root_component.h" />
+        <option value="$PROJECT_DIR$/../engine/src/glsl_shader.cpp" />
+        <option value="$PROJECT_DIR$/src/native_renderer.h" />
+        <option value="$PROJECT_DIR$/../engine/src/core/engine.cpp" />
       </list>
     </option>
   </component>
@@ -300,108 +366,83 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="245" />
     <option name="y" value="10" />
     <option name="width" value="1400" />
     <option name="height" value="1000" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="Desktop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProjectDesktop" type="47feb1d3:ProjectViewModuleNode" />
+              <item name="project_desktop" type="47feb1d3:ProjectViewModuleNode" />
             </path>
             <path>
               <item name="Desktop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProjectDesktop" type="47feb1d3:ProjectViewModuleNode" />
+              <item name="project_desktop" type="47feb1d3:ProjectViewModuleNode" />
               <item name="engine" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Desktop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProjectDesktop" type="47feb1d3:ProjectViewModuleNode" />
-              <item name="engine" type="462c0819:PsiDirectoryNode" />
-              <item name="include" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Desktop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProjectDesktop" type="47feb1d3:ProjectViewModuleNode" />
+              <item name="project_desktop" type="47feb1d3:ProjectViewModuleNode" />
               <item name="engine" type="462c0819:PsiDirectoryNode" />
               <item name="include" type="462c0819:PsiDirectoryNode" />
-              <item name="A2D" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Desktop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProjectDesktop" type="47feb1d3:ProjectViewModuleNode" />
+              <item name="project_desktop" type="47feb1d3:ProjectViewModuleNode" />
               <item name="engine" type="462c0819:PsiDirectoryNode" />
               <item name="include" type="462c0819:PsiDirectoryNode" />
               <item name="A2D" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Desktop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProjectDesktop" type="47feb1d3:ProjectViewModuleNode" />
+              <item name="project_desktop" type="47feb1d3:ProjectViewModuleNode" />
               <item name="engine" type="462c0819:PsiDirectoryNode" />
               <item name="include" type="462c0819:PsiDirectoryNode" />
               <item name="A2D" type="462c0819:PsiDirectoryNode" />
               <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Desktop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProjectDesktop" type="47feb1d3:ProjectViewModuleNode" />
-              <item name="engine" type="462c0819:PsiDirectoryNode" />
-              <item name="include" type="462c0819:PsiDirectoryNode" />
-              <item name="A2D" type="462c0819:PsiDirectoryNode" />
-              <item name="math" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Desktop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProjectDesktop" type="47feb1d3:ProjectViewModuleNode" />
+              <item name="project_desktop" type="47feb1d3:ProjectViewModuleNode" />
               <item name="engine" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Desktop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProjectDesktop" type="47feb1d3:ProjectViewModuleNode" />
+              <item name="project_desktop" type="47feb1d3:ProjectViewModuleNode" />
               <item name="engine" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="core" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Desktop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProjectDesktop" type="47feb1d3:ProjectViewModuleNode" />
-              <item name="engine" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Desktop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProjectDesktop" type="47feb1d3:ProjectViewModuleNode" />
+              <item name="project_desktop" type="47feb1d3:ProjectViewModuleNode" />
               <item name="project_core" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Desktop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProjectDesktop" type="47feb1d3:ProjectViewModuleNode" />
+              <item name="project_desktop" type="47feb1d3:ProjectViewModuleNode" />
               <item name="project_core" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Desktop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProjectDesktop" type="47feb1d3:ProjectViewModuleNode" />
+              <item name="project_desktop" type="47feb1d3:ProjectViewModuleNode" />
               <item name="project_desktop" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Desktop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProjectDesktop" type="47feb1d3:ProjectViewModuleNode" />
+              <item name="project_desktop" type="47feb1d3:ProjectViewModuleNode" />
               <item name="project_desktop" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
@@ -409,24 +450,26 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../project_core" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\selya\Projects\A2D\ProjectDesktop" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\selya\Projects\A2D\engine\src\core" />
       <recent name="C:\Users\selya\Projects\A2D\Engine" />
       <recent name="C:\Users\selya\Projects\A2D\Engine\src" />
       <recent name="C:\Users\selya\Projects\A2D\Engine\include\A2D" />
       <recent name="C:\Users\selya\Projects\A2D\ProjectDesktop\src" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\selya\Projects\A2D\ProjectDesktop" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -443,6 +486,146 @@
   </component>
   <component name="RunManager" selected="Application.desktop">
     <configuration name="Build All" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="desktop" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="desktop">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Continuous" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="Continuous" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ContinuousBuild" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="ContinuousBuild" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="ContinuousBuild">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ContinuousConfigure" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="ContinuousConfigure" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="ContinuousConfigure">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ContinuousCoverage" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="ContinuousCoverage" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="ContinuousCoverage">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ContinuousMemCheck" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="ContinuousMemCheck" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="ContinuousMemCheck">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ContinuousStart" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="ContinuousStart" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="ContinuousStart">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ContinuousSubmit" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="ContinuousSubmit" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="ContinuousSubmit">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ContinuousTest" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="ContinuousTest" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="ContinuousTest">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ContinuousUpdate" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="ContinuousUpdate" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="ContinuousUpdate">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Experimental" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="Experimental" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ExperimentalBuild" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="ExperimentalBuild" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="ExperimentalBuild">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ExperimentalConfigure" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="ExperimentalConfigure" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="ExperimentalConfigure">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ExperimentalCoverage" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="ExperimentalCoverage" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="ExperimentalCoverage">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ExperimentalMemCheck" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="ExperimentalMemCheck" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="ExperimentalMemCheck">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ExperimentalStart" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="ExperimentalStart" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="ExperimentalStart">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ExperimentalSubmit" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="ExperimentalSubmit" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="ExperimentalSubmit">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ExperimentalTest" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="ExperimentalTest" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="ExperimentalTest">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ExperimentalUpdate" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="ExperimentalUpdate" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="ExperimentalUpdate">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Nightly" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="Nightly" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="NightlyBuild" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="NightlyBuild" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="NightlyBuild">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="NightlyConfigure" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="NightlyConfigure" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="NightlyConfigure">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="NightlyCoverage" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="NightlyCoverage" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="NightlyCoverage">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="NightlyMemCheck" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="NightlyMemCheck" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="NightlyMemCheck">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="NightlyMemoryCheck" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="NightlyMemoryCheck" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="NightlyMemoryCheck">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="NightlyStart" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="NightlyStart" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="NightlyStart">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="NightlySubmit" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="NightlySubmit" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="NightlySubmit">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="NightlyTest" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="NightlyTest" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="NightlyTest">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="NightlyUpdate" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="NightlyUpdate" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="NightlyUpdate">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -567,6 +750,11 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="spdlog_headers_for_ide" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="spdlog_headers_for_ide" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="splitview" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Desktop" TARGET_NAME="splitview" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Desktop" RUN_TARGET_NAME="splitview">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -639,6 +827,35 @@
       <item itemvalue="Application.title" />
       <item itemvalue="Application.windows" />
       <item itemvalue="Application.lodepng" />
+      <item itemvalue="Application.Continuous" />
+      <item itemvalue="Application.ContinuousBuild" />
+      <item itemvalue="Application.ContinuousConfigure" />
+      <item itemvalue="Application.ContinuousCoverage" />
+      <item itemvalue="Application.ContinuousMemCheck" />
+      <item itemvalue="Application.ContinuousStart" />
+      <item itemvalue="Application.ContinuousSubmit" />
+      <item itemvalue="Application.ContinuousTest" />
+      <item itemvalue="Application.ContinuousUpdate" />
+      <item itemvalue="Application.Experimental" />
+      <item itemvalue="Application.ExperimentalBuild" />
+      <item itemvalue="Application.ExperimentalConfigure" />
+      <item itemvalue="Application.ExperimentalCoverage" />
+      <item itemvalue="Application.ExperimentalMemCheck" />
+      <item itemvalue="Application.ExperimentalStart" />
+      <item itemvalue="Application.ExperimentalSubmit" />
+      <item itemvalue="Application.ExperimentalTest" />
+      <item itemvalue="Application.ExperimentalUpdate" />
+      <item itemvalue="Application.Nightly" />
+      <item itemvalue="Application.NightlyBuild" />
+      <item itemvalue="Application.NightlyConfigure" />
+      <item itemvalue="Application.NightlyCoverage" />
+      <item itemvalue="Application.NightlyMemCheck" />
+      <item itemvalue="Application.NightlyMemoryCheck" />
+      <item itemvalue="Application.NightlyStart" />
+      <item itemvalue="Application.NightlySubmit" />
+      <item itemvalue="Application.NightlyTest" />
+      <item itemvalue="Application.NightlyUpdate" />
+      <item itemvalue="Application.spdlog_headers_for_ide" />
       <item itemvalue="Application.core" />
       <item itemvalue="Application.a2d" />
     </list>
@@ -663,32 +880,34 @@
       <workItem from="1541793017989" duration="17986000" />
       <workItem from="1541945404360" duration="323000" />
       <workItem from="1541945805593" duration="7562000" />
+      <workItem from="1541969591968" duration="70000" />
+      <workItem from="1541969685589" duration="6930000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="52984000" />
+    <option name="totallyTimeSpent" value="59984000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17449665" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17803837" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32844576" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.18768328" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.1868743" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Messages" order="8" weight="0.41788855" />
+      <window_info anchor="bottom" id="Messages" order="8" weight="0.41713014" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="11" show_stripe_button="false" />
-      <window_info anchor="bottom" id="CMake" order="12" weight="0.31085044" />
+      <window_info anchor="bottom" id="CMake" order="12" weight="0.31034482" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -703,20 +922,8 @@
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/../Engine/cmake-build-debug/Makefile" />
-    <entry file="file://$PROJECT_DIR$/../engine/thirdparty/glew/include/GL/glew.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="1204" column="13" selection-start-line="1204" selection-start-column="13" selection-end-line="1204" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../engine/thirdparty/glew/src/glew.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="33" selection-start-line="33" selection-end-line="33" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../engine/thirdparty/glew/include/GL/glew.h" />
+    <entry file="file://$PROJECT_DIR$/../engine/thirdparty/glew/src/glew.c" />
     <entry file="file://$PROJECT_DIR$/../engine/src/math/vector2.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5015">
@@ -760,9 +967,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/renderer.cpp" />
-    <entry file="file://$PROJECT_DIR$/../engine/LICENSE">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../engine/LICENSE" />
     <entry file="file://$PROJECT_DIR$/../engine/src/math/vector4.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
@@ -771,16 +976,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../Engine/test.cpp" />
-    <entry file="file://$PROJECT_DIR$/../engine/include/A2D/core/components/camera.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
-          <caret line="25" column="16" selection-start-line="25" selection-start-column="16" selection-end-line="25" selection-end-column="16" />
-          <folding>
-            <element signature="e#85#116#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../engine/include/A2D/core/components/camera.h" />
     <entry file="file://$PROJECT_DIR$/../engine/include/A2D/core/ref_counter.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
@@ -788,61 +984,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/native_renderer.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" selection-start-line="8" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../engine/src/glsl_shader.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="7" selection-start-line="14" selection-start-column="7" selection-end-line="14" selection-end-column="7" />
-          <folding>
-            <element signature="e#42#70#0" expanded="true" />
-            <element signature="e#2318#2344#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../engine/include/A2D/glsl_shader.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
-          <folding>
-            <element signature="e#118#140#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="35" selection-start-line="16" selection-start-column="35" selection-end-line="16" selection-end-column="35" />
-          <folding>
-            <element signature="e#42#63#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../engine/include/A2D/audio.h">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../engine/include/A2D/filesystem.h">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../engine/include/A2D/glsl_shader.h" />
+    <entry file="file://$PROJECT_DIR$/../engine/include/A2D/audio.h" />
+    <entry file="file://$PROJECT_DIR$/../engine/include/A2D/filesystem.h" />
     <entry file="file://$PROJECT_DIR$/../engine/include/A2D/core/intrusive_ptr.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="84" column="28" lean-forward="true" selection-start-line="84" selection-start-column="28" selection-end-line="84" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/native_renderer.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="138" column="45" selection-start-line="138" selection-start-column="45" selection-end-line="138" selection-end-column="45" />
         </state>
       </provider>
     </entry>
@@ -860,57 +1008,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../engine/src/core/components/sprite.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="29" column="34" selection-start-line="29" selection-start-column="34" selection-end-line="29" selection-end-column="34" />
-          <folding>
-            <element signature="e#42#81#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../engine/src/core/components/sprite.cpp" />
     <entry file="file://$PROJECT_DIR$/../engine/include/A2D/core/components/sprite.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="268">
           <caret line="27" column="36" selection-start-line="27" selection-start-column="36" selection-end-line="27" selection-end-column="36" />
-          <folding>
-            <element signature="e#85#116#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.15.26726/include/xutility">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="1107" selection-start-line="1107" selection-end-line="1107" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../engine/include/A2D/root_component.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="40" selection-start-line="5" selection-start-column="40" selection-end-line="5" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../project_core/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="39" selection-start-line="12" selection-start-column="39" selection-end-line="12" selection-end-column="39" />
-        </state>
-      </provider>
+    <entry file="file://C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.15.26726/include/xutility" />
+    <entry file="file://$PROJECT_DIR$/../engine/include/A2D/root_component.h" />
+    <entry file="file://$PROJECT_DIR$/../project_core/src/root_component.cpp">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/../engine/include/A2D/core/object2d.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
+        <state relative-caret-position="120">
           <caret line="56" selection-start-line="56" selection-end-line="56" />
           <folding>
             <element signature="e#89#117#0" expanded="true" />
@@ -920,10 +1033,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../engine/src/renderer.cpp">
+    <entry file="file://$PROJECT_DIR$/../engine/src/core/object2d.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        <state relative-caret-position="306">
+          <caret line="39" column="40" selection-start-line="39" selection-start-column="40" selection-end-line="39" selection-end-column="40" />
         </state>
       </provider>
     </entry>
@@ -937,52 +1050,135 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../engine/src/object2d.cpp">
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="39" column="40" selection-start-line="39" selection-start-column="40" selection-end-line="39" selection-end-column="40" />
+        <state relative-caret-position="85">
+          <caret line="5" column="43" selection-start-line="5" selection-start-column="43" selection-end-line="5" selection-end-column="43" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../engine/include/A2D/core/engine.h">
+    <entry file="file://$PROJECT_DIR$/../project_core/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
-          <folding>
-            <element signature="e#85#112#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="85">
+          <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../engine/thirdparty/spdlog/include/spdlog/sinks/basic_file_sink.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="706">
+          <caret line="58" column="31" selection-start-line="58" selection-start-column="31" selection-end-line="58" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../engine/thirdparty/spdlog/include/spdlog/logger.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="166">
+          <caret line="145" selection-start-line="145" selection-end-line="145" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../engine/thirdparty/spdlog/include/spdlog/details/pattern_formatter.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-71">
+          <caret line="856" column="6" selection-start-line="856" selection-start-column="6" selection-end-line="856" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../engine/thirdparty/spdlog/include/spdlog/common.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="126" column="11" selection-start-line="126" selection-start-column="11" selection-end-line="126" selection-end-column="11" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../engine/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1">
-          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+        <state relative-caret-position="349">
+          <caret line="37" column="33" selection-start-line="37" selection-start-column="33" selection-end-line="37" selection-end-column="33" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../engine/src/engine.cpp">
+    <entry file="file://$PROJECT_DIR$/../engine/src/renderer.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="16" column="40" selection-start-line="16" selection-start-column="40" selection-end-line="16" selection-end-column="40" />
+        <state relative-caret-position="-65">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../engine/src/glsl_shader.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="74" column="31" selection-start-line="74" selection-start-column="31" selection-end-line="74" selection-end-column="31" />
           <folding>
-            <element signature="e#42#67#0" expanded="true" />
+            <element signature="e#42#70#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../project_core/src/root_component.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="16" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
+        <state relative-caret-position="273">
+          <caret line="22" column="51" selection-start-line="22" selection-start-column="51" selection-end-line="22" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/native_renderer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/native_renderer.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="850">
+          <caret line="57" column="92" lean-forward="true" selection-start-line="57" selection-start-column="92" selection-end-line="57" selection-end-column="92" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../engine/include/A2D/core/engine.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="25" column="54" selection-start-line="25" selection-start-column="54" selection-end-line="25" selection-end-column="54" />
           <folding>
-            <element signature="e#103#124#0" expanded="true" />
+            <element signature="e#85#112#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../project_core/src/root_component.cpp">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/src/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="63" selection-start-line="12" selection-start-column="63" selection-end-line="12" selection-end-column="63" />
+          <folding>
+            <element signature="e#42#63#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../engine/thirdparty/spdlog/include/spdlog/sinks/android_sink.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1340">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+          <folding>
+            <element signature="e#146#198#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../engine/src/core/engine.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="26" column="18" lean-forward="true" selection-start-line="26" selection-start-column="18" selection-end-line="26" selection-end-column="18" />
+          <folding>
+            <element signature="e#42#67#0" expanded="true" />
+            <element signature="e#117#155#0" expanded="true" />
+            <element signature="e#209#226#0" expanded="true" />
+            <element signature="e#621#677#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
   </component>
 </project>

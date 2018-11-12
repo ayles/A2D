@@ -3,20 +3,13 @@
 //
 
 #include <A2D/glsl_shader.h>
+#include <A2D/math/vector.h>
+#include <A2D/math.h>
+#include <A2D/core.h>
 
 #include <utility>
 #include <vector>
 #include <iostream>
-#include <A2D/math/vector.h>
-#include <A2D/math.h>
-
-#ifdef __ANDROID__
-#include <android/log.h>
-#define LOG_TAG "glsl_shader"
-#define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
-#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
-#endif
-
 
 GLuint a2d::GLSLShader::bound_shader_id = 0;
 
@@ -75,14 +68,11 @@ GLuint a2d::GLSLShader::CompileShader(const std::string &shader_text, const GLen
         GLint max_length = 0;
         glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &max_length);
 
-        std::vector<GLchar> error_log(max_length);
-        glGetShaderInfoLog(shader_id, max_length, &max_length, &error_log[0]);
+        std::vector<GLchar> info_log(max_length);
+        glGetShaderInfoLog(shader_id, max_length, &max_length, &info_log[0]);
 
-#ifdef __ANDROID__
-        auto s = std::string(&*error_log.begin());
-        LOGE("%s", s.c_str());
-#endif
-        std::cout << std::string(&*error_log.begin()) << std::endl;
+        a2d::Engine::GetLogger()->error("{} shader: \n{}",
+                shader_type == GL_VERTEX_SHADER ? "vertex" : "fragment", std::string(&*info_log.begin()));
 
         glDeleteShader(shader_id);
         return 0;
@@ -114,7 +104,7 @@ GLuint a2d::GLSLShader::CompileProgram(GLuint vertex_shader_id, GLuint fragment_
 
         glDeleteProgram(program_id);
 
-        std::cout << std::string(&*info_log.begin()) << std::endl;
+        a2d::Engine::GetLogger()->error("Error linking shader:\n{}", std::string(&*info_log.begin()));
 
         return 0;
     }
