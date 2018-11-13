@@ -199,7 +199,7 @@ int sx_os_chdir(const char* path)
  || SX_PLATFORM_WINRT   \
  || SX_PLATFORM_ANDROID \
  || Sx_PLATFORM_IOS
-	SX_UNUSED(_path);
+	SX_UNUSED(path);
 	return -1;
 #elif SX_PLATFORM_WINDOWS
 	return SetCurrentDirectory(path);

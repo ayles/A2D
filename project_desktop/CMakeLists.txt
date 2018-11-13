@@ -15,7 +15,7 @@ add_custom_target(copy_resources ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${CORE_PROJECT_PATH}/resources
     ${CMAKE_CURRENT_BINARY_DIR}/resources
-))
+)
 
 add_dependencies(desktop copy_resources)
 
