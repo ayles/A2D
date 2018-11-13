@@ -2,8 +2,8 @@
 // Created by selya on 26.10.2018.
 //
 
-#include <A2D/renderer.h>
-#include <A2D/core/engine.h>
+#include <a2d/core/renderer.h>
+#include <a2d/core/engine.h>
 
 #ifdef __ANDROID__
 #include <spdlog/sinks/android_sink.h>
@@ -14,14 +14,16 @@
 #include <chrono>
 #include <cmath>
 
-
+float a2d::Engine::delta_time = 0.0f;
 a2d::pObject2D a2d::Engine::root = new Object2D;
 a2d::pCamera a2d::Engine::camera = nullptr;
 std::shared_ptr<spdlog::logger> a2d::Engine::logger = nullptr;
-float a2d::Engine::delta_time = 0.0f;
+std::thread::id a2d::Engine::ui_thread_id;
 
 bool a2d::Engine::Initialize() {
     // Important for hierarchical activate/disable
+    ui_thread_id = std::this_thread::get_id();
+
     root->is_active = true;
 
 #ifdef __ANDROID__
@@ -92,4 +94,8 @@ void a2d::Engine::SetCamera(a2d::pCamera camera) {
 
 std::shared_ptr<spdlog::logger> a2d::Engine::GetLogger() {
     return logger;
+}
+
+std::thread::id a2d::Engine::GetUIThreadID() {
+    return ui_thread_id;
 }

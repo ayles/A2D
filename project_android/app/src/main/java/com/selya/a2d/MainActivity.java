@@ -25,28 +25,30 @@ public class MainActivity extends Activity {
         glSurfaceView = new GLSurfaceView(this);
         glSurfaceView.setEGLContextClientVersion(2);
         glSurfaceView.setPreserveEGLContextOnPause(true);
-        glSurfaceView.setRenderer(new GLESRenderer(this));
+        glSurfaceView.setRenderer(new GLESRenderer());
         setContentView(glSurfaceView);
+        GL2JNI.initialize();
+        GL2JNI.register_asset_manager(getResources().getAssets());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         glSurfaceView.onPause();
-        GL2JNI.onPause();
+        GL2JNI.on_pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         glSurfaceView.onResume();
-        GL2JNI.onResume();
+        GL2JNI.on_resume();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        GL2JNI.uninitialize();
+        GL2JNI.on_destroy();
     }
 
     @Override

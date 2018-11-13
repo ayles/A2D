@@ -2,7 +2,7 @@
 // Created by selya on 26.10.2018.
 //
 
-#include <A2D/math/vector.h>
+#include <a2d/math/vector.h>
 
 #include <cmath>
 

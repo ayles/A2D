@@ -2,7 +2,7 @@
 // Created by selya on 26.10.2018.
 //
 
-#include <A2D/math/matrix.h>
+#include <a2d/math/matrix.h>
 
 #include <cmath>
 

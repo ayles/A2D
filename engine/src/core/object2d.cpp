@@ -2,7 +2,7 @@
 // Created by selya on 04.11.2018.
 //
 
-#include <A2D/core/object2d.h>
+#include <a2d/core/object2d.h>
 
 namespace a2d {
 

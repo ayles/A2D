@@ -2,8 +2,8 @@
 // Created by selya on 09.11.2018.
 //
 
-#include <A2D/core/components/sprite.h>
-#include <A2D/renderer.h>
+#include <a2d/core/components/sprite.h>
+#include <a2d/core/renderer.h>
 
 namespace a2d {
 

@@ -2,6 +2,7 @@ package com.selya.a2d;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.content.res.AssetManager;
 
 public final class GL2JNI {
 
@@ -10,11 +11,13 @@ public final class GL2JNI {
     }
 
     public static native boolean initialize();
-    public static native boolean update();
-    public static native void uninitialize();
-    public static native void onPause();
-    public static native void onResume();
-    public static native void resolutionChanged(int width, int height);
+    public static native boolean on_surface_created();
+    public static native boolean on_draw_frame();
+    public static native void on_pause();
+    public static native void on_resume();
+    public static native void on_surface_changed(int width, int height);
+    public static native void on_destroy();
+    public static native void register_asset_manager(AssetManager asset_manager);
 
     private static void loadLibrary() {
         System.loadLibrary("a2d_android_native");
