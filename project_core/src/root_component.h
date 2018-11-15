@@ -28,7 +28,10 @@ public:
     float f = 0.0f;
 
     void Initialize() override {
+        pCamera cam = new Camera();
+
         auto cam_obj = a2d::Engine::GetRoot()->AddChild(new Object2D);
+        cam_obj->rotation = 1;
         a2d::Engine::SetCamera(cam_obj->AddComponent<Camera>());
         o1 = a2d::Engine::GetRoot()->AddChild(new Object2D);
         o1->AddComponent<Sprite>();

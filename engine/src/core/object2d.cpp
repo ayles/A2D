@@ -112,7 +112,7 @@ void Object2D::PostUpdate() {
 void Object2D::PreDraw(const a2d::Matrix4f &mat) {
     transform_matrix.Identity();
     transform_matrix.Translate(position.x, position.y, 0.0f);
-    transform_matrix.Rotate(rotation, 0.0f, 0.0f, 1.0f);
+    transform_matrix.Rotate(rotation, 0.0f, 0.0f, -1.0f);
     transform_matrix.Scale(scale.x, scale.y, 1.0f);
 
     transform_matrix = mat * transform_matrix;

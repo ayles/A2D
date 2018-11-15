@@ -23,6 +23,11 @@ public:
     static std::vector<unsigned char> LoadRaw(const std::string &path) {
         return NativeFileSystem::LoadRaw(path);
     }
+
+    static std::string LoadText(const std::string &path) {
+        auto v = LoadRaw(path);
+        return std::string(v.begin(), v.end());
+    }
 };
 
 } //namespace a2d

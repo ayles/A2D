@@ -15,20 +15,17 @@ DECLARE_SMART_POINTER(Camera)
 class Camera : public Component {
     friend class Engine;
     friend class Renderer;
+
 public:
     float size = 5.0f;
 
-    const Matrix4f &GetMatrix() {
-        return camera_matrix;
-    }
+    const Matrix4f &GetMatrix();
 
 private:
-    Camera &SetOrtho2D(float left, float right, float bottom, float top) {
-        camera_matrix.SetOrtho2D(left, right, bottom, top);
-        return *this;
-    }
+    Camera &SetOrtho2D(float left, float right, float bottom, float top);
 
     Matrix4f camera_matrix;
+    Matrix4f camera_transformed_matrix;
 };
 
 } //namespace a2d

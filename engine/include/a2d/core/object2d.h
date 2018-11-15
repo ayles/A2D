@@ -67,6 +67,16 @@ public:
         return dynamic_cast<T *>(c->second.begin()->get());
     }
 
+    template<class T>
+    typename std::enable_if<std::is_base_of<Component, T>::value, void>::type
+    RemoveComponent() {
+        auto c = components.find(typeid(T));
+        if (c == components.end() || c->second.empty()) return;
+        c->second.erase(c->second.begin());
+    }
+
+    // TODO add GetComponents and RemoveComponent<T>(SMART_POINTER(T)) methods
+
     virtual ~Object2D();
 
 private:

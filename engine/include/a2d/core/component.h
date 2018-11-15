@@ -15,9 +15,9 @@ class Object2D;
 DECLARE_SMART_POINTER(Component)
 
 class Component : public ref_counter {
-public:
     friend Object2D;
 
+public:
     virtual SMART_POINTER(Object2D) GetObject2D();
 
     virtual bool IsActive();

@@ -56,8 +56,21 @@ void a2d::GLSLShader::Unbind() {
 GLuint a2d::GLSLShader::CompileShader(const std::string &shader_text, const GLenum &shader_type) {
     GLuint shader_id = glCreateShader(shader_type);
 
-    const char *c = shader_text.c_str();
-    glShaderSource(shader_id, 1, &c, nullptr);
+#ifdef TARGET_ANDROID
+    const int num_strings = 2;
+    const char *strings[num_strings] {
+        "#define ES\n",
+        shader_text.c_str()
+    };
+#elif TARGET_DESKTOP
+    const int num_strings = 2;
+    const char *strings[num_strings] {
+        "#version 330 core\n",
+        shader_text.c_str()
+    };
+#endif
+
+    glShaderSource(shader_id, num_strings, strings, nullptr);
 
     glCompileShader(shader_id);
 

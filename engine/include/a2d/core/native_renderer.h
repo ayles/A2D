@@ -36,35 +36,6 @@ public:
         a2d::Renderer::Initialize();
 #ifdef TARGET_ANDROID
         a2d::Engine::GetLogger()->info("{} {}", "OpenGL ES version:", glGetString(GL_VERSION));
-
-        shader = new GLSLShader("default",
-                                    "precision highp float;\n"
-                                    "uniform mat4 camera_matrix;\n"
-                                    "uniform mat4 model_matrix;\n"
-                                    "\n"
-                                    "attribute vec2 position;\n"
-                                    "\n"
-                                    "varying vec2 uv;\n"
-                                    "\n"
-                                    "void main() {\n"
-                                    "    uv = position.xy + 0.5;\n"
-                                    "    gl_Position = camera_matrix * model_matrix * vec4(position.x, position.y, 0, 1);\n"
-                                    "}\n",
-
-                                    "precision highp float;\n"
-                                    "uniform sampler2D sprite_texture;\n"
-                                    "uniform vec4 sprite_color;\n"
-                                    "\n"
-                                    "varying vec2 uv;\n"
-                                    "\n"
-                                    "void main() {\n"
-                                    "    // Don't change mul order here\n"
-                                    "    // Cause on my windows pc it will just show nothing\n"
-                                    "    // But on Ubuntu WSL it works\n"
-                                    "    // Maybe it is Nvidia driver bug\n"
-                                    "    gl_FragColor = sprite_color * texture2D(sprite_texture, uv);\n"
-                                    "}\n"
-            );
 #elif TARGET_DESKTOP
         glfwSetErrorCallback([](int id, const char *description) {
             a2d::Engine::GetLogger()->error(description);
@@ -101,40 +72,6 @@ public:
 
         glfwSetFramebufferSizeCallback(window, update_camera);
         update_camera(window, 640, 480);
-
-        shader = new GLSLShader("default",
-                                "#version 130\n"
-                                "\n"
-                                "uniform mat4 camera_matrix;\n"
-                                "uniform mat4 model_matrix;\n"
-                                "\n"
-                                "in vec2 position;\n"
-                                "\n"
-                                "out vec2 uv;\n"
-                                "\n"
-                                "void main() {\n"
-                                "    uv = position.xy + 0.5;\n"
-                                "    gl_Position = camera_matrix * model_matrix * vec4(position.x, position.y, 0, 1);\n"
-                                "}"
-                                "",
-
-                                "#version 130\n"
-                                "\n"
-                                "uniform sampler2D sprite_texture;\n"
-                                "uniform vec4 sprite_color;\n"
-                                "\n"
-                                "in vec2 uv;\n"
-                                "\n"
-                                "out vec4 out_color;\n"
-                                "\n"
-                                "void main() {\n"
-                                "    // Don't change mul order here\n"
-                                "    // Cause on my windows pc it will just show nothing\n"
-                                "    // But on Ubuntu WSL it works\n"
-                                "    // Maybe it is Nvidia driver bug\n"
-                                "    out_color = sprite_color * texture(sprite_texture, uv);\n"
-                                "}"
-        );
 #endif
 
         glEnable(GL_BLEND);
@@ -155,6 +92,8 @@ public:
 
         glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
         glEnableVertexAttribArray(0);
+
+        shader = new GLSLShader("default", FileSystem::LoadText("shaders/default/vertex.glsl"), FileSystem::LoadText("shaders/default/fragment.glsl"));
 
         return (initialized = true);
     }
