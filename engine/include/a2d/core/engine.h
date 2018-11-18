@@ -6,6 +6,7 @@
 #define A2D_ENGINE_H
 
 #include <a2d/core/macro.h>
+#include <a2d/core/texture.h>
 #include <a2d/core/object2d.h>
 #include <a2d/math.h>
 #include <a2d/core/components/camera.h>
@@ -13,6 +14,8 @@
 #include <spdlog/spdlog.h>
 
 #include <thread>
+#include "texture.h"
+
 
 namespace a2d {
 

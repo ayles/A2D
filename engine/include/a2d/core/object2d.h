@@ -9,7 +9,6 @@
 #include <a2d/math/matrix.h>
 #include <a2d/core/ref_counter.h>
 #include <a2d/core/macro.h>
-#include <a2d/core/component.h>
 
 #include <set>
 #include <map>
@@ -20,6 +19,8 @@
 namespace a2d {
 
 DECLARE_SMART_POINTER(Object2D)
+
+class Component;
 
 class Object2D final : public ref_counter {
 public:
@@ -51,7 +52,7 @@ public:
         if (components.find(t_index) != components.end()) {
             components[t_index].insert(component);
         } else {
-            (components[t_index] = std::set<pComponent>()).insert(component);
+            (components[t_index] = std::set<SMART_POINTER(Component)>()).insert(component);
         }
         component->object_2d = this;
         component->Initialize();
@@ -86,7 +87,7 @@ private:
     Matrix4f transform_matrix;
 
     std::set<pObject2D> children;
-    std::map<std::type_index, std::set<pComponent>> components;
+    std::map<std::type_index, std::set<SMART_POINTER(Component)>> components;
 
     void SetActive(bool active);
 

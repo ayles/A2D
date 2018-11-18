@@ -9,6 +9,12 @@
 
 #include <assert.h>
 
+#define DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(t)    \
+t(const t &) = delete;                                  \
+t(t &&) = delete;                                       \
+t &operator=(const t &) = delete;                       \
+t &operator=(t &&) = delete;
+
 #define DECLARE_SMART_POINTER(classname) \
 class classname; \
 typedef a2d::intrusive_ptr<classname> p##classname;

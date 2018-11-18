@@ -1,4 +1,4 @@
-#ifdef ES
+#ifdef RENDERER_GL_ES
 
 precision highp float;
 #define IN varying
@@ -14,8 +14,8 @@ out vec4 out_color;
 
 #endif
 
-uniform sampler2D sprite_texture;
-uniform vec4 sprite_color;
+uniform sampler2D texture_sampler;
+uniform vec4 color;
 
 IN vec2 uv;
 
@@ -24,5 +24,5 @@ void main() {
     // Cause on my windows pc it will just show nothing
     // But on Ubuntu WSL it works
     // Maybe it is Nvidia driver bug
-    OUT_COLOR = sprite_color * TEXTURE(sprite_texture, uv);
+    OUT_COLOR = color * TEXTURE(texture_sampler, uv);
 }

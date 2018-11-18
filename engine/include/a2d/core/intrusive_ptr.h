@@ -18,16 +18,16 @@ public:
 
     intrusive_ptr() : ptr(nullptr) {}
     intrusive_ptr(const intrusive_ptr &other) : ptr(other.ptr) {
-        if (ptr) reinterpret_cast<ref_counter *>(ptr)->add_ref();
+        if (ptr) dynamic_cast<ref_counter *>(ptr)->add_ref();
     }
 
     intrusive_ptr(T *p) : ptr(p) {
-        if (ptr) reinterpret_cast<ref_counter *>(ptr)->add_ref();
+        if (ptr) dynamic_cast<ref_counter *>(ptr)->add_ref();
     }
 
     template<class U>
     intrusive_ptr(const intrusive_ptr<U> &other) : ptr(other.get()) {
-        if (ptr) reinterpret_cast<ref_counter *>(ptr)->add_ref();
+        if (ptr) dynamic_cast<ref_counter *>(ptr)->add_ref();
     }
 
     T *get() const {
@@ -91,7 +91,7 @@ public:
     }
 
     ~intrusive_ptr() {
-        if (ptr) reinterpret_cast<ref_counter *>(ptr)->release_ref();
+        if (ptr) dynamic_cast<ref_counter *>(ptr)->release_ref();
     }
 };
 

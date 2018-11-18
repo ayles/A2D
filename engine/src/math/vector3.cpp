@@ -18,9 +18,11 @@ a2d::Vector<3, T, IF_FLOATING_POINT>::Vector(T scalar) : x(scalar), y(scalar), z
 template<class T>
 a2d::Vector<3, T, IF_FLOATING_POINT>::Vector(T x, T y, T z) : x(x), y(y), z(z) {}
 template<class T>
-a2d::Vector<3, T, IF_FLOATING_POINT>::Vector(const Vector<3, T> &other) : x(other.x), y(other.y), z(other.z) {}
+template<class U>
+a2d::Vector<3, T, IF_FLOATING_POINT>::Vector(const Vector<3, U> &other) : x(other.x), y(other.y), z(other.z) {}
 template<class T>
-a2d::Vector<3, T, IF_FLOATING_POINT>::Vector(const Vector<2, T> &v2, T z) : x(v2.x), y(v2.y), z(z) {}
+template<class U>
+a2d::Vector<3, T, IF_FLOATING_POINT>::Vector(const Vector<2, U> &v2, T z) : x(v2.x), y(v2.y), z(z) {}
 
 //
 // Const member functions

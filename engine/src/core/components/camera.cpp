@@ -4,8 +4,25 @@
 
 #include <a2d/core/components/camera.h>
 #include <a2d/core/object2d.h>
+#include <a2d/core.h>
 
 namespace a2d {
+
+float Camera::GetHeight() {
+    return height;
+}
+
+float Camera::GetWidth() {
+    return height * GetAspectRatio();
+}
+
+float Camera::GetAspectRatio() {
+    return (float)Renderer::GetWidth() / Renderer::GetHeight();
+}
+
+void Camera::SetHeight(float height) {
+    this->height = height;
+}
 
 const Matrix4f &Camera::GetMatrix() {
     camera_transformed_matrix = camera_matrix * GetObject2D()->GetTransformMatrix();

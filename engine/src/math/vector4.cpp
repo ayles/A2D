@@ -9,7 +9,7 @@
 #define IF_FLOATING_POINT typename std::enable_if<std::is_floating_point<T>::value>::type
 #define IF_INTEGRAL typename std::enable_if<std::is_integral<T>::value>::type
 
-// Vector template specialization for Vec3f
+// Vector template specialization for Vector3f
 
 template<class T>
 a2d::Vector<4, T, IF_FLOATING_POINT>::Vector() {}
@@ -18,11 +18,14 @@ a2d::Vector<4, T, IF_FLOATING_POINT>::Vector(T scalar) : x(scalar), y(scalar), z
 template<class T>
 a2d::Vector<4, T, IF_FLOATING_POINT>::Vector(T x, T y, T z, T w) : x(x), y(y), z(z), w(w) {}
 template<class T>
-a2d::Vector<4, T, IF_FLOATING_POINT>::Vector(const Vector<4, T> &other) : x(other.x), y(other.y), z(other.z), w(other.w) {}
+template<class U>
+a2d::Vector<4, T, IF_FLOATING_POINT>::Vector(const Vector<4, U> &other) : x(other.x), y(other.y), z(other.z), w(other.w) {}
 template<class T>
-a2d::Vector<4, T, IF_FLOATING_POINT>::Vector(const a2d::Vector<3, T> &v3, T w) : x(v3.x), y(v3.y), z(v3.z), w(w) {}
+template<class U>
+a2d::Vector<4, T, IF_FLOATING_POINT>::Vector(const a2d::Vector<3, U> &v3, T w) : x(v3.x), y(v3.y), z(v3.z), w(w) {}
 template<class T>
-a2d::Vector<4, T, IF_FLOATING_POINT>::Vector(const Vector<2, T> &v2, T z, T w) : x(v2.x), y(v2.y), z(z), w(w) {}
+template<class U>
+a2d::Vector<4, T, IF_FLOATING_POINT>::Vector(const Vector<2, U> &v2, T z, T w) : x(v2.x), y(v2.y), z(z), w(w) {}
 
 //
 // Const member functions

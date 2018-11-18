@@ -6,7 +6,7 @@
 #define A2D_NATIVE_RENDERER_H
 
 #include <a2d/core.h>
-#include <a2d/core/glsl_shader.h>
+#include <a2d/core/shader.h>
 
 #ifdef TARGET_ANDROID
 #include <GLES2/gl2.h>
@@ -16,6 +16,8 @@
 #endif
 
 #include <iostream>
+#include "shader.h"
+
 
 namespace a2d {
 
@@ -26,7 +28,6 @@ public:
     static GLFWwindow *window;
 #endif
 
-    static GLSLShader *shader;
     static GLuint vertex_buffer;
 
     static bool Initialize() {
@@ -93,8 +94,6 @@ public:
         glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
         glEnableVertexAttribArray(0);
 
-        shader = new GLSLShader("default", FileSystem::LoadText("shaders/default/vertex.glsl"), FileSystem::LoadText("shaders/default/fragment.glsl"));
-
         return (initialized = true);
     }
 
@@ -109,13 +108,24 @@ public:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // draw here
-        shader->Bind();
-        shader->SetUniformValue("camera_matrix", a2d::Engine::camera->GetMatrix());
+
         glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
+        bool first = true;
         for (const pSprite &sprite : a2d::Renderer::sprites) {
-            if (!sprite->IsActive()) continue;
-            shader->SetUniformValue("model_matrix", sprite->GetObject2D()->GetTransformMatrix());
-            shader->SetUniformValue("sprite_color", sprite->color);
+            if (!sprite->IsActive() || !sprite->shader) continue;
+            if (sprite->shader->Bind() || first) {
+                sprite->shader->SetUniform("camera_matrix", a2d::Engine::camera->GetMatrix());
+                first = false;
+            }
+            sprite->shader->SetUniform("model_matrix", sprite->GetObject2D()->GetTransformMatrix());
+            sprite->shader->SetUniform("color", sprite->color);
+            if (sprite->texture_region && sprite->texture_region->texture) {
+                // TODO
+                sprite->texture_region->texture->Bind();
+                //shader->Set("texture_sampler", 0);
+                sprite->shader->SetUniform("texture_offset", sprite->texture_region->offset);
+                sprite->shader->SetUniform("texture_size", sprite->texture_region->size);
+            }
             glDrawArrays(GL_TRIANGLES, 0, 6);
         }
 
@@ -143,7 +153,6 @@ public:
 GLFWwindow *a2d::NativeRenderer::window = nullptr;
 #endif
 
-GLSLShader *a2d::NativeRenderer::shader = nullptr;
 GLuint a2d::NativeRenderer::vertex_buffer = 0;
 
 } //namespace a2d

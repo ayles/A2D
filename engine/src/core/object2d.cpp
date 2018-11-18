@@ -3,6 +3,7 @@
 //
 
 #include <a2d/core/object2d.h>
+#include <a2d/core/component.h>
 
 namespace a2d {
 

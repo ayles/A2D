@@ -17,15 +17,20 @@ class Camera : public Component {
     friend class Renderer;
 
 public:
-    float size = 5.0f;
+    float GetHeight();
+    float GetWidth();
+    float GetAspectRatio();
+
+    void SetHeight(float height);
 
     const Matrix4f &GetMatrix();
 
 private:
-    Camera &SetOrtho2D(float left, float right, float bottom, float top);
-
+    float height = 5.0f;
     Matrix4f camera_matrix;
     Matrix4f camera_transformed_matrix;
+
+    Camera &SetOrtho2D(float left, float right, float bottom, float top);
 };
 
 } //namespace a2d

@@ -25,6 +25,9 @@ public:
 
     static a2d::Vector4f clear_color;
 
+    static int GetWidth();
+    static int GetHeight();
+
 private:
     static int width;
     static int height;
@@ -55,9 +58,6 @@ private:
     };
 
     static std::set<pSprite, sprites_compare> sprites;
-
-    static int GetWidth();
-    static int GetHeight();
 
     static bool Initialize();
     static bool PrepareDraw();

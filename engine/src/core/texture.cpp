@@ -3,9 +3,13 @@
 //
 
 #include <a2d/core/texture.h>
+#include <a2d/core.h>
+
+#include <lodepng.h>
 
 #include <string>
 #include <memory>
+#include <vector>
 
 a2d::Texture::Texture(
         int width, int height, const unsigned char *data, bool flip, bool mipmaps
@@ -17,8 +21,8 @@ a2d::Texture::Texture(
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mipmaps ? GL_NEAREST_MIPMAP_NEAREST : GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipmaps ? GL_NEAREST_MIPMAP_NEAREST : GL_NEAREST);
 
     auto final_data = new GLubyte[width * height * 4];
 
@@ -53,3 +57,41 @@ void a2d::Texture::Unbind(unsigned int texture_unit) {
 a2d::Texture::~Texture() {
     glDeleteTextures(1, &texture_id);
 }
+
+std::map<std::string, a2d::pTexture> a2d::Texture::textures = std::map<std::string, pTexture>();
+
+a2d::pTexture a2d::Texture::GetTexture(const std::string &name) {
+    auto s = textures.find(name);
+    if (s != textures.end()) {
+        return s->second;
+    }
+
+    std::vector<unsigned char> raw_texture = a2d::FileSystem::LoadRaw("textures/" + name + ".png");
+    unsigned int width, height;
+    std::vector<unsigned char> image;
+    lodepng::decode(image, width, height, raw_texture);
+
+    pTexture texture = new a2d::Texture(width, height, &image[0], true);
+
+    textures[name] = texture;
+    return texture;
+}
+
+a2d::TextureRegion::TextureRegion() : texture(nullptr), x(0), y(0), width(0), height(0) {
+
+}
+
+a2d::TextureRegion::TextureRegion(pTexture texture) :
+texture(texture), x(0), y(0), width(0), height(0),
+offset(0), size(1) {
+
+}
+
+a2d::TextureRegion::TextureRegion(pTexture texture, int x, int y, int width, int height) :
+texture(texture), x(x), y(y), width(width), height(height),
+offset(Vector2f(x, y) / Vector2f(texture->width, texture->height)),
+size(Vector2f(width, height) / Vector2f(texture->width, texture->height)){
+
+}
+
+a2d::TextureRegion::~TextureRegion() = default;

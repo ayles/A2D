@@ -7,6 +7,8 @@
 
 #include <a2d/core/component.h>
 #include <a2d/math.h>
+#include <a2d/core/texture.h>
+#include <a2d/core/shader.h>
 
 namespace a2d {
 
@@ -19,6 +21,8 @@ class Sprite : public Component {
 
 public:
     Vector4f color;
+    pTextureRegion texture_region;
+    pShader shader;
 
 private:
     Sprite();

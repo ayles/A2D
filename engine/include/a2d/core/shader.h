@@ -10,6 +10,14 @@
 #include <a2d/core/macro.h>
 #include <a2d/math.h>
 #include <a2d/core/texture.h>
+#include <a2d/core/ref_counter.h>
+
+#ifdef TARGET_ANDROID
+#include <GLES2/gl2.h>
+#elif TARGET_DESKTOP
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#endif
 
 #include <map>
 #include <string>
@@ -18,8 +26,9 @@ namespace a2d {
 
 DECLARE_SMART_POINTER(Shader)
 
-class Shader {
-public:
+class Shader : public ref_counter {
+    friend class NativeRenderer;
+private:
     enum ValueType {
         FLOAT = 1,
         INT,
@@ -28,31 +37,60 @@ public:
         VECTOR_2_FLOAT,
         VECTOR_3_FLOAT,
         VECTOR_4_FLOAT,
-        TEXTURE,
+        TEXTURE_UNIT,
         UNSUPPORTED
     };
 
-    class Uniform {
-    public:
+    struct Uniform {
         const std::string name;
         const ValueType type;
 
-        Uniform(std::string name, ValueType type) : name(std::move(name)), type(type) {}
+#if defined(RENDERER_GL) || defined(RENDERER_GL_ES)
+        const GLuint location;
+#endif
+        void Set(float v);
+        void Set(int v);
+        void Set(unsigned int v);
+        void Set(const Vector2f &vec);
+        void Set(const Vector3f &vec);
+        void Set(const Vector4f &vec);
+        void Set(const Matrix3f &mat);
+        void Set(const Matrix4f &mat);
     };
 
-    void Bind();
+public:
+    virtual void SetUniform(const std::string &name, float v);
+    virtual void SetUniform(const std::string &name, int v);
+    virtual void SetUniform(const std::string &name, unsigned int v);
+    virtual void SetUniform(const std::string &name, const Vector2f &vec);
+    virtual void SetUniform(const std::string &name, const Vector3f &vec);
+    virtual void SetUniform(const std::string &name, const Vector4f &vec);
+    virtual void SetUniform(const std::string &name, const Matrix3f &mat);
+    virtual void SetUniform(const std::string &name, const Matrix4f &mat);
 
-    void SetFloat(const std::string &name, float v);
-    void SetInt(const std::string &name, int v);
-    void SetVector2f(const std::string &name, const Vector2f &vec);
-    void SetVector3f(const std::string &name, const Vector3f &vec);
-    void SetVector4f(const std::string &name, const Vector4f &vec);
-    void SetMatrix3f(const std::string &name, const Matrix3f &mat);
-    void SetMatrix4f(const std::string &name, const Matrix4f &mat);
-    void SetTexture(const std::string &name, const Texture &tex);
+    virtual const std::map<std::string, Uniform> &GetUniforms() const;
+    virtual Uniform *GetUniform(const std::string &name) const;
 
-    const std::map<std::string, Uniform> &GetUniforms();
-    const Uniform *GetUniform(const std::string name);
+    static pShader GetShader(const std::string &name);
+
+private:
+    Shader(const std::string &vertex_shader_text, const std::string &fragment_shader_text);
+
+    virtual bool Bind();
+
+    virtual ~Shader();
+
+#if defined(RENDERER_GL) || defined(RENDERER_GL_ES)
+    const GLuint shader_id;
+#endif
+    std::map<std::string, Uniform> uniforms;
+
+
+    static std::map<std::string, pShader> shaders;
+    static GLuint bound_shader_id;
+
+    static GLuint CompileShader(const std::string &shader_text, const GLenum &shader_type);
+    static GLuint CompileProgram(GLuint vertex_shader_id, GLuint fragment_shader_id);
 };
 
 } //namespace a2d

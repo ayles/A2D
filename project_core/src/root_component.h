@@ -8,6 +8,7 @@
 #include <a2d/core.h>
 #include <a2d/core/components/sprite.h>
 #include <a2d/core/texture.h>
+#include <a2d/core/components/animator.h>
 
 #include <lodepng.h>
 
@@ -25,28 +26,40 @@ class RootComponent : public Component {
 public:
     a2d::pObject2D o1;
     a2d::pObject2D o2;
+    a2d::pObject2D e;
     float f = 0.0f;
 
     void Initialize() override {
         pCamera cam = new Camera();
 
         auto cam_obj = a2d::Engine::GetRoot()->AddChild(new Object2D);
-        cam_obj->rotation = 1;
         a2d::Engine::SetCamera(cam_obj->AddComponent<Camera>());
+
+        auto valeriy = Texture::GetTexture("valeriy");
+
         o1 = a2d::Engine::GetRoot()->AddChild(new Object2D);
-        o1->AddComponent<Sprite>();
+        o1->AddComponent<Sprite>()->texture_region = new TextureRegion(valeriy, 0, 0, 500, 200);
         o2 = a2d::Engine::GetRoot()->AddChild(new Object2D);
-        o2->AddComponent<Sprite>();
+        o2->AddComponent<Sprite>()->texture_region = new TextureRegion(valeriy);
 
         o1->GetComponent<Sprite>()->color.Set(0.5, 0.5, 1, 1);
         o2->GetComponent<Sprite>()->color.Set(1, 1, 0, 1);
 
-        unsigned int width, height;
-        std::vector<unsigned char> image;
-        std::vector<unsigned char> raw_texture = a2d::FileSystem::LoadRaw("valeriy.png");
-        lodepng::decode(image, width, height, raw_texture);
+        auto explosion = Texture::GetTexture("trump");
 
-        (new a2d::Texture(width, height, &image[0], true))->Bind();
+        e = a2d::Engine::GetRoot()->AddChild(new Object2D);
+        e->AddComponent<Sprite>()->texture_region = new TextureRegion(explosion);
+
+        std::vector<pTextureRegion> frames;
+        for (int i = 3; i >= 0; --i) {
+            for (int j = 0; j < 6; ++j) {
+                frames.push_back(new TextureRegion(explosion, j * explosion->width / 6, i * explosion->height / 4, explosion->width / 6, explosion->height / 4));
+            }
+        }
+
+        e->AddComponent<Animator>()->SetFrames(frames, 0.08f);
+        e->scale.Set(1.5f);
+        e->SetLayer(4);
     }
 
     void Update() override {
