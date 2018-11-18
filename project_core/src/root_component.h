@@ -19,6 +19,7 @@
 #endif
 
 #include <cmath>
+#include "trump.h"
 
 namespace a2d {
 
@@ -50,16 +51,37 @@ public:
         e = a2d::Engine::GetRoot()->AddChild(new Object2D);
         e->AddComponent<Sprite>()->texture_region = new TextureRegion(explosion);
 
-        std::vector<pTextureRegion> frames;
-        for (int i = 3; i >= 0; --i) {
-            for (int j = 0; j < 6; ++j) {
-                frames.push_back(new TextureRegion(explosion, j * explosion->width / 6, i * explosion->height / 4, explosion->width / 6, explosion->height / 4));
-            }
+        std::vector<Animation::Frame> f_bottom;
+        std::vector<Animation::Frame> f_right;
+        std::vector<Animation::Frame> f_top;
+        std::vector<Animation::Frame> f_left;
+        for (int j = 0; j < 6; ++j) {
+            f_bottom.emplace_back(
+                    new TextureRegion(explosion, j * explosion->width / 6, 3 * explosion->height / 4, explosion->width / 6, explosion->height / 4),
+                    0.08f
+            );
+            f_right.emplace_back(
+                    new TextureRegion(explosion, j * explosion->width / 6, 2 * explosion->height / 4, explosion->width / 6, explosion->height / 4),
+                    0.08f
+            );
+            f_top.emplace_back(
+                    new TextureRegion(explosion, j * explosion->width / 6, 1 * explosion->height / 4, explosion->width / 6, explosion->height / 4),
+                    0.08f
+            );
+            f_left.emplace_back(
+                    new TextureRegion(explosion, j * explosion->width / 6, 0 * explosion->height / 4, explosion->width / 6, explosion->height / 4),
+                    0.08f
+            );
         }
 
-        e->AddComponent<Animator>()->SetFrames(frames, 0.08f);
+        auto a = e->AddComponent<Animator>();
+        a->AddAnimation("bottom", new Animation(f_bottom));
+        a->AddAnimation("right", new Animation(f_right));
+        a->AddAnimation("top", new Animation(f_top));
+        a->AddAnimation("left", new Animation(f_left));
         e->scale.Set(1.5f);
         e->SetLayer(4);
+        e->AddComponent<Trump>();
     }
 
     void Update() override {
