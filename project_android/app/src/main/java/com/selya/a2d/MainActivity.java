@@ -22,7 +22,7 @@ public class MainActivity extends Activity {
             finish();
             return;
         }
-        glSurfaceView = new GLSurfaceView(this);
+        glSurfaceView = new ASurfaceView(this);
         glSurfaceView.setEGLContextClientVersion(2);
         glSurfaceView.setPreserveEGLContextOnPause(true);
         glSurfaceView.setRenderer(new GLESRenderer());

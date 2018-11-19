@@ -23,6 +23,8 @@ public:
 
     void SetHeight(float height);
 
+    Vector2f ScreenToWorld(const Vector2f &screen);
+
     const Matrix4f &GetMatrix();
 
 private:

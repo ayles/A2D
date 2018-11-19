@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.2)
-project(A2D)
+project(A2D CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 
 set(A2D_SOURCES
-        src/math/vector3.cpp
+    src/math/vector3.cpp
     src/math/vector4.cpp
     src/math/matrix4.cpp
     src/core/engine.cpp
@@ -12,9 +12,11 @@ set(A2D_SOURCES
     src/core/component.cpp
     src/core/components/sprite.cpp
     src/core/renderer.cpp
-        src/core/native_filesystem.cpp
+    src/core/native_filesystem.cpp
     src/core/texture.cpp
-        src/core/components/camera.cpp src/core/shader.cpp)
+    src/core/components/camera.cpp
+    src/core/shader.cpp
+        src/core/input.cpp src/core/native_renderer.cpp)
 
 set(A2D_HEADERS
     include/a2d/core/renderer.h
@@ -30,11 +32,14 @@ set(A2D_HEADERS
     include/a2d/core/macro.h
     include/a2d/core/components/sprite.h
     include/a2d/core/components/camera.h
-        include/a2d/core/native_renderer.h
+    include/a2d/core/native_renderer.h
     include/a2d/core/filesystem.h
     include/a2d/core/native_filesystem.h
     include/a2d/core/texture.h
-        include/a2d/core/shader.h include/a2d/core/components/animator.h)
+    include/a2d/core/shader.h
+    include/a2d/core/components/animator.h
+    include/a2d/core/input.h
+)
 
 add_library(a2d STATIC ${A2D_SOURCES} ${A2D_HEADERS})
 target_include_directories(a2d PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
