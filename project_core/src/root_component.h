@@ -9,6 +9,7 @@
 #include <a2d/core/components/sprite.h>
 #include <a2d/core/texture.h>
 #include <a2d/core/components/animator.h>
+#include <a2d/core/input.h>
 
 #include <lodepng.h>
 
@@ -79,7 +80,7 @@ public:
         a->AddAnimation("right", new Animation(f_right));
         a->AddAnimation("top", new Animation(f_top));
         a->AddAnimation("left", new Animation(f_left));
-        e->scale.Set(1.5f);
+        e->scale.Set(0.7f);
         e->SetLayer(4);
         e->AddComponent<Trump>();
     }

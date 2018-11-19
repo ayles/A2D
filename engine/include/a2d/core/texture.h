@@ -26,7 +26,20 @@ class Texture : public ref_counter {
     friend class Engine;
     friend class NativeRenderer;
 public:
+    enum Filtering {
+        NEAREST,
+        LINEAR,
+        TRILINEAR
+    };
+
+    enum Wrapping {
+        EDGE,
+        REPEAT,
+        MIRROR
+    };
+
     const int width, height;
+    const bool mipmaps;
 
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Texture)
 
@@ -61,10 +74,13 @@ public:
     const int width, height;
     const Vector2f offset;
     const Vector2f size;
+    const Texture::Filtering filtering;
+    const Texture::Wrapping wrapping;
 
-    TextureRegion();
-    TextureRegion(pTexture texture);
-    TextureRegion(pTexture texture, int x, int y, int width, int height);
+    TextureRegion(pTexture texture,
+                  Texture::Filtering = Texture::Filtering::LINEAR, Texture::Wrapping = Texture::Wrapping::EDGE);
+    TextureRegion(pTexture texture, int x, int y, int width, int height,
+                  Texture::Filtering = Texture::Filtering::LINEAR, Texture::Wrapping = Texture::Wrapping::EDGE);
     ~TextureRegion() override;
 
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(TextureRegion)

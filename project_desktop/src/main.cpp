@@ -14,19 +14,37 @@ __declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
 __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 }
 
+namespace a2d {
+
+class NativeConnector {
+public:
+    static bool Initialize() {
+        if (!a2d::Engine::Initialize()) return false;
+        if (!a2d::NativeRenderer::Initialize()) return false;
+        a2d::Engine::GetRoot()->AddComponent<a2d::RootComponent>();
+        return true;
+    }
+
+    static bool Step() {
+        return a2d::Engine::Update() &&
+               a2d::Engine::PostUpdate() &&
+               a2d::Engine::PreDraw() &&
+               a2d::NativeRenderer::Draw() &&
+               a2d::Engine::PostDraw();
+    }
+
+    static void Uninitialize() {
+        a2d::Engine::Uninitialize();
+        a2d::NativeRenderer::Uninitialize();
+    }
+};
+
+}
+
 int main() {
-    if (!a2d::Engine::Initialize()) return -1;
-    if (!a2d::NativeRenderer::Initialize()) return -1;
-    a2d::Engine::GetRoot()->AddComponent<a2d::RootComponent>();
-
-    while (a2d::Engine::Update() &&
-           a2d::Engine::PostUpdate() &&
-           a2d::Engine::PreDraw() &&
-           a2d::NativeRenderer::Draw() &&
-           a2d::Engine::PostDraw());
-
-    a2d::Engine::Uninitialize();
-    a2d::NativeRenderer::Uninitialize();
+    if (!a2d::NativeConnector::Initialize()) return -1;
+    while (a2d::NativeConnector::Step());
+    a2d::NativeConnector::Uninitialize();
 
     return 0;
 }

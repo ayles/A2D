@@ -122,6 +122,32 @@ public:
             if (sprite->texture_region && sprite->texture_region->texture) {
                 // TODO
                 sprite->texture_region->texture->Bind();
+                switch (sprite->texture_region->wrapping) {
+                    case a2d::Texture::Wrapping::EDGE:
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+                        break;
+                    case a2d::Texture::Wrapping::REPEAT:
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                        break;
+                    case a2d::Texture::Wrapping::MIRROR:
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+                        break;
+                }
+
+                switch (sprite->texture_region->filtering) {
+                    case a2d::Texture::Filtering::LINEAR:
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                        break;
+                    case a2d::Texture::Filtering::NEAREST:
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                }
+
+
                 //shader->Set("texture_sampler", 0);
                 sprite->shader->SetUniform("texture_offset", sprite->texture_region->offset);
                 sprite->shader->SetUniform("texture_size", sprite->texture_region->size);
@@ -148,12 +174,6 @@ public:
         a2d::Renderer::ResolutionChanged(width, height);
     }
 };
-
-#if TARGET_DESKTOP
-GLFWwindow *a2d::NativeRenderer::window = nullptr;
-#endif
-
-GLuint a2d::NativeRenderer::vertex_buffer = 0;
 
 } //namespace a2d
 

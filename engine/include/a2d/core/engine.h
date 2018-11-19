@@ -14,7 +14,6 @@
 #include <spdlog/spdlog.h>
 
 #include <thread>
-#include "texture.h"
 
 
 namespace a2d {
@@ -22,17 +21,24 @@ namespace a2d {
 class Engine {
     friend class Renderer;
     friend class NativeRenderer;
+    friend class NativeConnector;
+
+#ifdef TARGET_DESKTOP
+    friend int main();
+#endif
 
 public:
+    static void SetCamera(pCamera camera);
+
     static float GetDeltaTime();
     static pObject2D GetRoot();
     static pCamera GetCamera();
-    static void SetCamera(pCamera camera);
     static std::shared_ptr<spdlog::logger> GetLogger();
     static std::thread::id GetUIThreadID();
 
     Engine() = delete;
 
+private:
     static bool Initialize();
     static bool Update();
     static bool PostUpdate();
@@ -42,7 +48,6 @@ public:
     static void OnResume();
     static void Uninitialize();
 
-private:
     static float delta_time;
     static pObject2D root;
     static pCamera camera;

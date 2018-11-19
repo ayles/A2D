@@ -72,12 +72,19 @@ public:
         if (a != animations.end()) {
             if (current_animation != a->second || reset) a->second->Reset();
             current_animation = a->second;
+            playing = true;
         } else {
             current_animation = nullptr;
+            playing = false;
         }
     }
 
+    void PauseAnimation() {
+        playing = false;
+    }
+
 private:
+    bool playing = false;
     pAnimation current_animation = nullptr;
     std::map<std::string, pAnimation> animations;
 
@@ -86,7 +93,7 @@ private:
     void Update() override {
         if (!current_animation) return;
         GetObject2D()->GetComponent<Sprite>()->texture_region = current_animation->GetCurrentFrame().texture_region;
-        current_animation->AddDelta(a2d::Engine::GetDeltaTime());
+        if (playing) current_animation->AddDelta(a2d::Engine::GetDeltaTime());
     }
 
     ~Animator() override {}

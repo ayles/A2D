@@ -13,7 +13,7 @@
 
 a2d::Texture::Texture(
         int width, int height, const unsigned char *data, bool flip, bool mipmaps
-) : width(width), height(height) {
+) : width(width), height(height), mipmaps(mipmaps) {
     if ((width & (width - 1)) || (height & (height - 1))) mipmaps = false;
 
     glGenTextures(1, &texture_id);
@@ -77,20 +77,30 @@ a2d::pTexture a2d::Texture::GetTexture(const std::string &name) {
     return texture;
 }
 
-a2d::TextureRegion::TextureRegion() : texture(nullptr), x(0), y(0), width(0), height(0) {
+a2d::TextureRegion::TextureRegion(
+        pTexture texture,
+        Texture::Filtering filtering,
+        Texture::Wrapping wrapping
+) :
+texture(texture),
+x(0), y(0), width(0), height(0), offset(0), size(1),
+filtering(filtering), wrapping(wrapping)
+{
 
 }
 
-a2d::TextureRegion::TextureRegion(pTexture texture) :
-texture(texture), x(0), y(0), width(0), height(0),
-offset(0), size(1) {
-
-}
-
-a2d::TextureRegion::TextureRegion(pTexture texture, int x, int y, int width, int height) :
-texture(texture), x(x), y(y), width(width), height(height),
+a2d::TextureRegion::TextureRegion(
+        pTexture texture,
+        int x, int y, int width, int height,
+        Texture::Filtering filtering,
+        Texture::Wrapping wrapping
+) :
+texture(texture),
+x(x), y(y), width(width), height(height),
 offset(Vector2f(x, y) / Vector2f(texture->width, texture->height)),
-size(Vector2f(width, height) / Vector2f(texture->width, texture->height)){
+size(Vector2f(width, height) / Vector2f(texture->width, texture->height)),
+filtering(filtering), wrapping(wrapping)
+{
 
 }
 

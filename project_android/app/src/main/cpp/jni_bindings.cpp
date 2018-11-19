@@ -65,4 +65,35 @@ Java_com_selya_a2d_GL2JNI_register_1asset_1manager(JNIEnv *env, jclass type,
     a2d::NativeFileSystem::Initialize(AAssetManager_fromJava(env, asset_manager));
 }
 
+JNIEXPORT void JNICALL
+Java_com_selya_a2d_GL2JNI_on_1touch_1event(JNIEnv *env, jclass type, jobject motion_event) {
+    auto clazz = env->GetObjectClass(motion_event);
+    auto get_action_masked = env->GetMethodID(clazz, "getActionMasked", "()I");
+    auto get_action_index = env->GetMethodID(clazz, "getActionIndex", "()I");
+    auto get_pointer_count = env->GetMethodID(clazz, "getPointerCount", "()I");
+    auto get_x = env->GetMethodID(clazz, "getX", "()F");
+    auto get_y = env->GetMethodID(clazz, "getY", "()F");
+    auto action = env->CallIntMethod(motion_event, get_action_masked);
+    auto index = env->CallIntMethod(motion_event, get_action_index);
+    auto pointer_count = env->CallIntMethod(motion_event, get_pointer_count);
+    auto x = env->CallFloatMethod(motion_event, get_x);
+    auto y = env->CallFloatMethod(motion_event, get_y);
+    a2d::Input::Touch::TouchState state;
+    switch (action) {
+        case AMOTION_EVENT_ACTION_MOVE:
+        case AMOTION_EVENT_ACTION_DOWN:
+            state = a2d::Input::Touch::TouchState::PRESS;
+            break;
+        case AMOTION_EVENT_ACTION_UP:
+            state = a2d::Input::Touch::TouchState::RELEASE;
+            break;
+        default:
+            return;
+    }
+    a2d::Input::SetTouch(pointer_count, index, a2d::Input::Touch {
+        state,
+        x, y
+    });
+}
+
 }
