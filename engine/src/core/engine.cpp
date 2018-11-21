@@ -4,8 +4,10 @@
 
 #include <a2d/core/renderer.h>
 #include <a2d/core/engine.h>
+#include <a2d/core/object2d.h>
+#include <a2d/core/components/camera.h>
 
-#ifdef __ANDROID__
+#ifdef TARGET_ANDROID
 #include <spdlog/sinks/android_sink.h>
 #else
 #include <spdlog/sinks/stdout_sinks.h>
@@ -19,14 +21,14 @@ a2d::pObject2D a2d::Engine::root = new Object2D;
 a2d::pCamera a2d::Engine::camera = nullptr;
 std::shared_ptr<spdlog::logger> a2d::Engine::logger = nullptr;
 std::thread::id a2d::Engine::ui_thread_id;
+bool a2d::Engine::playing = false;
 
 bool a2d::Engine::Initialize() {
-    // Important for hierarchical activate/disable
     ui_thread_id = std::this_thread::get_id();
-
+    // Important for hierarchical activate/disable
     root->is_active = true;
 
-#ifdef __ANDROID__
+#ifdef TARGET_ANDROID
     logger = spdlog::android_logger_mt("logger", "a2d_log");
 #else
     logger = spdlog::stdout_logger_mt("logger");
@@ -34,6 +36,8 @@ bool a2d::Engine::Initialize() {
 
     logger->set_level(spdlog::level::info);
     logger->set_pattern("%+");
+
+    OnResume();
 
     return true;
 }
@@ -65,15 +69,20 @@ bool a2d::Engine::PostDraw() {
 }
 
 void a2d::Engine::OnPause() {
-
+    if (!playing) return;
+    playing = false;
+    root->OnPause();
 }
 
 void a2d::Engine::OnResume() {
-
+    if (playing) return;
+    playing = true;
+    root->OnResume();
 }
 
 void a2d::Engine::Uninitialize() {
-
+    OnPause();
+    root->CleanTree();
 }
 
 float a2d::Engine::GetDeltaTime() {
@@ -98,4 +107,8 @@ std::shared_ptr<spdlog::logger> a2d::Engine::GetLogger() {
 
 std::thread::id a2d::Engine::GetUIThreadID() {
     return ui_thread_id;
+}
+
+bool a2d::Engine::IsPlaying() {
+    return playing;
 }

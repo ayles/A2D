@@ -7,6 +7,7 @@
 
 #include <a2d/core.h>
 #include <a2d/core/shader.h>
+#include <a2d/core/components/camera.h>
 
 #ifdef TARGET_ANDROID
 #include <GLES2/gl2.h>
@@ -73,6 +74,14 @@ public:
 
         glfwSetFramebufferSizeCallback(window, update_camera);
         update_camera(window, 640, 480);
+
+        auto window_focus = [](GLFWwindow *window, int focus) {
+            if (focus) a2d::Engine::OnResume();
+            else a2d::Engine::OnPause();
+        };
+
+        glfwSetWindowFocusCallback(window, window_focus);
+
 #endif
 
         glEnable(GL_BLEND);

@@ -7,7 +7,6 @@
 
 #include <a2d/core/macro.h>
 #include <a2d/core/ref_counter.h>
-#include <a2d/core/object2d.h>
 
 namespace a2d {
 
@@ -19,27 +18,31 @@ class Component : public ref_counter {
     friend Object2D;
 
 public:
-    virtual pObject2D GetObject2D();
+    DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Component)
+
+    virtual SMART_POINTER(Object2D) GetObject2D();
 
     virtual bool IsActive();
-    virtual void SetActive(bool active);
 
 protected:
     bool is_active;
     SMART_POINTER(Object2D) object_2d;
 
+    virtual void SetActive(bool active);
+
+    // Events
     virtual void Initialize() {};
     virtual void OnEnable() {};
-    virtual void Start() {};
     virtual void LayerHierarchyAboutToChange() {};
     virtual void LayerHierarchyChanged() {};
     virtual void Update() {};
     virtual void PostUpdate() {};
     virtual void PreDraw() {};
     virtual void PostDraw() {};
-    virtual void OnQuit() {};
     virtual void OnDisable() {};
     virtual void OnDestroy() {};
+    virtual void OnPause() {};
+    virtual void OnResume() {};
 
     ~Component() override {};
     Component();

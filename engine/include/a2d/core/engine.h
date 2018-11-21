@@ -6,10 +6,6 @@
 #define A2D_ENGINE_H
 
 #include <a2d/core/macro.h>
-#include <a2d/core/texture.h>
-#include <a2d/core/object2d.h>
-#include <a2d/math.h>
-#include <a2d/core/components/camera.h>
 
 #include <spdlog/spdlog.h>
 
@@ -18,23 +14,23 @@
 
 namespace a2d {
 
+class Object2D;
+class Camera;
+
 class Engine {
     friend class Renderer;
     friend class NativeRenderer;
     friend class NativeConnector;
 
-#ifdef TARGET_DESKTOP
-    friend int main();
-#endif
-
 public:
-    static void SetCamera(pCamera camera);
+    static void SetCamera(SMART_POINTER(Camera) camera);
 
     static float GetDeltaTime();
-    static pObject2D GetRoot();
-    static pCamera GetCamera();
+    static SMART_POINTER(Object2D) GetRoot();
+    static SMART_POINTER(Camera) GetCamera();
     static std::shared_ptr<spdlog::logger> GetLogger();
     static std::thread::id GetUIThreadID();
+    static bool IsPlaying();
 
     Engine() = delete;
 
@@ -49,10 +45,11 @@ private:
     static void Uninitialize();
 
     static float delta_time;
-    static pObject2D root;
-    static pCamera camera;
+    static SMART_POINTER(Object2D) root;
+    static SMART_POINTER(Camera) camera;
     static std::shared_ptr<spdlog::logger> logger;
     static std::thread::id ui_thread_id;
+    static bool playing;
 };
 
 } //namespace a2d

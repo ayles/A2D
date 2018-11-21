@@ -16,7 +16,9 @@ set(A2D_SOURCES
     src/core/texture.cpp
     src/core/components/camera.cpp
     src/core/shader.cpp
-        src/core/input.cpp src/core/native_renderer.cpp)
+    src/core/input.cpp
+    src/core/native_renderer.cpp
+)
 
 set(A2D_HEADERS
     include/a2d/core/renderer.h
@@ -39,7 +41,7 @@ set(A2D_HEADERS
     include/a2d/core/shader.h
     include/a2d/core/components/animator.h
     include/a2d/core/input.h
-)
+        include/a2d/core/components/events_test.h)
 
 add_library(a2d STATIC ${A2D_SOURCES} ${A2D_HEADERS})
 target_include_directories(a2d PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -49,10 +51,19 @@ add_subdirectory(thirdparty/lodepng)
 add_subdirectory(thirdparty/simplejson)
 
 target_link_libraries(a2d spdlog lodepng simplejson)
-    target_compile_definitions(a2d PUBLIC RENDERER_GL_ES)
+target_compile_definitions(a2d PUBLIC RENDERER_GL_ES)
+
 if (ANDROID)
     target_compile_definitions(a2d PUBLIC TARGET_ANDROID)
-elseif(WIN32 OR LINUX OR APPLE)
+elseif(WIN32 OR UNIX OR APPLE)
+    if (WIN32)
+        target_compile_definitions(a2d PUBLIC TARGET_WINDOWS)
+    elseif(UNIX)
+        target_compile_definitions(a2d PUBLIC TARGET_LINUX)
+    elseif(APPLE)
+        target_compile_definitions(a2d PUBLIC TARGET_MACOS)
+    endif()
+
     find_package(OpenGL REQUIRED)
 
     target_compile_definitions(a2d PUBLIC RENDERER_GL)

@@ -65,11 +65,11 @@
 #define DIRECTINPUT_VERSION 0x0800
 
 #include <wctype.h>
-#include <Windows.h>
+#include <windows.h>
 #include <mmsystem.h>
 #include <dinput.h>
-#include <Xinput.h>
-#include <Dbt.h>
+#include <xinput.h>
+#include <dbt.h>
 
 #if defined(_MSC_VER)
  #include <malloc.h>

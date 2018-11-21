@@ -33,28 +33,7 @@ private:
     static int height;
 
     struct sprites_compare {
-        bool operator()(const pSprite &lhs, const pSprite &rhs) const {
-            std::stack<Object2D *> ls;
-            std::stack<Object2D *> rs;
-            ls.push(lhs->GetObject2D().get());
-            rs.push(rhs->GetObject2D().get());
-            while (ls.top()) {
-                ls.push(ls.top()->GetParent().get());
-            }
-            while (rs.top()) {
-                rs.push(rs.top()->GetParent().get());
-            }
-            while (true) {
-                ls.pop();
-                rs.pop();
-                if (ls.top()->GetLayer() != rs.top()->GetLayer()) {
-                    return ls.top()->GetLayer() < rs.top()->GetLayer();
-                } else if (ls.size() <= 1 || rs.size() <= 1) {
-                    // TODO compare by material
-                    return lhs < rhs;
-                }
-            }
-        }
+        bool operator()(const pSprite &lhs, const pSprite &rhs) const;
     };
 
     static std::set<pSprite, sprites_compare> sprites;

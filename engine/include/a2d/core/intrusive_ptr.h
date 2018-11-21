@@ -11,23 +11,26 @@ namespace a2d {
 
 template<class T>
 class intrusive_ptr {
-    T *ptr;
+    union {
+        T *ptr;
+        ref_counter *r_ptr;
+    };
 
 public:
     typedef T element_type;
 
     intrusive_ptr() : ptr(nullptr) {}
     intrusive_ptr(const intrusive_ptr &other) : ptr(other.ptr) {
-        if (ptr) dynamic_cast<ref_counter *>(ptr)->add_ref();
+        if (ptr) ptr->add_ref();
     }
 
     intrusive_ptr(T *p) : ptr(p) {
-        if (ptr) dynamic_cast<ref_counter *>(ptr)->add_ref();
+        if (ptr) ptr->add_ref();
     }
 
     template<class U>
-    intrusive_ptr(const intrusive_ptr<U> &other) : ptr(other.get()) {
-        if (ptr) dynamic_cast<ref_counter *>(ptr)->add_ref();
+    intrusive_ptr(const intrusive_ptr<U> &other) : ptr(dynamic_cast<T *>(other.get())) {
+        if (ptr) ptr->add_ref();
     }
 
     T *get() const {
@@ -91,7 +94,7 @@ public:
     }
 
     ~intrusive_ptr() {
-        if (ptr) dynamic_cast<ref_counter *>(ptr)->release_ref();
+        if (ptr) r_ptr->release_ref();
     }
 };
 

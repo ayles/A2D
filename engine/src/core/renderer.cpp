@@ -3,6 +3,8 @@
 //
 
 #include <a2d/core/renderer.h>
+#include <a2d/core/object2d.h>
+#include <a2d/core/components/camera.h>
 
 a2d::Vector4f a2d::Renderer::clear_color = Vector4f(0.0f, 0.0f, 0.0f, 1.0f);
 int a2d::Renderer::width = 1;
@@ -46,4 +48,27 @@ void a2d::Renderer::AddSprite(const a2d::pSprite &sprite) {
 
 void a2d::Renderer::RemoveSprite(const a2d::pSprite &sprite) {
     sprites.erase(sprite);
+}
+
+bool a2d::Renderer::sprites_compare::operator()(const a2d::pSprite &lhs, const a2d::pSprite &rhs) const {
+    std::stack<Object2D *> ls;
+    std::stack<Object2D *> rs;
+    ls.push(lhs->GetObject2D().get());
+    rs.push(rhs->GetObject2D().get());
+    while (ls.top()) {
+        ls.push(ls.top()->GetParent().get());
+    }
+    while (rs.top()) {
+        rs.push(rs.top()->GetParent().get());
+    }
+    while (true) {
+        ls.pop();
+        rs.pop();
+        if (ls.top()->GetLayer() != rs.top()->GetLayer()) {
+            return ls.top()->GetLayer() < rs.top()->GetLayer();
+        } else if (ls.size() <= 1 || rs.size() <= 1) {
+            // TODO compare by material
+            return lhs < rhs;
+        }
+    }
 }

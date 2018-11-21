@@ -21,7 +21,7 @@
 
 #define COM_NO_WINDOWS_H
 #include <objbase.h>
-#include "_mingw_dxhelper.h"
+#include <_mingw_dxhelper.h>
 
 #ifndef DIRECTINPUT_VERSION
 #define DIRECTINPUT_VERSION	0x0800

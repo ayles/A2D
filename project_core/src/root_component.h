@@ -20,6 +20,7 @@
 #endif
 
 #include <cmath>
+#include <a2d/core/components/events_test.h>
 #include "trump.h"
 
 namespace a2d {
@@ -83,6 +84,8 @@ public:
         e->scale.Set(0.7f);
         e->SetLayer(4);
         e->AddComponent<Trump>();
+
+        Engine::GetRoot()->AddComponent<a2d::EventsTest>();
     }
 
     void Update() override {

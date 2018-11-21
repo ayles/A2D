@@ -18,7 +18,7 @@ bool Object2D::IsActive() {
 void Object2D::SetActive(bool active) {
     if (is_active == active) return;
     is_active = active;
-    for (std::pair<std::type_index, std::set<pComponent>> s : components) {
+    for (const auto &s : components) {
         for (const pComponent &c : s.second) {
             c->SetActive(is_active);
         }
@@ -67,7 +67,7 @@ pObject2D Object2D::RemoveChild(const pObject2D &child) {
 }
 
 void Object2D::LayerHierarchyAboutToChange() {
-    for (std::pair<std::type_index, std::set<pComponent>> s : components) {
+    for (const auto &s : components) {
         for (const pComponent &c : s.second) {
             c->LayerHierarchyAboutToChange();
         }
@@ -78,7 +78,7 @@ void Object2D::LayerHierarchyAboutToChange() {
 }
 
 void Object2D::LayerHierarchyChanged() {
-    for (std::pair<std::type_index, std::set<pComponent>> s : components) {
+    for (const auto &s : components) {
         for (const pComponent &c : s.second) {
             c->LayerHierarchyChanged();
         }
@@ -89,7 +89,7 @@ void Object2D::LayerHierarchyChanged() {
 }
 
 void Object2D::Update() {
-    for (std::pair<std::type_index, std::set<pComponent>> s : components) {
+    for (const auto &s : components) {
         for (const pComponent &c : s.second) {
             c->Update();
         }
@@ -100,7 +100,7 @@ void Object2D::Update() {
 }
 
 void Object2D::PostUpdate() {
-    for (std::pair<std::type_index, std::set<pComponent>> s : components) {
+    for (const auto &s : components) {
         for (const pComponent &c : s.second) {
             c->PostUpdate();
         }
@@ -118,7 +118,7 @@ void Object2D::PreDraw(const a2d::Matrix4f &mat) {
 
     transform_matrix = mat * transform_matrix;
 
-    for (std::pair<std::type_index, std::set<pComponent>> s : components) {
+    for (const auto &s : components) {
         for (const pComponent &c : s.second) {
             c->PreDraw();
         }
@@ -129,15 +129,45 @@ void Object2D::PreDraw(const a2d::Matrix4f &mat) {
     }
 }
 
-
 void Object2D::PostDraw() {
-    for (std::pair<std::type_index, std::set<pComponent>> s : components) {
+    for (const auto &s : components) {
         for (const pComponent &c : s.second) {
             c->PostDraw();
         }
     }
     for (const pObject2D &c : children) {
         c->PostDraw();
+    }
+}
+
+void Object2D::OnPause() {
+    for (const auto &s : components) {
+        for (const pComponent &c : s.second) {
+            c->OnPause();
+        }
+    }
+    for (const pObject2D &c : children) {
+        c->OnPause();
+    }
+}
+
+void Object2D::OnResume() {
+    for (const auto &s : components) {
+        for (const pComponent &c : s.second) {
+            c->OnResume();
+        }
+    }
+    for (const pObject2D &c : children) {
+        c->OnResume();
+    }
+}
+
+void Object2D::CleanTree() {
+    for (const auto &s : components) {
+        while (!s.second.empty()) RemoveComponent(*s.second.begin());
+    }
+    for (const pObject2D &c : children) {
+        c->CleanTree();
     }
 }
 

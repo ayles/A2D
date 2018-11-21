@@ -11,44 +11,72 @@
 #include <android/asset_manager.h>
 #include <android/asset_manager_jni.h>
 
+namespace a2d {
+
+class NativeConnector {
+public:
+    static bool Initialize() {
+        if (!a2d::Engine::Initialize()) return false;
+        if (!a2d::NativeRenderer::Initialize()) return false;
+        a2d::Engine::GetRoot()->AddComponent<a2d::RootComponent>();
+        return true;
+    }
+
+    static bool Step() {
+        return a2d::Engine::Update() &&
+               a2d::Engine::PostUpdate() &&
+               a2d::Engine::PreDraw() &&
+               a2d::NativeRenderer::Draw() &&
+               a2d::Engine::PostDraw();
+    }
+
+    static void Uninitialize() {
+        a2d::Engine::Uninitialize();
+        a2d::NativeRenderer::Uninitialize();
+    }
+
+    static void OnPause() {
+        a2d::Engine::OnPause();
+    }
+
+    static void OnResume() {
+        a2d::Engine::OnResume();
+    }
+};
+
+} //namespace a2d
+
 extern "C" {
 
 JNIEXPORT jboolean JNICALL
 Java_com_selya_a2d_GL2JNI_initialize(JNIEnv *env, jclass type) {
-    if (!a2d::Engine::Initialize()) return JNI_FALSE;
     return JNI_TRUE;
 }
 
 JNIEXPORT jboolean JNICALL
 Java_com_selya_a2d_GL2JNI_on_1surface_1created(JNIEnv *env, jclass type) {
-    if (!a2d::NativeRenderer::Initialize()) return JNI_FALSE;
-    a2d::Engine::GetRoot()->AddComponent<a2d::RootComponent>();
+    if (!a2d::NativeConnector::Initialize()) return JNI_FALSE;
     return JNI_TRUE;
 }
 
 JNIEXPORT jboolean JNICALL
 Java_com_selya_a2d_GL2JNI_on_1draw_1frame(JNIEnv *env, jclass type) {
-    return (jboolean) (a2d::Engine::Update() &&
-                       a2d::Engine::PostUpdate() &&
-                       a2d::Engine::PreDraw() &&
-                       a2d::NativeRenderer::Draw() &&
-                       a2d::Engine::PostDraw());
+    return (jboolean) (a2d::NativeConnector::Step());
 }
 
 JNIEXPORT void JNICALL
 Java_com_selya_a2d_GL2JNI_on_1destroy(JNIEnv *env, jclass type) {
-    a2d::NativeRenderer::Uninitialize();
-    a2d::Engine::Uninitialize();
+    a2d::NativeConnector::Uninitialize();
 }
 
 JNIEXPORT void JNICALL
 Java_com_selya_a2d_GL2JNI_on_1pause(JNIEnv *env, jclass type) {
-    a2d::Engine::OnPause();
+    a2d::NativeConnector::OnPause();
 }
 
 JNIEXPORT void JNICALL
 Java_com_selya_a2d_GL2JNI_on_1resume(JNIEnv *env, jclass type) {
-    a2d::Engine::OnResume();
+    a2d::NativeConnector::OnResume();
 }
 
 

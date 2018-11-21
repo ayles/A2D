@@ -8,11 +8,13 @@
 
 #include <a2d/core/native_renderer.h>
 
+#ifdef TARGET_WINDOWS
 // Enable NVIDIA or AMD discrete gpu
 extern "C" {
 __declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
 __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 }
+#endif
 
 namespace a2d {
 
