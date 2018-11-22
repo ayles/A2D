@@ -5,7 +5,7 @@
 #include <jni.h>
 
 #include <a2d/core.h>
-#include <a2d/core/native_renderer.h>
+#include <a2d/core/renderer.h>
 #include <root_component.h>
 
 #include <android/asset_manager.h>
@@ -17,7 +17,7 @@ class NativeConnector {
 public:
     static bool Initialize() {
         if (!a2d::Engine::Initialize()) return false;
-        if (!a2d::NativeRenderer::Initialize()) return false;
+        if (!a2d::Renderer::Initialize()) return false;
         a2d::Engine::GetRoot()->AddComponent<a2d::RootComponent>();
         return true;
     }
@@ -26,13 +26,18 @@ public:
         return a2d::Engine::Update() &&
                a2d::Engine::PostUpdate() &&
                a2d::Engine::PreDraw() &&
-               a2d::NativeRenderer::Draw() &&
+               a2d::Renderer::Draw() &&
                a2d::Engine::PostDraw();
     }
 
     static void Uninitialize() {
         a2d::Engine::Uninitialize();
-        a2d::NativeRenderer::Uninitialize();
+        a2d::Renderer::Uninitialize();
+        a2d::FileSystem::Uninitialize();
+    }
+
+    static void ResolutionChanged(int width, int height) {
+        a2d::Renderer::ResolutionChanged(width, height);
     }
 
     static void OnPause() {
@@ -84,13 +89,13 @@ Java_com_selya_a2d_GL2JNI_on_1resume(JNIEnv *env, jclass type) {
 JNIEXPORT void JNICALL
 Java_com_selya_a2d_GL2JNI_on_1surface_1changed(JNIEnv *env, jclass type, jint width,
                                                           jint height) {
-    a2d::NativeRenderer::ResolutionChanged(width, height);
+    a2d::NativeConnector::ResolutionChanged(width, height);
 }
 
 JNIEXPORT void JNICALL
 Java_com_selya_a2d_GL2JNI_register_1asset_1manager(JNIEnv *env, jclass type,
                                                    jobject asset_manager) {
-    a2d::NativeFileSystem::Initialize(AAssetManager_fromJava(env, asset_manager));
+    a2d::FileSystem::Initialize(AAssetManager_fromJava(env, asset_manager));
 }
 
 JNIEXPORT void JNICALL

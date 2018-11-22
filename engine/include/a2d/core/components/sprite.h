@@ -16,15 +16,19 @@ DECLARE_SMART_POINTER(Sprite)
 
 class Sprite : public Component {
     friend class Renderer;
-    friend class NativeRenderer;
     friend class Object2D;
 
 public:
     Vector4f color;
-    pTextureRegion texture_region;
     pShader shader;
 
+    const pTextureRegion &GetTextureRegion();
+
+    void SetTextureRegion(const pTextureRegion &texture_region);
+
 private:
+    pTextureRegion texture_region;
+
     Sprite();
 
     void OnEnable() override;

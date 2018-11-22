@@ -6,8 +6,6 @@
 #include <a2d/core/renderer.h>
 #include <root_component.h>
 
-#include <a2d/core/native_renderer.h>
-
 #ifdef TARGET_WINDOWS
 // Enable NVIDIA or AMD discrete gpu
 extern "C" {
@@ -21,8 +19,9 @@ namespace a2d {
 class NativeConnector {
 public:
     static bool Initialize() {
+        if (!a2d::FileSystem::Initialize()) return false;
         if (!a2d::Engine::Initialize()) return false;
-        if (!a2d::NativeRenderer::Initialize()) return false;
+        if (!a2d::Renderer::Initialize()) return false;
         a2d::Engine::GetRoot()->AddComponent<a2d::RootComponent>();
         return true;
     }
@@ -31,13 +30,14 @@ public:
         return a2d::Engine::Update() &&
                a2d::Engine::PostUpdate() &&
                a2d::Engine::PreDraw() &&
-               a2d::NativeRenderer::Draw() &&
+               a2d::Renderer::Draw() &&
                a2d::Engine::PostDraw();
     }
 
     static void Uninitialize() {
         a2d::Engine::Uninitialize();
-        a2d::NativeRenderer::Uninitialize();
+        a2d::Renderer::Uninitialize();
+        a2d::FileSystem::Uninitialize();
     }
 };
 

@@ -12,13 +12,11 @@ set(A2D_SOURCES
     src/core/component.cpp
     src/core/components/sprite.cpp
     src/core/renderer.cpp
-    src/core/native_filesystem.cpp
-    src/core/texture.cpp
+        src/core/texture.cpp
     src/core/components/camera.cpp
     src/core/shader.cpp
     src/core/input.cpp
-    src/core/native_renderer.cpp
-)
+        src/core/filesystem.cpp)
 
 set(A2D_HEADERS
     include/a2d/core/renderer.h
@@ -34,14 +32,12 @@ set(A2D_HEADERS
     include/a2d/core/macro.h
     include/a2d/core/components/sprite.h
     include/a2d/core/components/camera.h
-    include/a2d/core/native_renderer.h
-    include/a2d/core/filesystem.h
-    include/a2d/core/native_filesystem.h
-    include/a2d/core/texture.h
+        include/a2d/core/filesystem.h
+        include/a2d/core/texture.h
     include/a2d/core/shader.h
     include/a2d/core/components/animator.h
     include/a2d/core/input.h
-        include/a2d/core/components/events_test.h)
+        include/a2d/core/components/events_test.h include/a2d/core/components/pixel_sprite.h include/a2d/core/components/pixel_camera.h)
 
 add_library(a2d STATIC ${A2D_SOURCES} ${A2D_HEADERS})
 target_include_directories(a2d PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

@@ -27,7 +27,7 @@ namespace a2d {
 DECLARE_SMART_POINTER(Shader)
 
 class Shader : public ref_counter {
-    friend class NativeRenderer;
+    friend class Renderer;
 private:
     enum ValueType {
         FLOAT = 1,

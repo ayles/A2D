@@ -27,8 +27,8 @@ public class MainActivity extends Activity {
         glSurfaceView.setPreserveEGLContextOnPause(true);
         glSurfaceView.setRenderer(new GLESRenderer());
         setContentView(glSurfaceView);
-        GL2JNI.initialize();
         GL2JNI.register_asset_manager(getResources().getAssets());
+        GL2JNI.initialize();
     }
 
     @Override

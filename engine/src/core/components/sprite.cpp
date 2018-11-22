@@ -11,6 +11,14 @@ Sprite::Sprite() : color(1), texture_region(nullptr), shader(Shader::GetShader("
 
 }
 
+const pTextureRegion &Sprite::GetTextureRegion() {
+    return texture_region;
+}
+
+void Sprite::SetTextureRegion(const pTextureRegion &texture_region) {
+    this->texture_region = texture_region;
+}
+
 void Sprite::OnEnable() {
     Renderer::AddSprite(this);
 }

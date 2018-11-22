@@ -10,6 +10,7 @@
 #include <a2d/core/texture.h>
 #include <a2d/core/components/animator.h>
 #include <a2d/core/input.h>
+#include <a2d/core/components/camera.h>
 
 #include <lodepng.h>
 
@@ -41,9 +42,9 @@ public:
         auto valeriy = Texture::GetTexture("valeriy");
 
         o1 = a2d::Engine::GetRoot()->AddChild(new Object2D);
-        o1->AddComponent<Sprite>()->texture_region = new TextureRegion(valeriy, 0, 0, 500, 200);
+        o1->AddComponent<Sprite>()->SetTextureRegion(new TextureRegion(valeriy, 0, 0, 500, 200));
         o2 = a2d::Engine::GetRoot()->AddChild(new Object2D);
-        o2->AddComponent<Sprite>()->texture_region = new TextureRegion(valeriy);
+        o2->AddComponent<Sprite>()->SetTextureRegion(new TextureRegion(valeriy));
 
         o1->GetComponent<Sprite>()->color.Set(0.5, 0.5, 1, 1);
         o2->GetComponent<Sprite>()->color.Set(1, 1, 0, 1);
@@ -51,7 +52,7 @@ public:
         auto explosion = Texture::GetTexture("trump");
 
         e = a2d::Engine::GetRoot()->AddChild(new Object2D);
-        e->AddComponent<Sprite>()->texture_region = new TextureRegion(explosion);
+        e->AddComponent<Sprite>()->SetTextureRegion(new TextureRegion(explosion));
 
         std::vector<Animation::Frame> f_bottom;
         std::vector<Animation::Frame> f_right;
@@ -85,7 +86,7 @@ public:
         e->SetLayer(4);
         e->AddComponent<Trump>();
 
-        Engine::GetRoot()->AddComponent<a2d::EventsTest>();
+        //Engine::GetRoot()->AddComponent<a2d::EventsTest>();
     }
 
     void Update() override {

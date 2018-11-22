@@ -92,7 +92,7 @@ private:
 
     void Update() override {
         if (!current_animation) return;
-        GetObject2D()->GetComponent<Sprite>()->texture_region = current_animation->GetCurrentFrame().texture_region;
+        GetObject2D()->GetComponent<Sprite>()->SetTextureRegion(current_animation->GetCurrentFrame().texture_region);
         if (playing) current_animation->AddDelta(a2d::Engine::GetDeltaTime());
     }
 

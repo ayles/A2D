@@ -13,7 +13,7 @@
 
 a2d::Texture::Texture(
         int width, int height, const unsigned char *data, bool flip, bool mipmaps
-) : width(width), height(height), mipmaps(mipmaps) {
+) : width(width), height(height), mipmaps(mipmaps), filtering(NEAREST), wrapping(REPEAT) {
     if ((width & (width - 1)) || (height & (height - 1))) mipmaps = false;
 
     glGenTextures(1, &texture_id);
@@ -21,8 +21,8 @@ a2d::Texture::Texture(
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mipmaps ? GL_NEAREST_MIPMAP_NEAREST : GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipmaps ? GL_NEAREST_MIPMAP_NEAREST : GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
     auto final_data = new GLubyte[width * height * 4];
 
@@ -43,9 +43,35 @@ a2d::Texture::Texture(
     delete [] final_data;
 }
 
-void a2d::Texture::Bind(unsigned int texture_unit) const {
+void a2d::Texture::Bind(unsigned int texture_unit, Filtering filtering, Wrapping wrapping) {
     glActiveTexture(GL_TEXTURE0 + texture_unit);
     glBindTexture(GL_TEXTURE_2D, texture_id);
+
+    if (this->filtering != filtering) {
+        GLuint f;
+        switch (filtering) {
+            case NEAREST: f = GL_NEAREST; break;
+            case LINEAR: f = GL_LINEAR; break;
+            case TRILINEAR: f = GL_LINEAR_MIPMAP_LINEAR; break;
+            default: return;
+        }
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, f);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, f);
+        this->filtering = filtering;
+    }
+
+    if (this->wrapping != wrapping) {
+        GLuint w;
+        switch (wrapping) {
+            case EDGE: w = GL_CLAMP_TO_EDGE; break;
+            case REPEAT: w = GL_REPEAT; break;
+            case MIRROR: w = GL_MIRRORED_REPEAT; break;
+            default: return;
+        }
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, w);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, w);
+        this->wrapping = wrapping;
+    }
 }
 
 void a2d::Texture::Unbind(unsigned int texture_unit) {
@@ -77,13 +103,27 @@ a2d::pTexture a2d::Texture::GetTexture(const std::string &name) {
     return texture;
 }
 
+
+
+
+
+
+a2d::TextureRegion::TextureRegion() :
+texture(nullptr),
+offset(0), size(0), uv_lb(0), uv_rt(0), ratio(1),
+filtering(Texture::Filtering::LINEAR), wrapping(Texture::Wrapping::REPEAT)
+{
+
+}
+
+
 a2d::TextureRegion::TextureRegion(
         pTexture texture,
         Texture::Filtering filtering,
         Texture::Wrapping wrapping
 ) :
 texture(texture),
-x(0), y(0), width(0), height(0), offset(0), size(1),
+offset(0), size(texture->width, texture->height), uv_lb(0), uv_rt(1), ratio((float)size.x / size.y),
 filtering(filtering), wrapping(wrapping)
 {
 
@@ -96,12 +136,78 @@ a2d::TextureRegion::TextureRegion(
         Texture::Wrapping wrapping
 ) :
 texture(texture),
-x(x), y(y), width(width), height(height),
-offset(Vector2f(x, y) / Vector2f(texture->width, texture->height)),
-size(Vector2f(width, height) / Vector2f(texture->width, texture->height)),
+offset(x, y), size(width, height),
+uv_lb(Vector2f(x, y) / Vector2f(texture->width, texture->height)),
+uv_rt(Vector2f(x + width, y + height) / Vector2f(texture->width, texture->height)),
+ratio((float)size.x / size.y),
 filtering(filtering), wrapping(wrapping)
 {
 
+}
+
+void a2d::TextureRegion::Bind(unsigned int texture_unit) {
+    if (!texture) return;
+    texture->Bind(texture_unit, filtering, wrapping);
+}
+
+/*void a2d::TextureRegion::SetTexture(const a2d::pTexture &texture) {
+
+}
+
+void a2d::TextureRegion::SetX(int x) {
+
+}
+
+void a2d::TextureRegion::SetY(int y) {
+
+}
+
+void a2d::TextureRegion::SetWidth(int width) {
+
+}
+
+void a2d::TextureRegion::SetHeight(int height) {
+
+}
+
+void a2d::TextureRegion::SetFiltering(a2d::Texture::Filtering filtering) {
+
+}
+
+void a2d::TextureRegion::SetWrapping(a2d::Texture::Wrapping wrapping) {
+
+}*/
+
+const a2d::pTexture &a2d::TextureRegion::GetTexture() {
+    return texture;
+}
+
+int a2d::TextureRegion::GetX() {
+    return offset.x;
+}
+
+int a2d::TextureRegion::GetY() {
+    return offset.y;
+}
+
+int a2d::TextureRegion::GetWidth() {
+    return size.x;
+}
+
+int a2d::TextureRegion::GetHeight() {
+    return size.y;
+}
+
+float a2d::TextureRegion::GetRatio() {
+    return ratio;
+}
+
+a2d::Texture::Filtering a2d::TextureRegion::GetFiltering() {
+    return filtering;
+}
+
+a2d::Texture::Wrapping a2d::TextureRegion::GetWrapping() {
+    return wrapping;
 }
 
 a2d::TextureRegion::~TextureRegion() = default;

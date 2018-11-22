@@ -13,7 +13,7 @@
 #endif
 
 #include <a2d/core/engine.h>
-#include <a2d/core/native_renderer.h>
+#include <a2d/core/renderer.h>
 
 #include <vector>
 
@@ -174,7 +174,7 @@ public:
 
     static KeyState GetKey(KeyCode key_code) {
 #ifdef TARGET_DESKTOP
-        switch (glfwGetKey(a2d::NativeRenderer::window, key_code)) {
+        switch (glfwGetKey(a2d::Renderer::window, key_code)) {
             case GLFW_PRESS: return KeyState::PRESS;
             case GLFW_RELEASE: return KeyState::RELEASE;
             default: return KeyState::RELEASE;

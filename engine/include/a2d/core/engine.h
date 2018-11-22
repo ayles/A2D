@@ -10,6 +10,7 @@
 #include <spdlog/spdlog.h>
 
 #include <thread>
+#include "texture.h"
 
 
 namespace a2d {

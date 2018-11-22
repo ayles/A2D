@@ -20,11 +20,16 @@
 
 namespace a2d {
 
+
+
+
 DECLARE_SMART_POINTER(Texture)
 
 class Texture : public ref_counter {
     friend class Engine;
-    friend class NativeRenderer;
+    friend class Renderer;
+    friend class TextureRegion;
+
 public:
     enum Filtering {
         NEAREST,
@@ -47,7 +52,6 @@ public:
 
 private:
     Texture(int width, int height, const unsigned char *data, bool flip = false, bool mipmaps = false);
-
     ~Texture() override;
 
 
@@ -55,36 +59,68 @@ private:
     GLuint texture_id;
 #endif
 
-    void Bind(unsigned int texture_unit = 0) const;
+    Filtering filtering;
+    Wrapping wrapping;
+
+    void Bind(unsigned int texture_unit = 0, Filtering filtering = LINEAR, Wrapping wrapping = REPEAT);
 
     static void Unbind(unsigned int texture_unit = 0);
 
     static std::map<std::string, pTexture> textures;
 };
 
+
+
+
+
 DECLARE_SMART_POINTER(TextureRegion)
 
 // TODO add filtering and wrapping here
 class TextureRegion : public ref_counter {
     friend class Engine;
+    friend class Renderer;
 
 public:
-    const pTexture texture;
-    const int x, y;
-    const int width, height;
-    const Vector2f offset;
-    const Vector2f size;
-    const Texture::Filtering filtering;
-    const Texture::Wrapping wrapping;
-
+    TextureRegion();
     TextureRegion(pTexture texture,
-                  Texture::Filtering = Texture::Filtering::LINEAR, Texture::Wrapping = Texture::Wrapping::EDGE);
+                  Texture::Filtering = Texture::Filtering::LINEAR, Texture::Wrapping = Texture::Wrapping::REPEAT);
     TextureRegion(pTexture texture, int x, int y, int width, int height,
-                  Texture::Filtering = Texture::Filtering::LINEAR, Texture::Wrapping = Texture::Wrapping::EDGE);
+                  Texture::Filtering = Texture::Filtering::LINEAR, Texture::Wrapping = Texture::Wrapping::REPEAT);
     ~TextureRegion() override;
 
+    void SetTexture(const pTexture &texture);
+    void SetX(int x);
+    void SetY(int y);
+    void SetWidth(int width);
+    void SetHeight(int height);
+    void SetFiltering(Texture::Filtering filtering);
+    void SetWrapping(Texture::Wrapping wrapping);
+
+    const pTexture &GetTexture();
+    int GetX();
+    int GetY();
+    int GetWidth();
+    int GetHeight();
+    float GetRatio();
+    Texture::Filtering GetFiltering();
+    Texture::Wrapping GetWrapping();
+
+    void Bind(unsigned int texture_unit = 0);
+
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(TextureRegion)
+
+private:
+    pTexture texture;
+    Vector2i offset;
+    Vector2i size;
+    Vector2f uv_lb;
+    Vector2f uv_rt;
+    float ratio;
+    Texture::Filtering filtering;
+    Texture::Wrapping wrapping;
 };
+
+
 
 } //namespace a2d
 
