@@ -28,6 +28,8 @@ DECLARE_SMART_POINTER(Shader)
 
 class Shader : public ref_counter {
     friend class Renderer;
+    friend class SpriteBatch;
+
 private:
     enum ValueType {
         FLOAT = 1,

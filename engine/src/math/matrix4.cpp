@@ -5,6 +5,7 @@
 #include <a2d/math/matrix.h>
 
 #include <cmath>
+#include <a2d/core/engine.h>
 
 #define IF_FLOATING_POINT typename std::enable_if<std::is_floating_point<T>::value>::type
 #define IF_INTEGRAL typename std::enable_if<std::is_integral<T>::value>::type
@@ -314,6 +315,37 @@ a2d::Matrix<4, 4, T> a2d::Matrix<4, 4, T, IF_FLOATING_POINT>::operator*(const Ma
                   data[15] * other.data[15];
 
     return nm;
+}
+
+template<class T>
+a2d::Vector<4, T> &a2d::Matrix<4, 4, T, IF_FLOATING_POINT>::Transform(float x, float y, float z, float w, Vector<4, T> &dest) const {
+    float rx = data[0] * x + data[4] * y + data[8] * z + data[12] * w;
+    float ry = data[1] * x + data[5] * y + data[9] * z + data[13] * w;
+    float rz = data[2] * x + data[6] * y + data[10] * z + data[14] * w;
+    float rw = data[3] * x + data[7] * y + data[11] * z + data[15] * w;
+    dest.x = rx;
+    dest.y = ry;
+    dest.z = rz;
+    dest.w = rw;
+    return dest;
+}
+
+template<class T>
+a2d::Vector<4, T> &a2d::Matrix<4, 4, T, IF_FLOATING_POINT>::Transform(Vector<4, T> &v) const {
+    return Transform(v, v);
+}
+
+template<class T>
+a2d::Vector<4, T> &a2d::Matrix<4, 4, T, IF_FLOATING_POINT>::Transform(const Vector<4, T> &v, Vector<4, T> &dest) const {
+    float rx = data[0] * v.x + data[4] * v.y + data[8] * v.z + data[12] * v.w;
+    float ry = data[1] * v.x + data[5] * v.y + data[9] * v.z + data[13] * v.w;
+    float rz = data[2] * v.x + data[6] * v.y + data[10] * v.z + data[14] * v.w;
+    float rw = data[3] * v.x + data[7] * v.y + data[11] * v.z + data[15] * v.w;
+    dest.x = rx;
+    dest.y = ry;
+    dest.z = rz;
+    dest.w = rw;
+    return dest;
 }
 
 template<class T>

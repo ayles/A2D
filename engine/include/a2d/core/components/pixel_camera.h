@@ -11,8 +11,15 @@ namespace a2d {
 
 class PixelCamera : public Camera {
 public:
+    PixelCamera();
 
+    void SetScaleFactor(float scale_factor);
+    float GetScaleFactor();
 
+    void Update() override;
+
+private:
+    float scale_factor;
 };
 
 } //namespace a2d

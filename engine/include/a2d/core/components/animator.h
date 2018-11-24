@@ -34,8 +34,9 @@ public:
 
     }
 
-    const Frame &GetCurrentFrame() const {
-        return frames[current_frame_index];
+    const Frame *GetCurrentFrame() const {
+        if (frames.empty()) return nullptr;
+        return &frames[current_frame_index];
     }
 
     void AddDelta(float delta) {
@@ -92,7 +93,12 @@ private:
 
     void Update() override {
         if (!current_animation) return;
-        GetObject2D()->GetComponent<Sprite>()->SetTextureRegion(current_animation->GetCurrentFrame().texture_region);
+        auto sprite = GetObject2D()->GetComponent<Sprite>();
+        if (!sprite) sprite = GetObject2D()->GetComponent<PixelSprite>();
+        if (!sprite) return;
+        auto frame = current_animation->GetCurrentFrame();
+        if (!frame) return;
+        sprite->SetTextureRegion(frame->texture_region);
         if (playing) current_animation->AddDelta(a2d::Engine::GetDeltaTime());
     }
 

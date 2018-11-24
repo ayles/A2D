@@ -7,7 +7,7 @@
 
 namespace a2d {
 
-Object2D::Object2D() : is_active(false), layer(0), parent(nullptr), scale(1), position(), rotation() {
+Object2D::Object2D() : is_active(false), layer(0), parent(nullptr), scale(1), position(), rotation(), drawable(nullptr) {
 
 }
 
@@ -38,9 +38,10 @@ int Object2D::GetLayer() {
 
 void Object2D::SetLayer(int layer) {
     if (layer == this->layer) return;
-    this->LayerHierarchyAboutToChange();
+    auto p = parent;
+    if (parent) parent->RemoveChild(this);
     this->layer = layer;
-    this->LayerHierarchyChanged();
+    p->AddChild(this);
 }
 
 pObject2D Object2D::GetParent() {
@@ -64,28 +65,6 @@ pObject2D Object2D::RemoveChild(const pObject2D &child) {
         children.erase(child);
     }
     return child;
-}
-
-void Object2D::LayerHierarchyAboutToChange() {
-    for (const auto &s : components) {
-        for (const pComponent &c : s.second) {
-            c->LayerHierarchyAboutToChange();
-        }
-    }
-    for (const pObject2D &c : children) {
-        c->LayerHierarchyAboutToChange();
-    }
-}
-
-void Object2D::LayerHierarchyChanged() {
-    for (const auto &s : components) {
-        for (const pComponent &c : s.second) {
-            c->LayerHierarchyChanged();
-        }
-    }
-    for (const pObject2D &c : children) {
-        c->LayerHierarchyChanged();
-    }
 }
 
 void Object2D::Update() {
@@ -126,6 +105,13 @@ void Object2D::PreDraw(const a2d::Matrix4f &mat) {
 
     for (const pObject2D &c : children) {
         c->PreDraw(transform_matrix);
+    }
+}
+
+void Object2D::Draw(SpriteBatch &sprite_batch) {
+    if (drawable) drawable->Draw(sprite_batch);
+    for (const pObject2D &c : children) {
+        c->Draw(sprite_batch);
     }
 }
 
@@ -173,6 +159,14 @@ void Object2D::CleanTree() {
 
 Object2D::~Object2D() {
 
+}
+
+bool Object2D::objects_compare::operator()(const pObject2D &lhs, const pObject2D &rhs) const {
+    if (lhs->GetLayer() != rhs->GetLayer()) return lhs->GetLayer() < rhs->GetLayer();
+    if (lhs->drawable && rhs->drawable) return *(lhs->drawable) < *(rhs->drawable);
+    if (lhs->drawable) return true;
+    if (rhs->drawable) return false;
+    return lhs < rhs;
 }
 
 } //namespace a2d

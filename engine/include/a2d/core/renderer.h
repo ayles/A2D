@@ -9,6 +9,7 @@
 #include <a2d/core/macro.h>
 #include <a2d/core/engine.h>
 #include <a2d/core/components/sprite.h>
+#include <a2d/core/sprite_batch.h>
 
 #ifdef TARGET_ANDROID
 #include <GLES2/gl2.h>
@@ -23,6 +24,7 @@
 namespace a2d {
 
 class Renderer {
+    friend class Engine;
     friend class Sprite;
     friend class NativeConnector;
 
@@ -43,20 +45,13 @@ public:
 private:
     static int width;
     static int height;
-
-    struct sprites_compare {
-        bool operator()(const pSprite &lhs, const pSprite &rhs) const;
-    };
-
-    static std::set<pSprite, sprites_compare> sprites;
+    static pSpriteBatch sprite_batch;
 
     static bool Initialize();
     static bool Draw();
     static void Uninitialize();
 
     static void ResolutionChanged(int width, int height);
-    static void AddSprite(const pSprite &sprite);
-    static void RemoveSprite(const pSprite &sprite);
 };
 
 } //namespace a2d

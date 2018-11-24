@@ -29,6 +29,7 @@ class Texture : public ref_counter {
     friend class Engine;
     friend class Renderer;
     friend class TextureRegion;
+    friend class SpriteBatch;
 
 public:
     enum Filtering {
@@ -79,6 +80,7 @@ DECLARE_SMART_POINTER(TextureRegion)
 class TextureRegion : public ref_counter {
     friend class Engine;
     friend class Renderer;
+    friend class SpriteBatch;
 
 public:
     TextureRegion();

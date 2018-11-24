@@ -7,10 +7,11 @@
 
 #include <a2d/core.h>
 #include <a2d/core/components/sprite.h>
+#include <a2d/core/components/pixel_sprite.h>
 #include <a2d/core/texture.h>
 #include <a2d/core/components/animator.h>
 #include <a2d/core/input.h>
-#include <a2d/core/components/camera.h>
+#include <a2d/core/components/pixel_camera.h>
 
 #include <lodepng.h>
 
@@ -34,10 +35,8 @@ public:
     float f = 0.0f;
 
     void Initialize() override {
-        pCamera cam = new Camera();
-
         auto cam_obj = a2d::Engine::GetRoot()->AddChild(new Object2D);
-        a2d::Engine::SetCamera(cam_obj->AddComponent<Camera>());
+        a2d::Engine::SetCamera(cam_obj->AddComponent<PixelCamera>());
 
         auto valeriy = Texture::GetTexture("valeriy");
 
@@ -49,21 +48,22 @@ public:
         o1->GetComponent<Sprite>()->color.Set(0.5, 0.5, 1, 1);
         o2->GetComponent<Sprite>()->color.Set(1, 1, 0, 1);
 
-        auto explosion = Texture::GetTexture("trump");
-
-        e = a2d::Engine::GetRoot()->AddChild(new Object2D);
-        e->AddComponent<Sprite>()->SetTextureRegion(new TextureRegion(explosion));
+        auto explosion = Texture::GetTexture("bunny");
 
         std::vector<Animation::Frame> f_bottom;
         std::vector<Animation::Frame> f_right;
         std::vector<Animation::Frame> f_top;
         std::vector<Animation::Frame> f_left;
         for (int j = 0; j < 6; ++j) {
-            f_bottom.emplace_back(
-                    new TextureRegion(explosion, j * explosion->width / 6, 3 * explosion->height / 4, explosion->width / 6, explosion->height / 4),
+            f_right.emplace_back(
+                    new TextureRegion(explosion, j * explosion->width / 6, 0, explosion->width / 6, explosion->height, Texture::Filtering::NEAREST),
                     0.08f
             );
-            f_right.emplace_back(
+            f_left.emplace_back(
+                    new TextureRegion(explosion, (j + 1) * explosion->width / 6, 0, -explosion->width / 6, explosion->height, Texture::Filtering::NEAREST),
+                    0.08f
+            );
+            /*f_right.emplace_back(
                     new TextureRegion(explosion, j * explosion->width / 6, 2 * explosion->height / 4, explosion->width / 6, explosion->height / 4),
                     0.08f
             );
@@ -74,17 +74,26 @@ public:
             f_left.emplace_back(
                     new TextureRegion(explosion, j * explosion->width / 6, 0 * explosion->height / 4, explosion->width / 6, explosion->height / 4),
                     0.08f
-            );
+            );*/
         }
 
-        auto a = e->AddComponent<Animator>();
-        a->AddAnimation("bottom", new Animation(f_bottom));
-        a->AddAnimation("right", new Animation(f_right));
-        a->AddAnimation("top", new Animation(f_top));
-        a->AddAnimation("left", new Animation(f_left));
-        e->scale.Set(0.7f);
-        e->SetLayer(4);
-        e->AddComponent<Trump>();
+        for (int i = 0; i < 100; ++i) {
+            for (int j = 0; j < 50; ++j) {
+                e = a2d::Engine::GetRoot()->AddChild(new Object2D);
+                e->AddComponent<PixelSprite>()->SetTextureRegion(
+                        new TextureRegion(explosion, Texture::Filtering::NEAREST));
+                e->GetComponent<PixelSprite>()->SetScaleFactor(2);
+                auto a = e->AddComponent<Animator>();
+                a->AddAnimation("bottom", new Animation(f_bottom));
+                a->AddAnimation("right", new Animation(f_right));
+                a->AddAnimation("top", new Animation(f_top));
+                a->AddAnimation("left", new Animation(f_left));
+                e->scale.Set(0.7f);
+                e->SetLayer(4);
+                e->AddComponent<Trump>();
+                e->position.Set(i * 10, j * 10);
+            }
+        }
 
         //Engine::GetRoot()->AddComponent<a2d::EventsTest>();
     }
@@ -98,6 +107,8 @@ public:
             o1->SetLayer(1);
             o2->SetLayer(0);
         }*/
+
+        a2d::Engine::GetLogger()->info("{}", 1 / a2d::Engine::GetDeltaTime());
 
         o1->GetComponent<Sprite>()->color.w = std::sin(f * 0.5f);
         o2->GetComponent<Sprite>()->color.w = std::sin(f * 0.25f);

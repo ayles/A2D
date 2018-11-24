@@ -10,10 +10,11 @@
 #include <a2d/core/components/animator.h>
 #include <a2d/core/components/sprite.h>
 #include <a2d/core/input.h>
+#include <a2d/core/object2d.h>
 
 class Trump : public a2d::Component {
     a2d::Vector2f direction = a2d::Vector2f(0.0f, 0.0f);
-    float speed = 3.0f;
+    float speed = 200.0f;
 
     void Update() override {
         direction = 0;

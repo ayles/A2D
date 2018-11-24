@@ -13,8 +13,6 @@ namespace a2d {
 class EventsTest : public Component {
     void Initialize() override                  { Engine::GetLogger()->info("Initialize"); };
     void OnEnable() override                    { Engine::GetLogger()->info("OnEnable"); };
-    void LayerHierarchyAboutToChange() override { Engine::GetLogger()->info("LayerHierarchyAboutToChange"); };
-    void LayerHierarchyChanged() override       { Engine::GetLogger()->info("LayerHierarchyChanged"); };
     void Update() override                      { Engine::GetLogger()->info("Update"); };
     void PostUpdate() override                  { Engine::GetLogger()->info("PostUpdate"); };
     void PreDraw() override                     { Engine::GetLogger()->info("PreDraw"); };

@@ -9,7 +9,7 @@
 a2d::Vector4f a2d::Renderer::clear_color = Vector4f(0.0f, 0.0f, 0.0f, 1.0f);
 int a2d::Renderer::width = 1;
 int a2d::Renderer::height = 1;
-std::set<a2d::pSprite, a2d::Renderer::sprites_compare> a2d::Renderer::sprites;
+a2d::pSpriteBatch a2d::Renderer::sprite_batch;
 
 #if TARGET_DESKTOP
 GLFWwindow *a2d::Renderer::window = nullptr;
@@ -83,21 +83,7 @@ bool a2d::Renderer::Initialize() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    static const GLfloat g_vertex_buffer_data[] = {
-            -0.5f, -0.5f,
-            0.5f, 0.5f,
-            -0.5f, 0.5f,
-            -0.5f, -0.5f,
-            0.5f, -0.5f,
-            0.5f,  0.5f,
-    };
-
-    glGenBuffers(1, &vertex_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glEnableVertexAttribArray(0);
+    sprite_batch = new SpriteBatch;
 
     return (initialized = true);
 }
@@ -124,24 +110,10 @@ bool a2d::Renderer::Draw()  {
     );
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-    bool first = true;
-    for (const pSprite &sprite : sprites) {
-        if (!sprite->IsActive() || !sprite->shader) continue;
-        if (sprite->shader->Bind() || first) {
-            sprite->shader->SetUniform("camera_matrix", a2d::Engine::camera->GetMatrix());
-            first = false;
-        }
-        sprite->shader->SetUniform("model_matrix", sprite->GetObject2D()->GetTransformMatrix());
-        sprite->shader->SetUniform("color", sprite->color);
-        if (sprite->texture_region) {
-            sprite->texture_region->Bind();
-            //shader->Set("texture_sampler", 0);
-            sprite->shader->SetUniform("uv_lb", sprite->texture_region->uv_lb);
-            sprite->shader->SetUniform("uv_rt", sprite->texture_region->uv_rt);
-            sprite->shader->SetUniform("ratio", sprite->texture_region->ratio);
-        }
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+    if (a2d::Engine::camera) {
+        sprite_batch->SetCameraMatrix(a2d::Engine::camera->GetMatrix());
+        a2d::Engine::GetRoot()->Draw(*sprite_batch);
+        sprite_batch->Flush();
     }
 
 #if TARGET_DESKTOP
@@ -161,35 +133,4 @@ void a2d::Renderer::ResolutionChanged(int width, int height) {
     glViewport(0, 0, width, height);
     Renderer::width = width;
     Renderer::height = height;
-}
-
-void a2d::Renderer::AddSprite(const a2d::pSprite &sprite) {
-    sprites.insert(sprite);
-}
-
-void a2d::Renderer::RemoveSprite(const a2d::pSprite &sprite) {
-    sprites.erase(sprite);
-}
-
-bool a2d::Renderer::sprites_compare::operator()(const a2d::pSprite &lhs, const a2d::pSprite &rhs) const {
-    std::stack<Object2D *> ls;
-    std::stack<Object2D *> rs;
-    ls.push(lhs->GetObject2D().get());
-    rs.push(rhs->GetObject2D().get());
-    while (ls.top()) {
-        ls.push(ls.top()->GetParent().get());
-    }
-    while (rs.top()) {
-        rs.push(rs.top()->GetParent().get());
-    }
-    while (true) {
-        ls.pop();
-        rs.pop();
-        if (ls.top()->GetLayer() != rs.top()->GetLayer()) {
-            return ls.top()->GetLayer() < rs.top()->GetLayer();
-        } else if (ls.size() <= 1 || rs.size() <= 1) {
-            // TODO compare by material
-            return lhs < rhs;
-        }
-    }
 }

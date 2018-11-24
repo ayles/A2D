@@ -4,6 +4,7 @@
 
 #include <a2d/core/components/sprite.h>
 #include <a2d/core/renderer.h>
+#include <a2d/core/object2d.h>
 
 namespace a2d {
 
@@ -19,24 +20,16 @@ void Sprite::SetTextureRegion(const pTextureRegion &texture_region) {
     this->texture_region = texture_region;
 }
 
+void Sprite::Draw(SpriteBatch &sprite_batch) {
+    sprite_batch.Draw(texture_region, shader, GetObject2D()->GetTransformMatrix(), color);
+}
+
 void Sprite::OnEnable() {
-    Renderer::AddSprite(this);
+
 }
 
 void Sprite::OnDisable() {
-    Renderer::RemoveSprite(this);
-}
 
-void Sprite::LayerHierarchyAboutToChange() {
-    if (IsActive()) {
-        Renderer::RemoveSprite(this);
-    }
-}
-
-void Sprite::LayerHierarchyChanged() {
-    if (IsActive()) {
-        Renderer::AddSprite(this);
-    }
 }
 
 Sprite::~Sprite() {

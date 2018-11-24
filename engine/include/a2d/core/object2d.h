@@ -11,6 +11,7 @@
 #include <a2d/core/macro.h>
 #include <a2d/core/engine.h>
 #include <a2d/core/component.h>
+#include <a2d/core/drawable.h>
 
 #include <set>
 #include <map>
@@ -26,6 +27,8 @@ class Component;
 
 class Object2D final : public ref_counter {
     friend class Engine;
+    friend class Renderer
+            ;
 
 public:
     Vector2f position;
@@ -64,6 +67,12 @@ public:
             component->OnResume();
         }
 
+        auto drawable = dynamic_cast<Drawable *>(component.get());
+        if (drawable) {
+            if (this->drawable) Engine::GetLogger()->error("More than one Drawable on object");
+            this->drawable = drawable;
+        }
+
         return component;
     }
 
@@ -99,6 +108,7 @@ public:
         component->SetActive(false);
         component->OnDestroy();
         iter->second.erase(component);
+        if (component == drawable) drawable = nullptr;
     }
 
     template<class T>
@@ -113,6 +123,7 @@ public:
         component->SetActive(false);
         component->OnDestroy();
         iter->second.erase(component);
+        if (component == drawable) drawable = nullptr;
     }
 
     virtual ~Object2D() override;
@@ -122,17 +133,21 @@ private:
     int layer;
     bool is_active;
     Matrix4f transform_matrix;
+    pDrawable drawable;
 
-    std::set<pObject2D> children;
+    struct objects_compare {
+        bool operator()(const pObject2D &lhs, const pObject2D &rhs) const;
+    };
+
+    std::set<pObject2D, objects_compare> children;
     std::map<std::type_index, std::set<SMART_POINTER(Component)>> components;
 
     void SetActive(bool active);
 
-    void LayerHierarchyAboutToChange();
-    void LayerHierarchyChanged();
     void Update();
     void PostUpdate();
     void PreDraw(const a2d::Matrix4f &mat);
+    void Draw(SpriteBatch &sprite_batch);
     void PostDraw();
     void OnPause();
     void OnResume();

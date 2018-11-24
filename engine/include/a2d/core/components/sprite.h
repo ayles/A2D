@@ -5,7 +5,7 @@
 #ifndef A2D_SPRITE_H
 #define A2D_SPRITE_H
 
-#include <a2d/core/component.h>
+#include <a2d/core/drawable.h>
 #include <a2d/math.h>
 #include <a2d/core/texture.h>
 #include <a2d/core/shader.h>
@@ -14,7 +14,7 @@ namespace a2d {
 
 DECLARE_SMART_POINTER(Sprite)
 
-class Sprite : public Component {
+class Sprite : public Drawable {
     friend class Renderer;
     friend class Object2D;
 
@@ -26,15 +26,14 @@ public:
 
     void SetTextureRegion(const pTextureRegion &texture_region);
 
-private:
+protected:
     pTextureRegion texture_region;
 
     Sprite();
 
+    void Draw(SpriteBatch &sprite_batch) override;
     void OnEnable() override;
     void OnDisable() override;
-    void LayerHierarchyAboutToChange() override;
-    void LayerHierarchyChanged() override;
 
     ~Sprite() override;
 };

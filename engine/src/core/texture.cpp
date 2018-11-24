@@ -123,7 +123,7 @@ a2d::TextureRegion::TextureRegion(
         Texture::Wrapping wrapping
 ) :
 texture(texture),
-offset(0), size(texture->width, texture->height), uv_lb(0), uv_rt(1), ratio((float)size.x / size.y),
+offset(0), size(texture->width, texture->height), uv_lb(0), uv_rt(1), ratio(std::abs((float)size.x / size.y)),
 filtering(filtering), wrapping(wrapping)
 {
 
@@ -139,7 +139,7 @@ texture(texture),
 offset(x, y), size(width, height),
 uv_lb(Vector2f(x, y) / Vector2f(texture->width, texture->height)),
 uv_rt(Vector2f(x + width, y + height) / Vector2f(texture->width, texture->height)),
-ratio((float)size.x / size.y),
+ratio(std::abs((float)size.x / size.y)),
 filtering(filtering), wrapping(wrapping)
 {
 

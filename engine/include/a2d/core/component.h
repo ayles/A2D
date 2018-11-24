@@ -33,8 +33,6 @@ protected:
     // Events
     virtual void Initialize() {};
     virtual void OnEnable() {};
-    virtual void LayerHierarchyAboutToChange() {};
-    virtual void LayerHierarchyChanged() {};
     virtual void Update() {};
     virtual void PostUpdate() {};
     virtual void PreDraw() {};

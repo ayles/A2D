@@ -12,11 +12,15 @@ set(A2D_SOURCES
     src/core/component.cpp
     src/core/components/sprite.cpp
     src/core/renderer.cpp
-        src/core/texture.cpp
+    src/core/texture.cpp
     src/core/components/camera.cpp
     src/core/shader.cpp
     src/core/input.cpp
-        src/core/filesystem.cpp)
+    src/core/filesystem.cpp
+    src/core/components/pixel_sprite.cpp
+    src/core/components/pixel_camera.cpp
+    src/core/sprite_batch.cpp
+)
 
 set(A2D_HEADERS
     include/a2d/core/renderer.h
@@ -32,12 +36,18 @@ set(A2D_HEADERS
     include/a2d/core/macro.h
     include/a2d/core/components/sprite.h
     include/a2d/core/components/camera.h
-        include/a2d/core/filesystem.h
-        include/a2d/core/texture.h
+    include/a2d/core/filesystem.h
+    include/a2d/core/texture.h
     include/a2d/core/shader.h
     include/a2d/core/components/animator.h
     include/a2d/core/input.h
-        include/a2d/core/components/events_test.h include/a2d/core/components/pixel_sprite.h include/a2d/core/components/pixel_camera.h)
+    include/a2d/core/components/events_test.h
+    include/a2d/core/components/pixel_sprite.h
+    include/a2d/core/components/pixel_camera.h
+    include/a2d/core/audio.h
+    include/a2d/core/drawable.h
+    include/a2d/core/sprite_batch.h
+)
 
 add_library(a2d STATIC ${A2D_SOURCES} ${A2D_HEADERS})
 target_include_directories(a2d PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -47,9 +57,9 @@ add_subdirectory(thirdparty/lodepng)
 add_subdirectory(thirdparty/simplejson)
 
 target_link_libraries(a2d spdlog lodepng simplejson)
-target_compile_definitions(a2d PUBLIC RENDERER_GL_ES)
 
 if (ANDROID)
+    target_compile_definitions(a2d PUBLIC RENDERER_GL_ES)
     target_compile_definitions(a2d PUBLIC TARGET_ANDROID)
 elseif(WIN32 OR UNIX OR APPLE)
     if (WIN32)
@@ -68,6 +78,8 @@ elseif(WIN32 OR UNIX OR APPLE)
 
     add_subdirectory(thirdparty/glew)
     add_subdirectory(thirdparty/glfw)
+    add_subdirectory(thirdparty/libsoundio)
 
-    target_link_libraries(a2d ${OPENGL_gl_LIBRARY} glew glfw)
+
+    target_link_libraries(a2d ${OPENGL_gl_LIBRARY} glew glfw libsoundio_static)
 endif()
