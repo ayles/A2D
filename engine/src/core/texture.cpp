@@ -11,6 +11,12 @@
 #include <memory>
 #include <vector>
 
+a2d::Texture::Texture(const a2d::TextureBuffer &texture_buffer, bool flip, bool mipmaps) :
+Texture(texture_buffer.width, texture_buffer.height, texture_buffer.data, flip, mipmaps) {
+
+}
+
+
 a2d::Texture::Texture(
         int width, int height, const unsigned char *data, bool flip, bool mipmaps
 ) : width(width), height(height), mipmaps(mipmaps), filtering(NEAREST), wrapping(REPEAT) {
@@ -24,6 +30,11 @@ a2d::Texture::Texture(
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
+    if (data) SetData(data, flip, mipmaps);
+}
+
+void a2d::Texture::SetData(const unsigned char *data, bool flip, bool mipmaps) {
+    glBindTexture(GL_TEXTURE_2D, texture_id);
     auto final_data = new GLubyte[width * height * 4];
 
     if (flip) {
@@ -102,10 +113,6 @@ a2d::pTexture a2d::Texture::GetTexture(const std::string &name) {
     textures[name] = texture;
     return texture;
 }
-
-
-
-
 
 
 a2d::TextureRegion::TextureRegion() :
@@ -211,3 +218,56 @@ a2d::Texture::Wrapping a2d::TextureRegion::GetWrapping() {
 }
 
 a2d::TextureRegion::~TextureRegion() = default;
+
+
+
+
+a2d::TextureBuffer::TextureBuffer(int width, int height) : data(new unsigned char[width * height * 4]), width(width), height(height) {
+
+}
+
+void a2d::TextureBuffer::SetPixel(int x, int y, float r, float g, float b, float a) {
+    SetPixel(x, y,
+            (unsigned char)(r * 255),
+            (unsigned char)(g * 255),
+            (unsigned char)(b * 255),
+            (unsigned char)(a * 255)
+    );
+}
+
+void a2d::TextureBuffer::SetPixel(int x, int y, const a2d::Vector4f &color) {
+    SetPixel(x, y, color.x, color.y, color.z, color.w);
+}
+
+void a2d::TextureBuffer::SetPixel(int x, int y, unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+    if (x < 0 || x >= width || y < 0 || y >= height) return;
+    int offset = (y * width + x) * 4;
+    data[offset] = r;
+    data[offset + 1] = g;
+    data[offset + 2] = b;
+    data[offset + 3] = a;
+}
+
+void a2d::TextureBuffer::Fill(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+    for (int i = 0; i < width * height * 4; i += 4) {
+        data[i] = r;
+        data[i + 1] = g;
+        data[i + 2] = b;
+        data[i + 3] = a;
+    }
+}
+
+a2d::Vector4f a2d::TextureBuffer::GetPixel(int x, int y) {
+    if (x < 0 || x >= width || y < 0 || y >= height) return Vector4f();
+    int offset = (y * width + x) * 4;
+    return a2d::Vector4f(
+            data[offset] / 255.0f,
+            data[offset + 1] / 255.0f,
+            data[offset + 2] / 255.0f,
+            data[offset + 3] / 255.0f
+    );
+}
+
+a2d::TextureBuffer::~TextureBuffer() {
+    delete [] data;
+}

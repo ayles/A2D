@@ -353,6 +353,58 @@ const T *a2d::Matrix<4, 4, T, IF_FLOATING_POINT>::operator[](int index) const {
     return &data[index * 4];
 }
 
+template<class T>
+a2d::Matrix<4, 4, T> &a2d::Matrix<4, 4, T, IF_FLOATING_POINT>::Invert() {
+    float a = data[0] * data[5] - data[1] * data[4];
+    float b = data[0] * data[6] - data[2] * data[4];
+    float c = data[0] * data[7] - data[3] * data[4];
+    float d = data[1] * data[6] - data[2] * data[5];
+    float e = data[1] * data[7] - data[3] * data[5];
+    float f = data[2] * data[7] - data[3] * data[6];
+    float g = data[8] * data[13] - data[9] * data[12];
+    float h = data[8] * data[14] - data[10] * data[12];
+    float i = data[8] * data[15] - data[11] * data[12];
+    float j = data[9] * data[14] - data[10] * data[13];
+    float k = data[9] * data[15] - data[11] * data[13];
+    float l = data[10] * data[15] - data[11] * data[14];
+    float det = a * l - b * k + c * j + d * i - e * h + f * g;
+    float nm00, nm01, nm02, nm03, nm10, nm11, nm12, nm13, nm20, nm21, nm22, nm23, nm30, nm31, nm32, nm33;
+    det = 1.0f / det;
+    nm00 = ( data[5]  * l - data[6]  * k + data[7]  * j) * det;
+    nm01 = (-data[1]  * l + data[2]  * k - data[3]  * j) * det;
+    nm02 = ( data[13] * f - data[14] * e + data[15] * d) * det;
+    nm03 = (-data[9]  * f + data[10] * e - data[11] * d) * det;
+    nm10 = (-data[4]  * l + data[6]  * i - data[7]  * h) * det;
+    nm11 = ( data[0]  * l - data[2]  * i + data[3]  * h) * det;
+    nm12 = (-data[12] * f + data[14] * c - data[15] * b) * det;
+    nm13 = ( data[8]  * f - data[10] * c + data[11] * b) * det;
+    nm20 = ( data[4]  * k - data[5]  * i + data[7]  * g) * det;
+    nm21 = (-data[0]  * k + data[1]  * i - data[3]  * g) * det;
+    nm22 = ( data[12] * e - data[13] * c + data[15] * a) * det;
+    nm23 = (-data[8]  * e + data[9]  * c - data[11] * a) * det;
+    nm30 = (-data[4]  * j + data[5]  * h - data[6]  * g) * det;
+    nm31 = ( data[0]  * j - data[1]  * h + data[2]  * g) * det;
+    nm32 = (-data[12] * d + data[13] * b - data[14] * a) * det;
+    nm33 = ( data[8]  * d - data[9]  * b + data[10] * a) * det;
+    data[0] = (nm00);
+    data[1] = (nm01);
+    data[2] = (nm02);
+    data[3] = (nm03);
+    data[4] = (nm10);
+    data[5] = (nm11);
+    data[6] = (nm12);
+    data[7] = (nm13);
+    data[8] = (nm20);
+    data[9] = (nm21);
+    data[10] = (nm22);
+    data[11] = (nm23);
+    data[12] = (nm30);
+    data[13] = (nm31);
+    data[14] = (nm32);
+    data[15] = (nm33);
+    return *this;
+}
+
 template class a2d::Matrix<4, 4, float>;
 template class a2d::Matrix<4, 4, double>;
 template class a2d::Matrix<4, 4, long double>;

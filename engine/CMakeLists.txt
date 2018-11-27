@@ -47,7 +47,7 @@ set(A2D_HEADERS
     include/a2d/core/audio.h
     include/a2d/core/drawable.h
     include/a2d/core/sprite_batch.h
-)
+        include/a2d/core/components/text.h include/a2d/core/bitmap_font.h include/a2d/core/components/pixel_text.h)
 
 add_library(a2d STATIC ${A2D_SOURCES} ${A2D_HEADERS})
 target_include_directories(a2d PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -55,8 +55,9 @@ target_include_directories(a2d PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_subdirectory(thirdparty/spdlog)
 add_subdirectory(thirdparty/lodepng)
 add_subdirectory(thirdparty/simplejson)
+add_subdirectory(thirdparty/freetype)
 
-target_link_libraries(a2d spdlog lodepng simplejson)
+target_link_libraries(a2d spdlog lodepng simplejson freetype)
 
 if (ANDROID)
     target_compile_definitions(a2d PUBLIC RENDERER_GL_ES)

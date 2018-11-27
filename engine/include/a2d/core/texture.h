@@ -21,6 +21,24 @@
 namespace a2d {
 
 
+struct TextureBuffer {
+    unsigned char * const data;
+    int width;
+    int height;
+
+    TextureBuffer(int width, int height);
+
+    void SetPixel(int x, int y, unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+    void SetPixel(int x, int y, float r, float g, float b, float a);
+    void SetPixel(int x, int y, const Vector4f &color);
+
+    void Fill(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+
+    Vector4f GetPixel(int x, int y);
+
+    ~TextureBuffer();
+};
+
 
 
 DECLARE_SMART_POINTER(Texture)
@@ -51,8 +69,12 @@ public:
 
     static pTexture GetTexture(const std::string &name);
 
-private:
     Texture(int width, int height, const unsigned char *data, bool flip = false, bool mipmaps = false);
+    Texture(const TextureBuffer &texture_buffer, bool flip = false, bool mipmaps = false);
+
+    void SetData(const unsigned char *data, bool flip = false, bool mipmaps = false);
+
+private:
     ~Texture() override;
 
 
@@ -76,7 +98,6 @@ private:
 
 DECLARE_SMART_POINTER(TextureRegion)
 
-// TODO add filtering and wrapping here
 class TextureRegion : public ref_counter {
     friend class Engine;
     friend class Renderer;

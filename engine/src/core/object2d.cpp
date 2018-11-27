@@ -38,10 +38,9 @@ int Object2D::GetLayer() {
 
 void Object2D::SetLayer(int layer) {
     if (layer == this->layer) return;
-    auto p = parent;
-    if (parent) parent->RemoveChild(this);
+    if (parent) parent->children.erase(this);
     this->layer = layer;
-    p->AddChild(this);
+    if (parent) parent->children.emplace(this);
 }
 
 pObject2D Object2D::GetParent() {
@@ -50,9 +49,9 @@ pObject2D Object2D::GetParent() {
 
 pObject2D Object2D::AddChild(pObject2D child) {
     if (child->parent != this) {
-        if (child->parent != nullptr) child->parent->RemoveChild(child);
+        if (child->parent) child->parent->RemoveChild(child);
         child->parent = this;
-        children.insert(child);
+        children.emplace(child);
         child->SetActive(true);
     }
     return child;
@@ -163,7 +162,12 @@ Object2D::~Object2D() {
 
 bool Object2D::objects_compare::operator()(const pObject2D &lhs, const pObject2D &rhs) const {
     if (lhs->GetLayer() != rhs->GetLayer()) return lhs->GetLayer() < rhs->GetLayer();
-    if (lhs->drawable && rhs->drawable) return *(lhs->drawable) < *(rhs->drawable);
+    if (lhs->drawable == rhs->drawable) {
+        return lhs < rhs;
+    }
+    if (lhs->drawable && rhs->drawable) {
+        return *(lhs->drawable) < *(rhs->drawable);
+    }
     if (lhs->drawable) return true;
     if (rhs->drawable) return false;
     return lhs < rhs;

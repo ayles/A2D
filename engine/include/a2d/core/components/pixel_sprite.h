@@ -16,7 +16,7 @@ public:
     void SetScaleFactor(float scale_factor);
     float GetScaleFactor();
 
-    void Update() override;
+    void Draw(SpriteBatch &sprite_batch) override;
 
 private:
     float scale_factor;

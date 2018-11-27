@@ -21,7 +21,14 @@ void Sprite::SetTextureRegion(const pTextureRegion &texture_region) {
 }
 
 void Sprite::Draw(SpriteBatch &sprite_batch) {
-    sprite_batch.Draw(texture_region, shader, GetObject2D()->GetTransformMatrix(), color);
+    if (!texture_region) return;
+    static Vector2f p1, p2, p3, p4;
+    float ratio = texture_region->GetRatio();
+    p1.Set(0.0f);
+    p2.Set(ratio, 0.0f);
+    p3.Set(ratio, 1.0f);
+    p4.Set(0.0f, 1.0f);
+    sprite_batch.Draw(texture_region, shader, p1, p2, p3, p4, GetObject2D()->GetTransformMatrix(), color);
 }
 
 void Sprite::OnEnable() {

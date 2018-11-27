@@ -49,6 +49,8 @@ public:
     Matrix<4, 4, T> &Translate(T x, T y, T z);
     Matrix<4, 4, T> &Translate(const Vector<3, T> &translate);
 
+    Matrix<4, 4, T> &Invert();
+
     Matrix<4, 4, T> &SetOrtho2D(T left, T right, T bottom, T top);
 
     Matrix<4, 4, T> &operator=(const Matrix<4, 4, T> &other);

@@ -25,7 +25,7 @@ void Camera::SetHeight(float height) {
 }
 
 const Matrix4f &Camera::GetMatrix() {
-    camera_transformed_matrix = camera_matrix * GetObject2D()->GetTransformMatrix();
+    camera_transformed_matrix = camera_matrix * Matrix4f(GetObject2D()->GetTransformMatrix()).Invert();
     return camera_transformed_matrix;
 }
 

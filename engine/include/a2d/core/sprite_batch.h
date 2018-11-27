@@ -25,6 +25,18 @@ namespace a2d {
 DECLARE_SMART_POINTER(SpriteBatch)
 
 class SpriteBatch : public ref_counter {
+    Matrix4f camera_matrix;
+    GLuint vbo;
+    GLuint indices;
+    Texture::Filtering filtering;
+    Texture::Wrapping wrapping;
+    pTexture current_texture;
+    pShader current_shader;
+    int buffer_size;
+    int buffer_capacity;
+    float *buffer;
+    Vector4f v;
+
 public:
     SpriteBatch() : buffer_size(0), buffer_capacity(8192), buffer(new float[buffer_capacity]),
         current_shader(nullptr), current_texture(nullptr), camera_matrix() {
@@ -56,7 +68,9 @@ public:
         return camera_matrix;
     }
 
-    void Draw(const pTextureRegion &texture_region, const pShader &shader, const Matrix4f &matrix, const Vector4f &color) {
+    void Draw(const pTextureRegion &texture_region, const pShader &shader,
+            const Vector2f &p1, const Vector2f &p2, const Vector2f &p3, const Vector2f &p4,
+            const Matrix4f &matrix, const Vector4f &color) {
         if (!texture_region || !shader) return;
         if (buffer_size >= buffer_capacity || current_texture != texture_region->texture || current_shader != shader ||
             texture_region->filtering != filtering || texture_region->wrapping != wrapping) {
@@ -67,34 +81,29 @@ public:
             wrapping = texture_region->wrapping;
         }
 
-        float half_width = texture_region->ratio * 0.5f;
-        float half_height = 0.5f;
-
-        matrix.Transform(-half_width, -half_height, 0, 1, v);
+        matrix.Transform(p1.x, p1.y, 0, 1, v);
         buffer[buffer_size++] = v.x;
         buffer[buffer_size++] = v.y;
         buffer[buffer_size++] = texture_region->uv_lb.x;
         buffer[buffer_size++] = texture_region->uv_lb.y;
 
-        matrix.Transform(half_width, -half_height, 0, 1, v);
+        matrix.Transform(p2.x, p2.y, 0, 1, v);
         buffer[buffer_size++] = v.x;
         buffer[buffer_size++] = v.y;
         buffer[buffer_size++] = texture_region->uv_rt.x;
         buffer[buffer_size++] = texture_region->uv_lb.y;
 
-        matrix.Transform(half_width, half_height, 0, 1, v);
+        matrix.Transform(p3.x, p3.y, 0, 1, v);
         buffer[buffer_size++] = v.x;
         buffer[buffer_size++] = v.y;
         buffer[buffer_size++] = texture_region->uv_rt.x;
         buffer[buffer_size++] = texture_region->uv_rt.y;
 
-        matrix.Transform(-half_width, half_height, 0, 1, v);
+        matrix.Transform(p4.x, p4.y, 0, 1, v);
         buffer[buffer_size++] = v.x;
         buffer[buffer_size++] = v.y;
         buffer[buffer_size++] = texture_region->uv_lb.x;
         buffer[buffer_size++] = texture_region->uv_rt.y;
-
-
     }
 
     void Flush() {
@@ -125,19 +134,6 @@ public:
     }
 
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(SpriteBatch)
-
-private:
-    Matrix4f camera_matrix;
-    GLuint vbo;
-    GLuint indices;
-    Texture::Filtering filtering;
-    Texture::Wrapping wrapping;
-    pTexture current_texture;
-    pShader current_shader;
-    int buffer_size;
-    int buffer_capacity;
-    float *buffer;
-    Vector4f v;
 };
 
 } //namespace a2d
