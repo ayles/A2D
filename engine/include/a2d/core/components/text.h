@@ -36,8 +36,13 @@ public:
         this->bitmap_font = bitmap_font;
     }
 
-    const std::u32string &GetText() const {
+    const std::u32string &GetUTF32Text() const {
         return text;
+    }
+
+    std::string GetText() const {
+        std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> convert;
+        return convert.to_bytes(text);
     }
 
     pBitmapFont &GetFont() {

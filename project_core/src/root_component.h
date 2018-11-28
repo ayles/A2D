@@ -42,7 +42,7 @@ public:
     void Initialize() override {
         auto cam_obj = a2d::Engine::GetRoot()->AddChild(new Object2D);
         a2d::Engine::SetCamera(cam_obj->AddComponent<PixelCamera>());
-        cam_obj->AddComponent<MoveCamera>();
+        //cam_obj->AddComponent<MoveCamera>();
 
         /*auto valeriy = Texture::GetTexture("valeriy");
 
@@ -65,7 +65,7 @@ public:
         t_o->GetComponent<PixelText>()->SetText(U"Я сделяль мем на движке");
         t_o->position.x = -540.f;
 
-        /*auto explosion = Texture::GetTexture("bunny");
+        auto explosion = Texture::GetTexture("bunny");
 
         std::vector<Animation::Frame> f_bottom;
         std::vector<Animation::Frame> f_right;
@@ -80,7 +80,7 @@ public:
                     new TextureRegion(explosion, (j + 1) * explosion->width / 6, 0, -explosion->width / 6, explosion->height, Texture::Filtering::NEAREST),
                     0.08f
             );
-            *//*f_right.emplace_back(
+            /*f_right.emplace_back(
                     new TextureRegion(explosion, j * explosion->width / 6, 2 * explosion->height / 4, explosion->width / 6, explosion->height / 4),
                     0.08f
             );
@@ -91,7 +91,7 @@ public:
             f_left.emplace_back(
                     new TextureRegion(explosion, j * explosion->width / 6, 0 * explosion->height / 4, explosion->width / 6, explosion->height / 4),
                     0.08f
-            );*//*
+            );*/
         }
 
         for (int i = 0; i < 100; ++i) {
@@ -99,7 +99,7 @@ public:
                 e = a2d::Engine::GetRoot()->AddChild(new Object2D);
                 e->AddComponent<PixelSprite>()->SetTextureRegion(
                         new TextureRegion(explosion, Texture::Filtering::NEAREST));
-                e->GetComponent<PixelSprite>()->SetScaleFactor(2);
+                e->GetComponent<PixelSprite>()->SetScaleFactor(3);
                 auto a = e->AddComponent<Animator>();
                 a->AddAnimation("bottom", new Animation(f_bottom));
                 a->AddAnimation("right", new Animation(f_right));
@@ -110,7 +110,7 @@ public:
                 e->AddComponent<Trump>();
                 e->position.Set(i * 30, j * 30);
             }
-        }*/
+        }
 
         //Engine::GetRoot()->AddComponent<a2d::EventsTest>();
     }

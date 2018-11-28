@@ -4,9 +4,7 @@ project(A2D CXX)
 set(CMAKE_CXX_STANDARD 11)
 
 set(A2D_SOURCES
-    src/math/vector3.cpp
-    src/math/vector4.cpp
-    src/math/matrix4.cpp
+        src/math/matrix4.cpp
     src/core/engine.cpp
     src/core/object2d.cpp
     src/core/component.cpp
@@ -20,7 +18,7 @@ set(A2D_SOURCES
     src/core/components/pixel_sprite.cpp
     src/core/components/pixel_camera.cpp
     src/core/sprite_batch.cpp
-)
+        src/core/bitmap_font.cpp)
 
 set(A2D_HEADERS
     include/a2d/core/renderer.h
@@ -47,7 +45,10 @@ set(A2D_HEADERS
     include/a2d/core/audio.h
     include/a2d/core/drawable.h
     include/a2d/core/sprite_batch.h
-        include/a2d/core/components/text.h include/a2d/core/bitmap_font.h include/a2d/core/components/pixel_text.h)
+    include/a2d/core/components/text.h
+    include/a2d/core/bitmap_font.h
+    include/a2d/core/components/pixel_text.h
+)
 
 add_library(a2d STATIC ${A2D_SOURCES} ${A2D_HEADERS})
 target_include_directories(a2d PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -79,8 +80,8 @@ elseif(WIN32 OR UNIX OR APPLE)
 
     add_subdirectory(thirdparty/glew)
     add_subdirectory(thirdparty/glfw)
-    add_subdirectory(thirdparty/libsoundio)
+    #add_subdirectory(thirdparty/libsoundio)
 
 
-    target_link_libraries(a2d ${OPENGL_gl_LIBRARY} glew glfw libsoundio_static)
+    target_link_libraries(a2d ${OPENGL_gl_LIBRARY} glew glfw) #libsoundio_static)
 endif()

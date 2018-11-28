@@ -13,5 +13,11 @@
 #include <a2d/core/intrusive_ptr.h>
 #include <a2d/core/renderer.h>
 #include <a2d/core/filesystem.h>
+#include <a2d/core/input.h>
+#include <a2d/core/texture.h>
+#include <a2d/core/bitmap_font.h>
+#include <a2d/core/drawable.h>
+#include <a2d/core/shader.h>
+#include <a2d/core/sprite_batch.h>
 
 #endif //A2D_CORE_H
