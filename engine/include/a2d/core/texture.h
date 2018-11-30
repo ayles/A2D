@@ -65,19 +65,18 @@ public:
     const int width, height;
     const bool mipmaps;
 
-    DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Texture)
-
     static pTexture GetTexture(const std::string &name);
 
     Texture(int width, int height, const unsigned char *data, bool flip = false, bool mipmaps = false);
     Texture(const TextureBuffer &texture_buffer, bool flip = false, bool mipmaps = false);
 
+    DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Texture)
+
+    ~Texture() override;
+
     void SetData(const unsigned char *data, bool flip = false, bool mipmaps = false);
 
 private:
-    ~Texture() override;
-
-
 #if defined(RENDERER_GL) || defined(RENDERER_GL_ES)
     GLuint texture_id;
 #endif
@@ -109,6 +108,9 @@ public:
                   Texture::Filtering = Texture::Filtering::LINEAR, Texture::Wrapping = Texture::Wrapping::REPEAT);
     TextureRegion(pTexture texture, int x, int y, int width, int height,
                   Texture::Filtering = Texture::Filtering::LINEAR, Texture::Wrapping = Texture::Wrapping::REPEAT);
+
+    DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(TextureRegion)
+
     ~TextureRegion() override;
 
     void SetTexture(const pTexture &texture);
@@ -129,8 +131,6 @@ public:
     Texture::Wrapping GetWrapping();
 
     void Bind(unsigned int texture_unit = 0);
-
-    DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(TextureRegion)
 
 private:
     pTexture texture;

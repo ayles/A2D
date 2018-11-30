@@ -11,6 +11,7 @@
 #include <a2d/core/texture.h>
 #include <a2d/core/engine.h>
 #include <a2d/core/components/sprite.h>
+#include <a2d/core/components/pixel_sprite.h>
 
 #include <vector>
 

@@ -48,7 +48,7 @@ set(A2D_HEADERS
     include/a2d/core/components/text.h
     include/a2d/core/bitmap_font.h
     include/a2d/core/components/pixel_text.h
-)
+        include/a2d/core/components/audio_source.h include/a2d/core/components/audio_clip.h)
 
 add_library(a2d STATIC ${A2D_SOURCES} ${A2D_HEADERS})
 target_include_directories(a2d PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -58,7 +58,16 @@ add_subdirectory(thirdparty/lodepng)
 add_subdirectory(thirdparty/simplejson)
 add_subdirectory(thirdparty/freetype)
 
-target_link_libraries(a2d spdlog lodepng simplejson freetype)
+set(SOLOUD_STATIC TRUE)
+if (WIN32)
+    set(SOLOUD_BACKEND_WINMM TRUE)
+elseif(ANDROID)
+    set(SOLOUD_BACKEND_OPENSLES TRUE)
+endif()
+
+add_subdirectory(thirdparty/soloud)
+
+target_link_libraries(a2d spdlog lodepng simplejson freetype soloud)
 
 if (ANDROID)
     target_compile_definitions(a2d PUBLIC RENDERER_GL_ES)

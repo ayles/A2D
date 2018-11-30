@@ -2,6 +2,7 @@
 // Created by selya on 10.11.2018.
 //
 
+#include <a2d/core/engine.h>
 #include <a2d/core/renderer.h>
 #include <a2d/core/object2d.h>
 #include <a2d/core/components/camera.h>
@@ -14,8 +15,6 @@ a2d::pSpriteBatch a2d::Renderer::sprite_batch;
 #if TARGET_DESKTOP
 GLFWwindow *a2d::Renderer::window = nullptr;
 #endif
-
-GLuint a2d::Renderer::vertex_buffer = 0;
 
 int a2d::Renderer::GetWidth() {
     return width;
@@ -93,8 +92,10 @@ bool a2d::Renderer::Draw()  {
 
     float half_height = a2d::Engine::camera->GetHeight() * 0.5f;
     float ratio = a2d::Engine::camera->GetAspectRatio();
-    a2d::Engine::camera->SetOrtho2D(-half_height * ratio, half_height * ratio, -half_height,
-                                    half_height);
+    a2d::Engine::camera->SetOrtho2D(
+            -half_height * ratio, half_height * ratio,
+            -half_height, half_height
+    );
 
 
 #if TARGET_DESKTOP
@@ -108,6 +109,7 @@ bool a2d::Renderer::Draw()  {
             a2d::Renderer::clear_color.z,
             a2d::Renderer::clear_color.w
     );
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     if (a2d::Engine::camera) {
@@ -118,7 +120,6 @@ bool a2d::Renderer::Draw()  {
 
 #if TARGET_DESKTOP
     glfwSwapBuffers(window);
-    glfwPollEvents();
 #endif
     return true;
 }

@@ -3,7 +3,7 @@
 //
 
 #include <a2d/core/texture.h>
-#include <a2d/core.h>
+#include <a2d/core/filesystem.h>
 
 #include <lodepng.h>
 

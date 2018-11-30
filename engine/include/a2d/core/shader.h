@@ -9,7 +9,6 @@
 
 #include <a2d/core/macro.h>
 #include <a2d/math.h>
-#include <a2d/core/texture.h>
 #include <a2d/core/ref_counter.h>
 
 #ifdef TARGET_ANDROID

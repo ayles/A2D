@@ -3,11 +3,9 @@
 //
 
 #include <a2d/core/shader.h>
-#include <a2d/math/vector.h>
-#include <a2d/math.h>
-#include <a2d/core.h>
+#include <a2d/core/engine.h>
+#include <a2d/core/filesystem.h>
 
-#include <utility>
 #include <vector>
 #include <iostream>
 
@@ -226,6 +224,7 @@ void Shader::Uniform::Set(const Vector4f &vec) {
 }
 
 void Shader::Uniform::Set(const Matrix3f &mat) {
+    // TODO
     //glUniformMatrix3fv(location, 1, GL_FALSE, mat[0]);
 }
 

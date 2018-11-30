@@ -5,10 +5,8 @@
 #ifndef A2D_RENDER_H
 #define A2D_RENDER_H
 
-#include <a2d/math.h>
 #include <a2d/core/macro.h>
-#include <a2d/core/engine.h>
-#include <a2d/core/components/sprite.h>
+#include <a2d/math/vector.h>
 #include <a2d/core/sprite_batch.h>
 
 #ifdef TARGET_ANDROID
@@ -17,9 +15,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #endif
-
-#include <set>
-#include <stack>
 
 namespace a2d {
 
@@ -30,12 +25,12 @@ class Renderer {
 
 public:
     Renderer() = delete;
+    DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Renderer)
+    ~Renderer() = delete;
 
 #ifdef TARGET_DESKTOP
     static GLFWwindow *window;
 #endif
-
-    static GLuint vertex_buffer;
 
     static a2d::Vector4f clear_color;
 

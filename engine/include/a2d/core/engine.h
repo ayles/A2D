@@ -10,8 +10,6 @@
 #include <spdlog/spdlog.h>
 
 #include <thread>
-#include "texture.h"
-
 
 namespace a2d {
 
@@ -27,13 +25,15 @@ public:
     static void SetCamera(SMART_POINTER(Camera) camera);
 
     static float GetDeltaTime();
-    static SMART_POINTER(Object2D) GetRoot();
-    static SMART_POINTER(Camera) GetCamera();
-    static std::shared_ptr<spdlog::logger> GetLogger();
-    static std::thread::id GetUIThreadID();
+    static SMART_POINTER(Object2D) &GetRoot();
+    static SMART_POINTER(Camera) &GetCamera();
+    static std::shared_ptr<spdlog::logger> &GetLogger();
+    static std::thread::id &GetUIThreadID();
     static bool IsPlaying();
 
     Engine() = delete;
+    DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Engine)
+    ~Engine() = delete;
 
 private:
     static bool Initialize();

@@ -2,7 +2,6 @@
 // Created by selya on 26.10.2018.
 //
 
-#include <a2d/core/renderer.h>
 #include <a2d/core/engine.h>
 #include <a2d/core/object2d.h>
 #include <a2d/core/components/camera.h>
@@ -13,8 +12,14 @@
 #include <spdlog/sinks/stdout_sinks.h>
 #endif
 
+#ifdef TARGET_ANDROID
+#include <GLES2/gl2.h>
+#elif TARGET_DESKTOP
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#endif
+
 #include <chrono>
-#include <cmath>
 
 float a2d::Engine::delta_time = 0.0f;
 a2d::pObject2D a2d::Engine::root = new Object2D;
@@ -22,6 +27,36 @@ a2d::pCamera a2d::Engine::camera = nullptr;
 std::shared_ptr<spdlog::logger> a2d::Engine::logger = nullptr;
 std::thread::id a2d::Engine::ui_thread_id;
 bool a2d::Engine::playing = false;
+
+
+void a2d::Engine::SetCamera(a2d::pCamera camera) {
+    Engine::camera = camera;
+}
+
+float a2d::Engine::GetDeltaTime() {
+    return delta_time;
+}
+
+a2d::pObject2D &a2d::Engine::GetRoot() {
+    return root;
+}
+
+a2d::pCamera &a2d::Engine::GetCamera() {
+    return camera;
+}
+
+std::shared_ptr<spdlog::logger> &a2d::Engine::GetLogger() {
+    return logger;
+}
+
+std::thread::id &a2d::Engine::GetUIThreadID() {
+    return ui_thread_id;
+}
+
+bool a2d::Engine::IsPlaying() {
+    return playing;
+}
+
 
 bool a2d::Engine::Initialize() {
     ui_thread_id = std::this_thread::get_id();
@@ -47,6 +82,9 @@ bool a2d::Engine::Update() {
 
     delta_time = std::chrono::duration<float>(std::chrono::system_clock::now() - start).count();
     start = std::chrono::system_clock::now();
+
+    // For fast input handling
+    glfwPollEvents();
 
     root->Update();
 
@@ -83,32 +121,4 @@ void a2d::Engine::OnResume() {
 void a2d::Engine::Uninitialize() {
     OnPause();
     root->CleanTree();
-}
-
-float a2d::Engine::GetDeltaTime() {
-    return delta_time;
-}
-
-a2d::pObject2D a2d::Engine::GetRoot() {
-    return root;
-}
-
-a2d::pCamera a2d::Engine::GetCamera() {
-    return camera;
-}
-
-void a2d::Engine::SetCamera(a2d::pCamera camera) {
-    Engine::camera = camera;
-}
-
-std::shared_ptr<spdlog::logger> a2d::Engine::GetLogger() {
-    return logger;
-}
-
-std::thread::id a2d::Engine::GetUIThreadID() {
-    return ui_thread_id;
-}
-
-bool a2d::Engine::IsPlaying() {
-    return playing;
 }

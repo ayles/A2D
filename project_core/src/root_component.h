@@ -17,6 +17,8 @@
 #include <a2d/core/components/events_test.h>
 
 #include <lodepng.h>
+#include <soloud.h>
+#include <soloud_wav.h>
 
 #ifdef TARGET_ANDROID
 #include <GLES2/gl2.h>
@@ -38,6 +40,10 @@ public:
     a2d::pObject2D o2;
     a2d::pObject2D e;
     float f = 0.0f;
+
+    SoLoud::Soloud g_soloud;
+    SoLoud::Wav g_wave;
+    SoLoud::handle h;
 
     void Initialize() override {
         auto cam_obj = a2d::Engine::GetRoot()->AddChild(new Object2D);
@@ -113,6 +119,13 @@ public:
         }
 
         //Engine::GetRoot()->AddComponent<a2d::EventsTest>();
+
+        g_soloud.init();
+        auto a = a2d::FileSystem::LoadRaw("audio/ddlc.mp3");
+        g_wave.loadMem(&a[0], a.size(), true);
+        g_wave.setLooping(true);
+
+        h = g_soloud.play(g_wave);
     }
 
     void Update() override {
@@ -129,6 +142,23 @@ public:
         o2->GetComponent<Sprite>()->color.w = std::sin(f * 0.25f);
         o1->position.Set(std::sin(f) * 3, 0.5f);
         o2->position.Set(-std::sin(f) * 3, -0.5f);*/
+
+        if (Input::GetKey(Input::KeyCode::KEY_W) ||
+            Input::GetKey(Input::KeyCode::KEY_A) ||
+            Input::GetKey(Input::KeyCode::KEY_S) ||
+            Input::GetKey(Input::KeyCode::KEY_D)) {
+            if (g_soloud.getPause(h)) {
+                g_soloud.setPause(h, false);
+            }
+        } else {
+            if (!g_soloud.getPause(h)) {
+                g_soloud.setPause(h, true);
+            }
+        }
+    }
+
+    void OnDestroy() override {
+        g_soloud.deinit();
     }
 };
 

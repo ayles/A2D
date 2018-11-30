@@ -17,13 +17,10 @@
 #include <map>
 #include <typeindex>
 #include <type_traits>
-#include <iostream>
 
 namespace a2d {
 
 DECLARE_SMART_POINTER(Object2D)
-
-class Component;
 
 class Object2D final : public ref_counter {
     friend class Engine;

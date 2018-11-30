@@ -32,8 +32,8 @@ public:
     };
 
     enum KeyState {
-        PRESS,
-        RELEASE
+        RELEASE = 0,
+        PRESS = 1
     };
 
     enum KeyCode {
