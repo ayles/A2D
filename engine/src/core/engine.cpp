@@ -83,8 +83,10 @@ bool a2d::Engine::Update() {
     delta_time = std::chrono::duration<float>(std::chrono::system_clock::now() - start).count();
     start = std::chrono::system_clock::now();
 
+#ifdef TARGET_DESKTOP
     // For fast input handling
     glfwPollEvents();
+#endif
 
     root->Update();
 

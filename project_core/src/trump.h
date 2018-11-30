@@ -11,6 +11,7 @@
 #include <a2d/core/components/sprite.h>
 #include <a2d/core/input.h>
 #include <a2d/core/object2d.h>
+#include <a2d/core/components/audio_source.h>
 
 class Trump : public a2d::Component {
     a2d::Vector2f direction = a2d::Vector2f(0.0f, 0.0f);
@@ -55,6 +56,12 @@ class Trump : public a2d::Component {
         }
 
         GetObject2D()->position += direction * a2d::Engine::GetDeltaTime() * speed;
+
+        GetObject2D()->GetComponent<a2d::AudioSource>()->Play();
+        float pan = (GetObject2D()->position.x - a2d::Engine::GetCamera()->GetObject2D()->position.x) / (a2d::Engine::GetCamera()->GetWidth() / 2);
+        if (pan > 1) pan = 1;
+        if (pan < -1) pan = -1;
+        GetObject2D()->GetComponent<a2d::AudioSource>()->SetPan(pan);
     }
 };
 

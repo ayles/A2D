@@ -44,3 +44,5 @@ CTestTestfile.cmake
 cmake-build*/
 .vscode/
 .vs/
+
+**/app/src/main/assets/

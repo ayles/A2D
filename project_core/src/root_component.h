@@ -15,6 +15,7 @@
 #include <a2d/core/components/pixel_camera.h>
 #include <a2d/core/bitmap_font.h>
 #include <a2d/core/components/events_test.h>
+#include <a2d/core/components/audio_source.h>
 
 #include <lodepng.h>
 #include <soloud.h>
@@ -100,32 +101,21 @@ public:
             );*/
         }
 
-        for (int i = 0; i < 100; ++i) {
-            for (int j = 0; j < 10; ++j) {
-                e = a2d::Engine::GetRoot()->AddChild(new Object2D);
-                e->AddComponent<PixelSprite>()->SetTextureRegion(
-                        new TextureRegion(explosion, Texture::Filtering::NEAREST));
-                e->GetComponent<PixelSprite>()->SetScaleFactor(3);
-                auto a = e->AddComponent<Animator>();
-                a->AddAnimation("bottom", new Animation(f_bottom));
-                a->AddAnimation("right", new Animation(f_right));
-                a->AddAnimation("top", new Animation(f_top));
-                a->AddAnimation("left", new Animation(f_left));
-                e->scale.Set(0.7f);
-                e->SetLayer(i * 50 + j);
-                e->AddComponent<Trump>();
-                e->position.Set(i * 30, j * 30);
-            }
-        }
+        e = a2d::Engine::GetRoot()->AddChild(new Object2D);
+        e->AddComponent<PixelSprite>()->SetTextureRegion(
+                new TextureRegion(explosion, Texture::Filtering::NEAREST));
+        e->GetComponent<PixelSprite>()->SetScaleFactor(3);
+        auto a = e->AddComponent<Animator>();
+        a->AddAnimation("bottom", new Animation(f_bottom));
+        a->AddAnimation("right", new Animation(f_right));
+        a->AddAnimation("top", new Animation(f_top));
+        a->AddAnimation("left", new Animation(f_left));
+        e->scale.Set(0.7f);
+        e->SetLayer(1);
+        e->AddComponent<Trump>();
+        e->AddComponent<AudioSource>()->SetAudioClip(new AudioClip(a2d::FileSystem::LoadRaw("audio/ddlc.mp3")));
 
         //Engine::GetRoot()->AddComponent<a2d::EventsTest>();
-
-        g_soloud.init();
-        auto a = a2d::FileSystem::LoadRaw("audio/ddlc.mp3");
-        g_wave.loadMem(&a[0], a.size(), true);
-        g_wave.setLooping(true);
-
-        h = g_soloud.play(g_wave);
     }
 
     void Update() override {
@@ -143,22 +133,7 @@ public:
         o1->position.Set(std::sin(f) * 3, 0.5f);
         o2->position.Set(-std::sin(f) * 3, -0.5f);*/
 
-        if (Input::GetKey(Input::KeyCode::KEY_W) ||
-            Input::GetKey(Input::KeyCode::KEY_A) ||
-            Input::GetKey(Input::KeyCode::KEY_S) ||
-            Input::GetKey(Input::KeyCode::KEY_D)) {
-            if (g_soloud.getPause(h)) {
-                g_soloud.setPause(h, false);
-            }
-        } else {
-            if (!g_soloud.getPause(h)) {
-                g_soloud.setPause(h, true);
-            }
-        }
-    }
 
-    void OnDestroy() override {
-        g_soloud.deinit();
     }
 };
 

@@ -1,1 +1,0 @@
-This is just stub to check assets copy task
