@@ -20,26 +20,19 @@ class Trump : public a2d::Component {
     void Update() override {
         direction = 0;
 
-#ifdef TARGET_DESKTOP
 
-        if (a2d::Input::GetKey(a2d::Input::KeyCode::KEY_W) == a2d::Input::KeyState::PRESS) direction.y += 1;
-        if (a2d::Input::GetKey(a2d::Input::KeyCode::KEY_S) == a2d::Input::KeyState::PRESS) direction.y -= 1;
-        if (a2d::Input::GetKey(a2d::Input::KeyCode::KEY_A) == a2d::Input::KeyState::PRESS) direction.x -= 1;
-        if (a2d::Input::GetKey(a2d::Input::KeyCode::KEY_D) == a2d::Input::KeyState::PRESS) direction.x += 1;
+        auto m = a2d::Input::GetMousePosition();
+        auto pos = a2d::Engine::GetCamera()->ScreenToWorld(a2d::Vector2f(m.x / a2d::Renderer::GetWidth(),
+                1.0f - m.y / a2d::Renderer::GetHeight()));
 
-#elif TARGET_ANDROID
-        auto touch = a2d::Input::GetTouch(0);
-        auto pos = a2d::Engine::GetCamera()->ScreenToWorld(
-                a2d::Vector2f(touch.x / a2d::Renderer::GetWidth(), 1 - touch.y / a2d::Renderer::GetHeight())
-        );
         direction = pos - GetObject2D()->position;
 
         auto diff = pos - GetObject2D()->position;
-        if (diff.LengthSquared() < 0.01f) {
+        if (diff.LengthSquared() < 1.f) {
             GetObject2D()->GetComponent<a2d::Animator>()->PauseAnimation();
             return;
         }
-#endif
+
         if (direction.LengthSquared() > 0)
             direction.Normalize();
 

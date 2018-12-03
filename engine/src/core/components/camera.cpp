@@ -34,6 +34,7 @@ Camera &Camera::SetOrtho2D(float left, float right, float bottom, float top) {
     return *this;
 }
 
+// TODO use camera matrix (unproject)
 Vector2f Camera::ScreenToWorld(const Vector2f &screen) {
     float half_width = GetWidth() / 2.0f;
     float half_height = height / 2.0f;

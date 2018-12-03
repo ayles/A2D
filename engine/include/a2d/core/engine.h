@@ -24,6 +24,7 @@ class Engine {
 public:
     static void SetCamera(SMART_POINTER(Camera) camera);
 
+    static unsigned long long GetFrameIndex();
     static float GetDeltaTime();
     static SMART_POINTER(Object2D) &GetRoot();
     static SMART_POINTER(Camera) &GetCamera();
@@ -45,6 +46,7 @@ private:
     static void OnResume();
     static void Uninitialize();
 
+    static unsigned long long frame_index;
     static float delta_time;
     static SMART_POINTER(Object2D) root;
     static SMART_POINTER(Camera) camera;

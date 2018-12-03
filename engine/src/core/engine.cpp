@@ -21,6 +21,7 @@
 
 #include <chrono>
 
+unsigned long long a2d::Engine::frame_index = 0;
 float a2d::Engine::delta_time = 0.0f;
 a2d::pObject2D a2d::Engine::root = new Object2D;
 a2d::pCamera a2d::Engine::camera = nullptr;
@@ -31,6 +32,10 @@ bool a2d::Engine::playing = false;
 
 void a2d::Engine::SetCamera(a2d::pCamera camera) {
     Engine::camera = camera;
+}
+
+unsigned long long a2d::Engine::GetFrameIndex() {
+    return frame_index;
 }
 
 float a2d::Engine::GetDeltaTime() {
@@ -79,6 +84,10 @@ bool a2d::Engine::Initialize() {
 
 bool a2d::Engine::Update() {
     static auto start = std::chrono::system_clock::now();
+
+    frame_index++;
+    // reserve 0 frame index
+    if (frame_index == 0) frame_index++;
 
     delta_time = std::chrono::duration<float>(std::chrono::system_clock::now() - start).count();
     start = std::chrono::system_clock::now();

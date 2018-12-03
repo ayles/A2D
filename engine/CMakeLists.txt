@@ -57,6 +57,7 @@ add_subdirectory(thirdparty/spdlog)
 add_subdirectory(thirdparty/lodepng)
 add_subdirectory(thirdparty/simplejson)
 add_subdirectory(thirdparty/freetype)
+add_subdirectory(thirdparty/box2d)
 
 set(SOLOUD_STATIC TRUE)
 if (WIN32)
@@ -67,7 +68,7 @@ endif()
 
 add_subdirectory(thirdparty/soloud)
 
-target_link_libraries(a2d spdlog lodepng simplejson freetype soloud)
+target_link_libraries(a2d spdlog lodepng simplejson freetype soloud box2d)
 
 if (ANDROID)
     target_compile_definitions(a2d PUBLIC RENDERER_GL_ES)
@@ -89,8 +90,6 @@ elseif(WIN32 OR UNIX OR APPLE)
 
     add_subdirectory(thirdparty/glew)
     add_subdirectory(thirdparty/glfw)
-    #add_subdirectory(thirdparty/libsoundio)
 
-
-    target_link_libraries(a2d ${OPENGL_gl_LIBRARY} glew glfw) #libsoundio_static)
+    target_link_libraries(a2d ${OPENGL_gl_LIBRARY} glew glfw)
 endif()

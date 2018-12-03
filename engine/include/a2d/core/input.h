@@ -2,8 +2,10 @@
 // Created by selya on 19.11.2018.
 //
 
-#ifndef A2D_INPUT_H
-#define A2D_INPUT_H
+#ifndef A2D_INPUT_NEW_H
+#define A2D_INPUT_NEW_H
+
+#include <a2d/core/renderer.h>
 
 #ifdef TARGET_DESKTOP
 #include <GL/glew.h>
@@ -12,30 +14,12 @@
 #include <android/input.h>
 #endif
 
-#include <a2d/core/engine.h>
-#include <a2d/core/renderer.h>
-
-#include <vector>
-
 namespace a2d {
 
 class Input {
+    friend class NativeConnector;
+
 public:
-    struct Touch {
-        enum TouchState {
-            PRESS,
-            RELEASE
-        };
-
-        TouchState state;
-        float x, y;
-    };
-
-    enum KeyState {
-        RELEASE = 0,
-        PRESS = 1
-    };
-
     enum KeyCode {
         KEY_UNKNOWN         = -1,
 
@@ -162,39 +146,259 @@ public:
         KEY_MENU            = 348,
     };
 
-#ifdef TARGET_ANDROID
-    static std::vector<Input::Touch> touches;
+    enum MouseButtonCode {
+        MOUSE_BUTTON_1      = 0,
+        MOUSE_BUTTON_2      = 1,
+        MOUSE_BUTTON_3      = 2,
+        MOUSE_BUTTON_4      = 3,
+        MOUSE_BUTTON_5      = 4,
+        MOUSE_BUTTON_6      = 5,
+        MOUSE_BUTTON_7      = 6,
+        MOUSE_BUTTON_8      = 7,
+        MOUSE_BUTTON_LAST   = MOUSE_BUTTON_8,
+        MOUSE_BUTTON_LEFT   = MOUSE_BUTTON_1,
+        MOUSE_BUTTON_RIGHT  = MOUSE_BUTTON_2,
+        MOUSE_BUTTON_MIDDLE = MOUSE_BUTTON_3
+    };
 
-    static void SetTouch(int touches_count, int index, Touch touch) {
-        touches.resize(touches_count);
-        touches[index] = touch;
-        a2d::Engine::GetLogger()->info("{} {}", GetTouch(0).x, GetTouch(0).y);
+    enum KeyState {
+        RELEASED = 0,
+        PRESSED = 1
+    };
+
+    struct Touch {
+        enum TouchState {
+            RELEASED = 0,
+            PRESSED = 1,
+            JUST_RELEASED = 2,
+            JUST_PRESSED = 3
+        };
+
+        int index = 0;
+        Vector2f position = Vector2f();
+        TouchState state = RELEASED;
+
+        Touch(int index, Vector2f position, TouchState state) : index(index), position(position), state(state) {}
+    };
+
+
+
+    // Returns key current state either PRESSED or RELEASED
+    static KeyState GetKeyState(KeyCode key_code) {
+        return GetKeyInternalState(key_code).state;
     }
-#endif
 
-    static KeyState GetKey(KeyCode key_code) {
-#ifdef TARGET_DESKTOP
-        switch (glfwGetKey(a2d::Renderer::window, key_code)) {
-            case GLFW_PRESS: return KeyState::PRESS;
-            case GLFW_RELEASE: return KeyState::RELEASE;
-            default: return KeyState::RELEASE;
-        }
-#elif TARGET_ANDROID
-        return KeyState::RELEASE;
-#endif
+    // Returns true if key was pressed during current frame
+    static bool IsKeyJustPressed(KeyCode key_code) {
+        return GetKeyInternalState(key_code).last_pressed == Engine::GetFrameIndex();
     }
 
+    // Returns true if key was released during current frame
+    static bool IsKeyJustReleased(KeyCode key_code) {
+        return GetKeyInternalState(key_code).last_released == Engine::GetFrameIndex();
+    }
+
+    // Returns mouse position relative to top-left screen corner
+    static Vector2f GetMousePosition() {
+        return GetInternalMousePosition();
+    }
+
+    // Returns mouse button current state either PRESSED or RELEASED
+    static KeyState GetMouseButtonState(MouseButtonCode button_code) {
+        return GetMouseButtonInternalState(button_code).state;
+    }
+
+    // Returns true if mouse button was pressed during current frame
+    static bool IsMouseButtonJustPressed(MouseButtonCode button_code) {
+        return GetMouseButtonInternalState(button_code).last_pressed == Engine::GetFrameIndex();
+    }
+
+    // Returns true if mouse button was released during current frame
+    static bool IsMouseButtonJustReleased(MouseButtonCode button_code) {
+        return GetMouseButtonInternalState(button_code).last_released == Engine::GetFrameIndex();
+    }
+
+    // Returns number of currently active touches
+    static int GetTouchesCount() {
+        return GetInternalTouchesCount();
+    }
+
+    // Get Touch by its index (starting from 0)
     static Touch GetTouch(int touch_index) {
-#ifdef TARGET_ANDROID
-        if (touch_index < touches.size())
-            return touches[touch_index];
-#elif TARGET_DESKTOP
+        auto touch_internal_state = GetTouchInternalState(touch_index);
 
+        Touch::TouchState state = Touch::TouchState::RELEASED;
+
+        if (touch_internal_state.state == Touch::TouchState::PRESSED) {
+            state = (touch_internal_state.last_pressed == Engine::GetFrameIndex()) ?
+                    Touch::TouchState::JUST_PRESSED : Touch::TouchState::PRESSED;
+        } else if (touch_internal_state.state == Touch::TouchState::RELEASED) {
+            state = (touch_internal_state.last_released == Engine::GetFrameIndex()) ?
+                    Touch::TouchState::JUST_RELEASED : Touch::TouchState::RELEASED;
+        }
+
+        return { touch_index, touch_internal_state.position, state };
+    }
+
+private:
+    static bool Initialize() {
+#ifdef TARGET_DESKTOP
+        glfwSetKeyCallback(Renderer::window, KeyCallback);
+        glfwSetCursorPosCallback(Renderer::window, MousePositionCallback);
+        glfwSetMouseButtonCallback(Renderer::window, MouseButtonCallback);
 #endif
-        return { Touch::TouchState::RELEASE, 0.0f, 0.0f };
+        return true;
+    }
+
+    static void Uninitialize() {
+#ifdef TARGET_DESKTOP
+        glfwSetKeyCallback(Renderer::window, nullptr);
+        glfwSetCursorPosCallback(Renderer::window, nullptr);
+        glfwSetMouseButtonCallback(Renderer::window, nullptr);
+#endif
+    }
+
+#ifdef TARGET_DESKTOP
+    static void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+        auto &key_internal_state = GetKeyInternalState((KeyCode)key);
+
+        switch (action) {
+            case GLFW_PRESS:
+                key_internal_state.last_pressed = Engine::GetFrameIndex();
+                key_internal_state.state = KeyState::PRESSED;
+                break;
+
+            case GLFW_RELEASE:
+                key_internal_state.last_released = Engine::GetFrameIndex();
+                key_internal_state.state = KeyState::RELEASED;
+                break;
+
+            case GLFW_REPEAT:
+                // if we loosed a PRESS event
+                if (key_internal_state.state == KeyState::RELEASED) {
+                    key_internal_state.last_pressed = Engine::GetFrameIndex();
+                    key_internal_state.state = KeyState::PRESSED;
+                }
+                break;
+
+            default:
+                return;
+        }
+    }
+
+    static void MousePositionCallback(GLFWwindow *window, double x_position, double y_position) {
+        GetInternalMousePosition().Set((float)x_position, (float)y_position);
+    }
+
+    static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+        auto &button_internal_state = GetMouseButtonInternalState((MouseButtonCode)button);
+
+        switch (action) {
+            case GLFW_PRESS:
+                button_internal_state.last_pressed = Engine::GetFrameIndex();
+                button_internal_state.state = KeyState::PRESSED;
+                break;
+
+            case GLFW_RELEASE:
+                button_internal_state.last_released = Engine::GetFrameIndex();
+                button_internal_state.state = KeyState::RELEASED;
+                break;
+
+            default:
+                return;
+        }
+    }
+
+
+
+#elif TARGET_ANDROID
+    static void TouchCallback(int touches_count, int touch_index, int touch_action, float touch_x, float touch_y) {
+        auto &touch_internal_state = GetTouchInternalState(touch_index);
+        auto &button_internal_state = GetMouseButtonInternalState(MouseButtonCode::MOUSE_BUTTON_LEFT);
+
+        switch (touch_action) {
+            case AMOTION_EVENT_ACTION_DOWN:
+                touch_internal_state.last_pressed = Engine::GetFrameIndex();
+                touch_internal_state.state = Touch::TouchState::PRESSED;
+                if (touch_index == 0) {
+                    button_internal_state.last_pressed = Engine::GetFrameIndex();
+                    button_internal_state.state = KeyState::PRESSED;
+                }
+                break;
+
+            case AMOTION_EVENT_ACTION_UP:
+                touch_internal_state.last_released = Engine::GetFrameIndex();
+                touch_internal_state.state = Touch::TouchState::RELEASED;
+                if (touch_index == 0) {
+                    button_internal_state.last_released = Engine::GetFrameIndex();
+                    button_internal_state.state = KeyState::RELEASED;
+                }
+                break;
+
+            case AMOTION_EVENT_ACTION_MOVE:
+                // if we loosed a DOWN event
+                if (touch_internal_state.state == Touch::TouchState::RELEASED) {
+                    touch_internal_state.last_pressed = Engine::GetFrameIndex();
+                    touch_internal_state.state = Touch::TouchState::PRESSED;
+                    if (touch_index == 0) {
+                        button_internal_state.last_released = Engine::GetFrameIndex();
+                        button_internal_state.state = KeyState::RELEASED;
+                    }
+                }
+                break;
+
+            default:
+                return;
+        }
+
+        GetInternalTouchesCount() = touches_count;
+        touch_internal_state.position.Set(touch_x, touch_y);
+
+        if (touch_index == 0) {
+            GetInternalMousePosition().Set(touch_x, touch_y);
+        }
+    }
+#endif
+
+    struct KeyInternalState {
+        unsigned long long last_pressed = 0;
+        unsigned long long last_released = 0;
+        KeyState state = KeyState::RELEASED;
+    };
+
+    struct TouchInternalState {
+        unsigned long long last_pressed = 0;
+        unsigned long long last_released = 0;
+        Touch::TouchState state = Touch::TouchState::RELEASED;
+        Vector2f position = Vector2f();
+    };
+
+    static int &GetInternalTouchesCount() {
+        static int touches_count = 0;
+        return touches_count;
+    }
+
+    static KeyInternalState &GetKeyInternalState(KeyCode key_code) {
+        static std::map<KeyCode, KeyInternalState> keys_states;
+        return keys_states[key_code];
+    }
+
+    static KeyInternalState &GetMouseButtonInternalState(MouseButtonCode button_code) {
+        static std::map<MouseButtonCode , KeyInternalState> buttons_states;
+        return buttons_states[button_code];
+    }
+
+    static TouchInternalState &GetTouchInternalState(int touch_index) {
+        static std::map<int, TouchInternalState> touches_states;
+        return touches_states[touch_index];
+    }
+
+    static Vector2f &GetInternalMousePosition() {
+        static Vector2f mouse_position;
+        return mouse_position;
     }
 };
 
 } //namespace a2d
 
-#endif //A2D_INPUT_H
+#endif //A2D_INPUT_NEW_H

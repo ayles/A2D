@@ -49,7 +49,7 @@ public:
     void Initialize() override {
         auto cam_obj = a2d::Engine::GetRoot()->AddChild(new Object2D);
         a2d::Engine::SetCamera(cam_obj->AddComponent<PixelCamera>());
-        //cam_obj->AddComponent<MoveCamera>();
+        cam_obj->AddComponent<MoveCamera>();
 
         /*auto valeriy = Texture::GetTexture("valeriy");
 
