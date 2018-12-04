@@ -2,8 +2,8 @@
 // Created by selya on 19.11.2018.
 //
 
-#ifndef A2D_INPUT_NEW_H
-#define A2D_INPUT_NEW_H
+#ifndef A2D_INPUT_H
+#define A2D_INPUT_H
 
 #include <a2d/core/renderer.h>
 
@@ -198,6 +198,11 @@ public:
         return GetKeyInternalState(key_code).last_released == Engine::GetFrameIndex();
     }
 
+    // Returns scroll delta during this frame. Simple mouse wheel provides y-delta (vertical)
+    static Vector2f GetScrollDelta() {
+        return GetInternalScrollDelta();
+    }
+
     // Returns mouse position relative to top-left screen corner
     static Vector2f GetMousePosition() {
         return GetInternalMousePosition();
@@ -246,6 +251,7 @@ private:
         glfwSetKeyCallback(Renderer::window, KeyCallback);
         glfwSetCursorPosCallback(Renderer::window, MousePositionCallback);
         glfwSetMouseButtonCallback(Renderer::window, MouseButtonCallback);
+        glfwSetScrollCallback(Renderer::window, ScrollCallback);
 #endif
         return true;
     }
@@ -255,6 +261,7 @@ private:
         glfwSetKeyCallback(Renderer::window, nullptr);
         glfwSetCursorPosCallback(Renderer::window, nullptr);
         glfwSetMouseButtonCallback(Renderer::window, nullptr);
+        glfwSetScrollCallback(Renderer::window, nullptr);
 #endif
     }
 
@@ -309,7 +316,9 @@ private:
         }
     }
 
-
+    static void ScrollCallback(GLFWwindow *window, double x_offset, double y_offset) {
+        GetInternalScrollDelta().Set((float)x_offset, (float)y_offset);
+    }
 
 #elif TARGET_ANDROID
     static void TouchCallback(int touches_count, int touch_index, int touch_action, float touch_x, float touch_y) {
@@ -397,8 +406,13 @@ private:
         static Vector2f mouse_position;
         return mouse_position;
     }
+
+    static Vector2f &GetInternalScrollDelta() {
+        static Vector2f scroll_delta;
+        return scroll_delta;
+    }
 };
 
 } //namespace a2d
 
-#endif //A2D_INPUT_NEW_H
+#endif //A2D_INPUT_H
