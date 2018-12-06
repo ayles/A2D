@@ -121,14 +121,14 @@ public:
     void SetFiltering(Texture::Filtering filtering);
     void SetWrapping(Texture::Wrapping wrapping);
 
-    const pTexture &GetTexture();
-    int GetX();
-    int GetY();
-    int GetWidth();
-    int GetHeight();
-    float GetRatio();
-    Texture::Filtering GetFiltering();
-    Texture::Wrapping GetWrapping();
+    const pTexture &GetTexture() const;
+    int GetX() const;
+    int GetY() const;
+    int GetWidth() const;
+    int GetHeight() const;
+    float GetRatio() const;
+    Texture::Filtering GetFiltering() const;
+    Texture::Wrapping GetWrapping() const;
 
     void Bind(unsigned int texture_unit = 0);
 

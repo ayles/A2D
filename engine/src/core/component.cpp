@@ -9,11 +9,11 @@ a2d::Component::Component() : is_active(false) {
 
 }
 
-a2d::pObject2D a2d::Component::GetObject2D() {
+a2d::pObject2D a2d::Component::GetObject2D() const {
     return object_2d;
 }
 
-bool a2d::Component::IsActive() {
+bool a2d::Component::IsActive() const {
     return is_active;
 }
 

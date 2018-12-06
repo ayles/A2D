@@ -24,7 +24,5 @@
 #include <a2d/core/components/text.h>
 #include <a2d/core/components/animator.h>
 #include <a2d/core/components/pixel_camera.h>
-#include <a2d/core/components/pixel_sprite.h>
-#include <a2d/core/components/pixel_text.h>
 
 #endif //A2D_CORE_H

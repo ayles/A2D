@@ -19,6 +19,6 @@ float a2d::PixelCamera::GetScaleFactor() {
 }
 
 void a2d::PixelCamera::Update() {
-    SetHeight(a2d::Renderer::GetHeight());
+    SetHeight((float)a2d::Renderer::GetHeight());
     Component::Update();
 }

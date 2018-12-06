@@ -11,7 +11,7 @@ Object2D::Object2D() : is_active(false), layer(0), parent(nullptr), scale(1), po
 
 }
 
-bool Object2D::IsActive() {
+bool Object2D::IsActive() const {
     return is_active;
 }
 
@@ -32,7 +32,7 @@ const Matrix4f &Object2D::GetTransformMatrix() const {
     return transform_matrix;
 }
 
-int Object2D::GetLayer() {
+int Object2D::GetLayer() const {
     return layer;
 }
 
@@ -43,7 +43,7 @@ void Object2D::SetLayer(int layer) {
     if (parent) parent->children.emplace(this);
 }
 
-pObject2D Object2D::GetParent() {
+pObject2D Object2D::GetParent() const {
     return parent;
 }
 
@@ -162,14 +162,13 @@ Object2D::~Object2D() {
 
 bool Object2D::objects_compare::operator()(const pObject2D &lhs, const pObject2D &rhs) const {
     if (lhs->GetLayer() != rhs->GetLayer()) return lhs->GetLayer() < rhs->GetLayer();
-    if (lhs->drawable == rhs->drawable) {
-        return lhs < rhs;
+    if (lhs->drawable != rhs->drawable) {
+        if (lhs->drawable && rhs->drawable) {
+            return *(lhs->drawable) < *(rhs->drawable);
+        } else {
+            return lhs->drawable < rhs->drawable;
+        }
     }
-    if (lhs->drawable && rhs->drawable) {
-        return *(lhs->drawable) < *(rhs->drawable);
-    }
-    if (lhs->drawable) return true;
-    if (rhs->drawable) return false;
     return lhs < rhs;
 }
 

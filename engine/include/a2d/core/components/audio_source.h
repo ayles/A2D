@@ -7,6 +7,7 @@
 
 #include <a2d/core/component.h>
 #include <a2d/core/audio_clip.h>
+#include <a2d/core/audio.h>
 
 #include <soloud.h>
 
@@ -14,72 +15,26 @@ namespace a2d {
 
 class AudioSource : public Component {
     pAudioClip audio_clip;
-    float volume = 1;
-    float pan = 0;
+    float volume;
+    float pan;
 
-    SoLoud::handle handle = 0;
-    bool paused = true;
+    SoLoud::handle handle;
+    bool paused;
 
 public:
-    void SetAudioClip(const pAudioClip &audio_clip) {
-        this->audio_clip = audio_clip;
-        if (!audio_clip) return;
-    }
+    AudioSource();
 
-    void SetVolume(float volume) {
-        this->volume = volume;
-        GetAudioEngine().setVolume(handle, volume);
-    }
+    void SetAudioClip(const pAudioClip &audio_clip);
+    void SetVolume(float volume);
+    void SetPan(float pan);
 
-    void SetPan(float pan) {
-        this->pan = pan;
-        GetAudioEngine().setPan(handle, pan);
-    }
+    const pAudioClip &GetAudioClip();
+    float GetVolume();
+    float GetPan();
 
-    const pAudioClip &GetAudioClip() {
-        return audio_clip;
-    }
-
-    float GetVolume() {
-        return volume;
-    }
-
-    float GetPan() {
-        return pan;
-    }
-
-    void Play() {
-        if (!paused) return;
-        paused = false;
-        if (handle) {
-            GetAudioEngine().setPause(handle, false);
-        } else {
-            handle = GetAudioEngine().play(audio_clip->data, volume, pan);
-        }
-    }
-
-    void Pause() {
-        if (paused) return;
-        paused = true;
-        GetAudioEngine().setPause(handle, true);
-    }
-
-    void Stop() {
-        GetAudioEngine().stop(handle);
-        paused = true;
-        handle = 0;
-    }
-
-private:
-    static SoLoud::Soloud &GetAudioEngine() {
-        static SoLoud::Soloud engine;
-        static bool initialized = false;
-        if (!initialized) {
-            engine.init();
-            initialized = true;
-        }
-        return engine;
-    }
+    void Play();
+    void Pause();
+    void Stop();
 };
 
 } //namespace a2d

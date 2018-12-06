@@ -18,10 +18,10 @@ class MoveCamera : public a2d::Component {
     void Update() override {
         direction = 0;
 
-        if (a2d::Input::GetKeyState(a2d::Input::KeyCode::KEY_W) == a2d::Input::KeyState::PRESSED) direction.y += 1;
-        if (a2d::Input::GetKeyState(a2d::Input::KeyCode::KEY_S) == a2d::Input::KeyState::PRESSED) direction.y -= 1;
-        if (a2d::Input::GetKeyState(a2d::Input::KeyCode::KEY_A) == a2d::Input::KeyState::PRESSED) direction.x -= 1;
-        if (a2d::Input::GetKeyState(a2d::Input::KeyCode::KEY_D) == a2d::Input::KeyState::PRESSED) direction.x += 1;
+        if (a2d::Input::GetKeyState(a2d::Input::KeyCode::KEY_W)) direction.y += 1;
+        if (a2d::Input::GetKeyState(a2d::Input::KeyCode::KEY_S)) direction.y -= 1;
+        if (a2d::Input::GetKeyState(a2d::Input::KeyCode::KEY_A)) direction.x -= 1;
+        if (a2d::Input::GetKeyState(a2d::Input::KeyCode::KEY_D)) direction.x += 1;
 
         if (direction.LengthSquared() > 0)
             direction.Normalize();

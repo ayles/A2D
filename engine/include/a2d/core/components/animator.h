@@ -11,7 +11,6 @@
 #include <a2d/core/texture.h>
 #include <a2d/core/engine.h>
 #include <a2d/core/components/sprite.h>
-#include <a2d/core/components/pixel_sprite.h>
 
 #include <vector>
 
@@ -26,84 +25,39 @@ public:
         pTextureRegion texture_region;
         float time;
 
-        Frame(const pTextureRegion &texture_region, float time) : texture_region(texture_region), time(time) {
-
-        }
+        Frame(const pTextureRegion &texture_region, float time);
     };
 
-    explicit Animation(std::vector<Frame> frames) : frames(std::move(frames)) {
+    Animation(std::vector<Frame> frames);
 
-    }
+    const Frame *GetCurrentFrame() const;
 
-    const Frame *GetCurrentFrame() const {
-        if (frames.empty()) return nullptr;
-        return &frames[current_frame_index];
-    }
-
-    void AddDelta(float delta) {
-        if (frames.empty()) return;
-        elapsed_frame_time += delta;
-        if (frames[current_frame_index].time <= elapsed_frame_time) {
-            if (++current_frame_index >= frames.size()) {
-                current_frame_index = 0;
-            }
-            elapsed_frame_time = 0.0f;
-        }
-    }
-
-    void Reset() {
-        elapsed_frame_time = 0.0f;
-        current_frame_index = 0;
-    }
+    void AddDelta(float delta);
+    void Reset();
 
 private:
-    float elapsed_frame_time = 0.0f;
-    int current_frame_index = 0;
+    float elapsed_frame_time;
+    int current_frame_index;
     const std::vector<Frame> frames;
 };
 
 class Animator : public Component {
     friend class Object2D;
 public:
-    void AddAnimation(const std::string &name, const pAnimation &animation) {
-        animations[name] = animation;
-    }
-
-    void PlayAnimation(const std::string &name, float reset = true) {
-        auto a = animations.find(name);
-        if (a != animations.end()) {
-            if (current_animation != a->second || reset) a->second->Reset();
-            current_animation = a->second;
-            playing = true;
-        } else {
-            current_animation = nullptr;
-            playing = false;
-        }
-    }
-
-    void PauseAnimation() {
-        playing = false;
-    }
+    void AddAnimation(const std::string &name, const pAnimation &animation);
+    void PlayAnimation(const std::string &name, float reset = true);
+    void PauseAnimation();
 
 private:
-    bool playing = false;
-    pAnimation current_animation = nullptr;
+    bool playing;
+    pAnimation current_animation;
     std::map<std::string, pAnimation> animations;
 
-    Animator() {}
+    Animator();
 
-    void Update() override {
-        if (!current_animation) return;
-        auto sprite = GetObject2D()->GetComponent<Sprite>();
-        if (!sprite) sprite = GetObject2D()->GetComponent<PixelSprite>();
-        if (!sprite) return;
-        auto frame = current_animation->GetCurrentFrame();
-        if (!frame) return;
-        sprite->SetTextureRegion(frame->texture_region);
-        if (playing) current_animation->AddDelta(a2d::Engine::GetDeltaTime());
-    }
+    void Update() override;
 
-    ~Animator() override {}
+    ~Animator() override;
 };
 
 }//namespace a2d

@@ -20,9 +20,9 @@ class Component : public ref_counter {
 public:
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Component)
 
-    virtual SMART_POINTER(Object2D) GetObject2D();
+    virtual SMART_POINTER(Object2D) GetObject2D() const;
 
-    virtual bool IsActive();
+    virtual bool IsActive() const;
 
 protected:
     bool is_active;

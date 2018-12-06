@@ -69,7 +69,7 @@ public:
         return ptr == other.ptr;
     }
 
-    bool operator!=(T *p) {
+    bool operator!=(T *p) const {
         return ptr != p;
     }
 

@@ -5,8 +5,12 @@
 #include <a2d/core.h>
 #include <a2d/core/renderer.h>
 #include <root_component.h>
+#include <a2d/core/filesystem.h>
+#include <a2d/core/input.h>
+#include <a2d/core/audio.h>
 
-#ifdef TARGET_WINDOWS
+
+#if defined(TARGET_WINDOWS) && defined(FORCE_DISCRETE_GPU)
 // Enable NVIDIA or AMD discrete gpu
 extern "C" {
 __declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
@@ -20,6 +24,7 @@ class NativeConnector {
 public:
     static bool Initialize() {
         if (!a2d::FileSystem::Initialize()) return false;
+        if (!a2d::Audio::Initialize()) return false;
         if (!a2d::Engine::Initialize()) return false;
         if (!a2d::Renderer::Initialize()) return false;
         if (!a2d::Input::Initialize()) return false;
@@ -39,6 +44,7 @@ public:
         a2d::Input::Uninitialize();
         a2d::Engine::Uninitialize();
         a2d::Renderer::Uninitialize();
+        a2d::Audio::Uninitialize();
         a2d::FileSystem::Uninitialize();
     }
 };
@@ -46,6 +52,11 @@ public:
 }
 
 int main() {
+#ifdef TARGET_LINUX
+    setenv("DISPLAY", ":0", true);
+    setenv("LIBGL_ALWAYS_INDIRECT", "1", true);
+#endif
+
     if (!a2d::NativeConnector::Initialize()) return -1;
     while (a2d::NativeConnector::Step());
     a2d::NativeConnector::Uninitialize();

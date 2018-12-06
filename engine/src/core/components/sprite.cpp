@@ -16,18 +16,32 @@ const pTextureRegion &Sprite::GetTextureRegion() {
     return texture_region;
 }
 
-void Sprite::SetTextureRegion(const pTextureRegion &texture_region) {
+const Shader *Sprite::GetShaderForSortOrNull() const {
+    return shader.get();
+}
+
+const TextureRegion *Sprite::GetTextureRegionForSortOrNull() const {
+    return texture_region.get();
+}
+
+void Sprite::SetTextureRegion(const pTextureRegion &texture_region, bool pixel_size, bool adjust_size) {
     this->texture_region = texture_region;
+    if (adjust_size) {
+        if (pixel_size) {
+            this->SetSize(std::abs(texture_region->GetWidth()), std::abs(texture_region->GetHeight()));
+        } else {
+            this->SetSize(1, texture_region->GetRatio());
+        }
+    }
 }
 
 void Sprite::Draw(SpriteBatch &sprite_batch) {
     if (!texture_region) return;
     static Vector2f p1, p2, p3, p4;
-    float ratio = texture_region->GetRatio();
-    p1.Set(0.0f);
-    p2.Set(ratio, 0.0f);
-    p3.Set(ratio, 1.0f);
-    p4.Set(0.0f, 1.0f);
+    p1.Set(-size.x * origin.x, -size.y * origin.y);
+    p2.Set(size.x * (1 - origin.x), p1.y);
+    p3.Set(p2.x, size.y * (1 - origin.y));
+    p4.Set(p1.x, p3.y);
     sprite_batch.Draw(texture_region, shader, p1, p2, p3, p4, GetObject2D()->GetTransformMatrix(), color);
 }
 

@@ -44,7 +44,7 @@ public:
 
     void SetCameraMatrix(const Matrix4f &camera_matrix);
 
-    const Matrix4f &GetCameraMatrix();
+    const Matrix4f &GetCameraMatrix() const;
 
     void Draw(const pTextureRegion &texture_region, const pShader &shader,
             const Vector2f &p1, const Vector2f &p2, const Vector2f &p3, const Vector2f &p4,

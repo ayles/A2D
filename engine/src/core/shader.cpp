@@ -145,12 +145,14 @@ GLuint Shader::CompileShader(const std::string &shader_text, const GLenum &shade
         GLint max_length = 0;
         glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &max_length);
 
-        std::vector<GLchar> info_log(max_length);
-        glGetShaderInfoLog(shader_id, max_length, &max_length, &info_log[0]);
+        if (max_length > 0) {
+            std::vector<GLchar> info_log(max_length);
+            glGetShaderInfoLog(shader_id, max_length, &max_length, &info_log[0]);
 
-        a2d::Engine::GetLogger()->error("{} shader: \n{}",
-                                        shader_type == GL_VERTEX_SHADER ? "vertex" : "fragment", std::string(&*info_log.begin()));
-
+            a2d::Engine::GetLogger()->error("{} shader: \n{}",
+                                            shader_type == GL_VERTEX_SHADER ? "vertex" : "fragment",
+                                            std::string(&*info_log.begin()));
+        }
         glDeleteShader(shader_id);
         return 0;
     }
@@ -173,15 +175,17 @@ GLuint Shader::CompileProgram(GLuint vertex_shader_id, GLuint fragment_shader_id
         GLint max_length = 0;
         glGetProgramiv(program_id, GL_INFO_LOG_LENGTH, &max_length);
 
-        std::vector<GLchar> info_log(max_length);
-        glGetProgramInfoLog(program_id, max_length, &max_length, &info_log[0]);
+        if (max_length > 0) {
+            std::vector<GLchar> info_log(max_length);
+            glGetProgramInfoLog(program_id, max_length, &max_length, &info_log[0]);
 
-        glDeleteShader(vertex_shader_id);
-        glDeleteShader(fragment_shader_id);
+            glDeleteShader(vertex_shader_id);
+            glDeleteShader(fragment_shader_id);
 
-        glDeleteProgram(program_id);
+            glDeleteProgram(program_id);
 
-        a2d::Engine::GetLogger()->error("Error linking shader:\n{}", std::string(&*info_log.begin()));
+            a2d::Engine::GetLogger()->error("Error linking shader:\n{}", std::string(&*info_log.begin()));
+        }
 
         return 0;
     }

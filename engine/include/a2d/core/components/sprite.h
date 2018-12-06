@@ -24,7 +24,10 @@ public:
 
     const pTextureRegion &GetTextureRegion();
 
-    void SetTextureRegion(const pTextureRegion &texture_region);
+    const Shader *GetShaderForSortOrNull() const override;
+    const TextureRegion *GetTextureRegionForSortOrNull() const override;
+
+    void SetTextureRegion(const pTextureRegion &texture_region, bool pixel_size = true, bool adjust_size = true);
 
 protected:
     pTextureRegion texture_region;

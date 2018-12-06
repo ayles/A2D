@@ -319,10 +319,10 @@ a2d::Matrix<4, 4, T> a2d::Matrix<4, 4, T, IF_FLOATING_POINT>::operator*(const Ma
 
 template<class T>
 a2d::Vector<4, T> &a2d::Matrix<4, 4, T, IF_FLOATING_POINT>::Transform(float x, float y, float z, float w, Vector<4, T> &dest) const {
-    float rx = data[0] * x + data[4] * y + data[8] * z + data[12] * w;
-    float ry = data[1] * x + data[5] * y + data[9] * z + data[13] * w;
-    float rz = data[2] * x + data[6] * y + data[10] * z + data[14] * w;
-    float rw = data[3] * x + data[7] * y + data[11] * z + data[15] * w;
+    T rx = data[0] * x + data[4] * y + data[8] * z + data[12] * w;
+    T ry = data[1] * x + data[5] * y + data[9] * z + data[13] * w;
+    T rz = data[2] * x + data[6] * y + data[10] * z + data[14] * w;
+    T rw = data[3] * x + data[7] * y + data[11] * z + data[15] * w;
     dest.x = rx;
     dest.y = ry;
     dest.z = rz;
@@ -337,10 +337,10 @@ a2d::Vector<4, T> &a2d::Matrix<4, 4, T, IF_FLOATING_POINT>::Transform(Vector<4, 
 
 template<class T>
 a2d::Vector<4, T> &a2d::Matrix<4, 4, T, IF_FLOATING_POINT>::Transform(const Vector<4, T> &v, Vector<4, T> &dest) const {
-    float rx = data[0] * v.x + data[4] * v.y + data[8] * v.z + data[12] * v.w;
-    float ry = data[1] * v.x + data[5] * v.y + data[9] * v.z + data[13] * v.w;
-    float rz = data[2] * v.x + data[6] * v.y + data[10] * v.z + data[14] * v.w;
-    float rw = data[3] * v.x + data[7] * v.y + data[11] * v.z + data[15] * v.w;
+    T rx = data[0] * v.x + data[4] * v.y + data[8] * v.z + data[12] * v.w;
+    T ry = data[1] * v.x + data[5] * v.y + data[9] * v.z + data[13] * v.w;
+    T rz = data[2] * v.x + data[6] * v.y + data[10] * v.z + data[14] * v.w;
+    T rw = data[3] * v.x + data[7] * v.y + data[11] * v.z + data[15] * v.w;
     dest.x = rx;
     dest.y = ry;
     dest.z = rz;
@@ -355,20 +355,20 @@ const T *a2d::Matrix<4, 4, T, IF_FLOATING_POINT>::operator[](int index) const {
 
 template<class T>
 a2d::Matrix<4, 4, T> &a2d::Matrix<4, 4, T, IF_FLOATING_POINT>::Invert() {
-    float a = data[0] * data[5] - data[1] * data[4];
-    float b = data[0] * data[6] - data[2] * data[4];
-    float c = data[0] * data[7] - data[3] * data[4];
-    float d = data[1] * data[6] - data[2] * data[5];
-    float e = data[1] * data[7] - data[3] * data[5];
-    float f = data[2] * data[7] - data[3] * data[6];
-    float g = data[8] * data[13] - data[9] * data[12];
-    float h = data[8] * data[14] - data[10] * data[12];
-    float i = data[8] * data[15] - data[11] * data[12];
-    float j = data[9] * data[14] - data[10] * data[13];
-    float k = data[9] * data[15] - data[11] * data[13];
-    float l = data[10] * data[15] - data[11] * data[14];
-    float det = a * l - b * k + c * j + d * i - e * h + f * g;
-    float nm00, nm01, nm02, nm03, nm10, nm11, nm12, nm13, nm20, nm21, nm22, nm23, nm30, nm31, nm32, nm33;
+    T a = data[0] * data[5] - data[1] * data[4];
+    T b = data[0] * data[6] - data[2] * data[4];
+    T c = data[0] * data[7] - data[3] * data[4];
+    T d = data[1] * data[6] - data[2] * data[5];
+    T e = data[1] * data[7] - data[3] * data[5];
+    T f = data[2] * data[7] - data[3] * data[6];
+    T g = data[8] * data[13] - data[9] * data[12];
+    T h = data[8] * data[14] - data[10] * data[12];
+    T i = data[8] * data[15] - data[11] * data[12];
+    T j = data[9] * data[14] - data[10] * data[13];
+    T k = data[9] * data[15] - data[11] * data[13];
+    T l = data[10] * data[15] - data[11] * data[14];
+    T det = a * l - b * k + c * j + d * i - e * h + f * g;
+    T nm00, nm01, nm02, nm03, nm10, nm11, nm12, nm13, nm20, nm21, nm22, nm23, nm30, nm31, nm32, nm33;
     det = 1.0f / det;
     nm00 = ( data[5]  * l - data[6]  * k + data[7]  * j) * det;
     nm01 = (-data[1]  * l + data[2]  * k - data[3]  * j) * det;

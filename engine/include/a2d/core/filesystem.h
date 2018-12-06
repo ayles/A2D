@@ -23,45 +23,19 @@ class FileSystem {
 public:
     friend class NativeConnector;
 
-    static std::vector<unsigned char> LoadRaw(const std::string &path) {
-#ifdef TARGET_ANDROID
-        auto asset = AAssetManager_open(asset_manager, path.c_str(), AASSET_MODE_UNKNOWN);
-        auto size = AAsset_getLength(asset);
-        std::vector<unsigned char> v(size);
-        AAsset_read (asset, &v[0], size);
-        AAsset_close(asset);
-        return v;
-#elif TARGET_DESKTOP
-        std::ifstream file("resources/" + path, std::ios::binary);
-        if ((file.rdstate() & std::ifstream::failbit) != 0) {
-            std::vector<unsigned char> a;
-            return a;
-        }
-        return std::vector<unsigned char>(
-                (std::istreambuf_iterator<char>(file)),
-                (std::istreambuf_iterator<char>())
-        );
-#endif
-    }
-
-    static std::string LoadText(const std::string &path) {
-        auto v = LoadRaw(path);
-        return std::string(v.begin(), v.end());
-    }
+    static std::vector<unsigned char> LoadRaw(const std::string &path);
+    static std::string LoadText(const std::string &path);
 
 private:
 #ifdef TARGET_DESKTOP
-    static bool Initialize() {
-        return true;
-    }
+    static bool Initialize();
 #elif TARGET_ANDROID
-    private:
     static AAssetManager *asset_manager;
+
+    // TODO move to private section
 public:
-    static bool Initialize(AAssetManager *asset_manager) {
-        FileSystem::asset_manager = asset_manager;
-        return true;
-    }
+    static bool Initialize(AAssetManager *asset_manager);
+private:
 #endif
 
     static void Uninitialize() {}

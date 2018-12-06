@@ -38,7 +38,7 @@ void SpriteBatch::SetCameraMatrix(const Matrix4f &camera_matrix) {
     this->camera_matrix = camera_matrix;
 }
 
-const Matrix4f &SpriteBatch::GetCameraMatrix() {
+const Matrix4f &SpriteBatch::GetCameraMatrix() const {
     return camera_matrix;
 }
 

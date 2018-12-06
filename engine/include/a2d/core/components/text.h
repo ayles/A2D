@@ -23,46 +23,21 @@ protected:
 public:
     Vector4f color;
 
-    void SetText(const std::string &text) {
-        std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> convert;
-        this->text = convert.from_bytes(text);
-    }
+    Text();
 
-    void SetText(const std::u32string &text) {
-        this->text = text;
-    }
+    void SetText(const std::string &text);
+    void SetText(const std::u32string &text);
 
-    void SetFont(const pBitmapFont &bitmap_font) {
-        this->bitmap_font = bitmap_font;
-    }
+    void SetFont(const pBitmapFont &bitmap_font);
 
-    const std::u32string &GetUTF32Text() const {
-        return text;
-    }
+    const std::u32string &GetUTF32Text() const;
+    std::string GetText() const;
 
-    std::string GetText() const {
-        std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> convert;
-        return convert.to_bytes(text);
-    }
+    pBitmapFont &GetFont();
 
-    pBitmapFont &GetFont() {
-        return bitmap_font;
-    }
+    void Draw(SpriteBatch &sprite_batch) override;
 
-    void Draw(SpriteBatch &sprite_batch) override {
-        static Vector2f p1, p2, p3, p4;
-        float current_x = 0.0f;
-        for (auto c : text) {
-            const auto &t = bitmap_font->GetCharacter(c);
-            if (!t) continue;
-            p1.Set(current_x + 0.0f, -1.0f);
-            p2.Set(current_x + t->ratio, -1.0f);
-            p3.Set(current_x + t->ratio, 3.0f);
-            p4.Set(current_x + 0.0f, 3.0f);
-            sprite_batch.Draw(t->texture_region, shader, p1, p2, p3, p4, GetObject2D()->GetTransformMatrix(), color);
-            current_x += t->ratio;
-        }
-    }
+    ~Text() override;
 };
 
 } //namespace a2d

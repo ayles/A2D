@@ -121,6 +121,19 @@ if (SOLOUD_BACKEND_SDL2)
 
 endif()
 
+if (SOLOUD_BACKEND_ALSA)
+    find_package(ALSA REQUIRED)
+
+    set(COMPILE_DEFINITIONS ${COMPILE_DEFINITIONS} WITH_ALSA)
+
+	set(BACKENDS_SOURCES
+			${BACKENDS_SOURCES}
+			${BACKENDS_PATH}/alsa/soloud_alsa.cpp
+	)
+
+    set(LINK_LIBRARIES ${LINK_LIBRARIES} ${ALSA_LIBRARY})
+endif()
+
 if (SOLOUD_BACKEND_COREAUDIO)
 	if (NOT APPLE)
 		message (FATAL_ERROR "CoreAudio backend can be enabled only on Apple!")

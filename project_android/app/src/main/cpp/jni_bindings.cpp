@@ -16,6 +16,7 @@ namespace a2d {
 class NativeConnector {
 public:
     static bool Initialize() {
+        if (!a2d::Audio::Initialize()) return false;
         if (!a2d::Engine::Initialize()) return false;
         if (!a2d::Renderer::Initialize()) return false;
         if (!a2d::Input::Initialize()) return false;
@@ -35,6 +36,7 @@ public:
         a2d::Input::Uninitialize();
         a2d::Engine::Uninitialize();
         a2d::Renderer::Uninitialize();
+        a2d::Audio::Uninitialize();
         a2d::FileSystem::Uninitialize();
     }
 

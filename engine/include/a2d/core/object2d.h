@@ -17,6 +17,12 @@
 #include <map>
 #include <typeindex>
 #include <type_traits>
+#include <a2d/core/components/sprite.h>
+#include <a2d/core/components/animator.h>
+
+
+#include "drawable.h"
+
 
 namespace a2d {
 
@@ -49,10 +55,10 @@ public:
 
     void SetLayer(int layer);
 
-    bool IsActive();
+    bool IsActive() const;
     const a2d::Matrix4f &GetTransformMatrix() const;
-    int GetLayer();
-    pObject2D GetParent();
+    int GetLayer() const;
+    pObject2D GetParent() const;
 
     pObject2D AddChild(pObject2D child);
     pObject2D RemoveChild(const pObject2D &child);
@@ -78,9 +84,9 @@ public:
     RemoveComponent(const SMART_POINTER(T) &component);
 
     ~Object2D() override;
-
-    std::set<pObject2D, objects_compare> children;
 private:
+    std::set<pObject2D, objects_compare> children;
+
     void SetActive(bool active);
 
     void Update();

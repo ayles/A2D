@@ -19,15 +19,9 @@ class AudioClip : public ref_counter {
     friend class AudioSource;
 
 public:
-    AudioClip(const std::vector<unsigned char> &audio_file) {
-        data.loadMem(const_cast<unsigned char *>(&audio_file[0]), audio_file.size(), true);
-    }
-
+    AudioClip(const std::vector<unsigned char> &audio_file);
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(AudioClip)
-
-    ~AudioClip() {
-
-    }
+    ~AudioClip() override;
 
 private:
     SoLoud::Wav data;

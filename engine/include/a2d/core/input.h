@@ -174,199 +174,115 @@ public:
             JUST_PRESSED = 3
         };
 
-        int index = 0;
-        Vector2f position = Vector2f();
-        TouchState state = RELEASED;
+        int index;
+        Vector2f position;
+        TouchState state;
 
-        Touch(int index, Vector2f position, TouchState state) : index(index), position(position), state(state) {}
+        Touch();
+        Touch(int index, Vector2f position, TouchState state);
     };
 
 
 
-    // Returns key current state either PRESSED or RELEASED
-    static KeyState GetKeyState(KeyCode key_code) {
-        return GetKeyInternalState(key_code).state;
-    }
+    /**
+     * Returns key current state either PRESSED or RELEASED.
+     *
+     * @param key_code key code
+     * @return key state
+     */
+    static KeyState GetKeyState(KeyCode key_code);
 
-    // Returns true if key was pressed during current frame
-    static bool IsKeyJustPressed(KeyCode key_code) {
-        return GetKeyInternalState(key_code).last_pressed == Engine::GetFrameIndex();
-    }
+    /**
+     * Shows whether key was pressed in the current frame.
+     *
+     * @param key_code key code
+     * @return true if key was pressed during current frame, false otherwise
+     */
+    static bool IsKeyJustPressed(KeyCode key_code);
 
-    // Returns true if key was released during current frame
-    static bool IsKeyJustReleased(KeyCode key_code) {
-        return GetKeyInternalState(key_code).last_released == Engine::GetFrameIndex();
-    }
+    /**
+     * Shows whether key was released in the current frame.
+     *
+     * @param key_code key code
+     * @return true if key was released during current frame, false otherwise
+     */
+    static bool IsKeyJustReleased(KeyCode key_code);
 
-    // Returns scroll delta during this frame. Simple mouse wheel provides y-delta (vertical)
-    static Vector2f GetScrollDelta() {
-        return GetInternalScrollDelta();
-    }
+    /**
+     * Returns scroll delta during this frame.
+     *
+     * Simple mouse wheel provides only y-delta (vertical).
+     *
+     * @return scroll delta
+     */
+    static Vector2f GetScrollDelta();
 
-    // Returns mouse position relative to top-left screen corner
-    static Vector2f GetMousePosition() {
-        return GetInternalMousePosition();
-    }
+    /**
+     * Returns mouse position relative to top-left screen corner.
+     *
+     * On mobile platforms it is just touch 0 position.
+     *
+     * @return mouse position
+     */
+    static Vector2f GetMousePosition();
 
-    // Returns mouse button current state either PRESSED or RELEASED
-    static KeyState GetMouseButtonState(MouseButtonCode button_code) {
-        return GetMouseButtonInternalState(button_code).state;
-    }
+    /**
+     * Returns mouse button current state either PRESSED or RELEASED.
+     *
+     * On mobile platforms it is same as touch 0 state.
+     *
+     * @param button_code mouse button code
+     * @return mouse button state
+     */
+    static KeyState GetMouseButtonState(MouseButtonCode button_code);
 
-    // Returns true if mouse button was pressed during current frame
-    static bool IsMouseButtonJustPressed(MouseButtonCode button_code) {
-        return GetMouseButtonInternalState(button_code).last_pressed == Engine::GetFrameIndex();
-    }
+    /**
+     * Shows whether mouse button was pressed in the current frame.
+     *
+     * On mobile platforms it is same as touch 0 state.
+     *
+     * @param button_code mouse button code
+     * @return true if button was pressed during current frame, false otherwise
+     */
+    static bool IsMouseButtonJustPressed(MouseButtonCode button_code);
 
-    // Returns true if mouse button was released during current frame
-    static bool IsMouseButtonJustReleased(MouseButtonCode button_code) {
-        return GetMouseButtonInternalState(button_code).last_released == Engine::GetFrameIndex();
-    }
+    /**
+     * Shows whether mouse button was released in the current frame.
+     *
+     * On mobile platforms it is same as touch 0 state.
+     *
+     * @param button_code mouse button code
+     * @return true if button was released during current frame, false otherwise
+     */
+    static bool IsMouseButtonJustReleased(MouseButtonCode button_code);
 
-    // Returns number of currently active touches
-    static int GetTouchesCount() {
-        return GetInternalTouchesCount();
-    }
+    /**
+     * Returns number of currently active touches.
+     *
+     * @return number of currently active touches
+     */
+    static int GetTouchesCount();
 
-    // Get Touch by its index (starting from 0)
-    static Touch GetTouch(int touch_index) {
-        auto touch_internal_state = GetTouchInternalState(touch_index);
-
-        Touch::TouchState state = Touch::TouchState::RELEASED;
-
-        if (touch_internal_state.state == Touch::TouchState::PRESSED) {
-            state = (touch_internal_state.last_pressed == Engine::GetFrameIndex()) ?
-                    Touch::TouchState::JUST_PRESSED : Touch::TouchState::PRESSED;
-        } else if (touch_internal_state.state == Touch::TouchState::RELEASED) {
-            state = (touch_internal_state.last_released == Engine::GetFrameIndex()) ?
-                    Touch::TouchState::JUST_RELEASED : Touch::TouchState::RELEASED;
-        }
-
-        return { touch_index, touch_internal_state.position, state };
-    }
+    /**
+     * Returns touch by its index.
+     *
+     * @param touch_index touch index
+     * @return touch
+     */
+    static Touch GetTouch(int touch_index);
 
 private:
-    static bool Initialize() {
-#ifdef TARGET_DESKTOP
-        glfwSetKeyCallback(Renderer::window, KeyCallback);
-        glfwSetCursorPosCallback(Renderer::window, MousePositionCallback);
-        glfwSetMouseButtonCallback(Renderer::window, MouseButtonCallback);
-        glfwSetScrollCallback(Renderer::window, ScrollCallback);
-#endif
-        return true;
-    }
+    static bool Initialize();
 
-    static void Uninitialize() {
-#ifdef TARGET_DESKTOP
-        glfwSetKeyCallback(Renderer::window, nullptr);
-        glfwSetCursorPosCallback(Renderer::window, nullptr);
-        glfwSetMouseButtonCallback(Renderer::window, nullptr);
-        glfwSetScrollCallback(Renderer::window, nullptr);
-#endif
-    }
+    static void Uninitialize();
 
 #ifdef TARGET_DESKTOP
-    static void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-        auto &key_internal_state = GetKeyInternalState((KeyCode)key);
-
-        switch (action) {
-            case GLFW_PRESS:
-                key_internal_state.last_pressed = Engine::GetFrameIndex();
-                key_internal_state.state = KeyState::PRESSED;
-                break;
-
-            case GLFW_RELEASE:
-                key_internal_state.last_released = Engine::GetFrameIndex();
-                key_internal_state.state = KeyState::RELEASED;
-                break;
-
-            case GLFW_REPEAT:
-                // if we loosed a PRESS event
-                if (key_internal_state.state == KeyState::RELEASED) {
-                    key_internal_state.last_pressed = Engine::GetFrameIndex();
-                    key_internal_state.state = KeyState::PRESSED;
-                }
-                break;
-
-            default:
-                return;
-        }
-    }
-
-    static void MousePositionCallback(GLFWwindow *window, double x_position, double y_position) {
-        GetInternalMousePosition().Set((float)x_position, (float)y_position);
-    }
-
-    static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
-        auto &button_internal_state = GetMouseButtonInternalState((MouseButtonCode)button);
-
-        switch (action) {
-            case GLFW_PRESS:
-                button_internal_state.last_pressed = Engine::GetFrameIndex();
-                button_internal_state.state = KeyState::PRESSED;
-                break;
-
-            case GLFW_RELEASE:
-                button_internal_state.last_released = Engine::GetFrameIndex();
-                button_internal_state.state = KeyState::RELEASED;
-                break;
-
-            default:
-                return;
-        }
-    }
-
-    static void ScrollCallback(GLFWwindow *window, double x_offset, double y_offset) {
-        GetInternalScrollDelta().Set((float)x_offset, (float)y_offset);
-    }
-
+    static void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
+    static void MousePositionCallback(GLFWwindow *window, double x_position, double y_position);
+    static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+    static void ScrollCallback(GLFWwindow *window, double x_offset, double y_offset);
 #elif TARGET_ANDROID
-    static void TouchCallback(int touches_count, int touch_index, int touch_action, float touch_x, float touch_y) {
-        auto &touch_internal_state = GetTouchInternalState(touch_index);
-        auto &button_internal_state = GetMouseButtonInternalState(MouseButtonCode::MOUSE_BUTTON_LEFT);
-
-        switch (touch_action) {
-            case AMOTION_EVENT_ACTION_DOWN:
-                touch_internal_state.last_pressed = Engine::GetFrameIndex();
-                touch_internal_state.state = Touch::TouchState::PRESSED;
-                if (touch_index == 0) {
-                    button_internal_state.last_pressed = Engine::GetFrameIndex();
-                    button_internal_state.state = KeyState::PRESSED;
-                }
-                break;
-
-            case AMOTION_EVENT_ACTION_UP:
-                touch_internal_state.last_released = Engine::GetFrameIndex();
-                touch_internal_state.state = Touch::TouchState::RELEASED;
-                if (touch_index == 0) {
-                    button_internal_state.last_released = Engine::GetFrameIndex();
-                    button_internal_state.state = KeyState::RELEASED;
-                }
-                break;
-
-            case AMOTION_EVENT_ACTION_MOVE:
-                // if we loosed a DOWN event
-                if (touch_internal_state.state == Touch::TouchState::RELEASED) {
-                    touch_internal_state.last_pressed = Engine::GetFrameIndex();
-                    touch_internal_state.state = Touch::TouchState::PRESSED;
-                    if (touch_index == 0) {
-                        button_internal_state.last_released = Engine::GetFrameIndex();
-                        button_internal_state.state = KeyState::RELEASED;
-                    }
-                }
-                break;
-
-            default:
-                return;
-        }
-
-        GetInternalTouchesCount() = touches_count;
-        touch_internal_state.position.Set(touch_x, touch_y);
-
-        if (touch_index == 0) {
-            GetInternalMousePosition().Set(touch_x, touch_y);
-        }
-    }
+    static void TouchCallback(int touches_count, int touch_index, int touch_action, float touch_x, float touch_y);
 #endif
 
     struct KeyInternalState {
@@ -382,35 +298,12 @@ private:
         Vector2f position = Vector2f();
     };
 
-    static int &GetInternalTouchesCount() {
-        static int touches_count = 0;
-        return touches_count;
-    }
-
-    static KeyInternalState &GetKeyInternalState(KeyCode key_code) {
-        static std::map<KeyCode, KeyInternalState> keys_states;
-        return keys_states[key_code];
-    }
-
-    static KeyInternalState &GetMouseButtonInternalState(MouseButtonCode button_code) {
-        static std::map<MouseButtonCode , KeyInternalState> buttons_states;
-        return buttons_states[button_code];
-    }
-
-    static TouchInternalState &GetTouchInternalState(int touch_index) {
-        static std::map<int, TouchInternalState> touches_states;
-        return touches_states[touch_index];
-    }
-
-    static Vector2f &GetInternalMousePosition() {
-        static Vector2f mouse_position;
-        return mouse_position;
-    }
-
-    static Vector2f &GetInternalScrollDelta() {
-        static Vector2f scroll_delta;
-        return scroll_delta;
-    }
+    static int &GetInternalTouchesCount();
+    static KeyInternalState &GetKeyInternalState(KeyCode key_code);
+    static KeyInternalState &GetMouseButtonInternalState(MouseButtonCode button_code);
+    static TouchInternalState &GetTouchInternalState(int touch_index);
+    static Vector2f &GetInternalMousePosition();
+    static Vector2f &GetInternalScrollDelta();
 };
 
 } //namespace a2d

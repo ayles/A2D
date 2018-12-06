@@ -144,8 +144,8 @@ a2d::TextureRegion::TextureRegion(
 ) :
 texture(texture),
 offset(x, y), size(width, height),
-uv_lb(Vector2f(x, y) / Vector2f(texture->width, texture->height)),
-uv_rt(Vector2f(x + width, y + height) / Vector2f(texture->width, texture->height)),
+uv_lb(Vector2f((float)x, (float)y) / Vector2f((float)texture->width, (float)texture->height)),
+uv_rt(Vector2f(float(x + width), float(y + height)) / Vector2f((float)texture->width, (float)texture->height)),
 ratio(std::abs((float)size.x / size.y)),
 filtering(filtering), wrapping(wrapping)
 {
@@ -185,35 +185,35 @@ void a2d::TextureRegion::SetWrapping(a2d::Texture::Wrapping wrapping) {
 
 }*/
 
-const a2d::pTexture &a2d::TextureRegion::GetTexture() {
+const a2d::pTexture &a2d::TextureRegion::GetTexture() const {
     return texture;
 }
 
-int a2d::TextureRegion::GetX() {
+int a2d::TextureRegion::GetX() const {
     return offset.x;
 }
 
-int a2d::TextureRegion::GetY() {
+int a2d::TextureRegion::GetY() const {
     return offset.y;
 }
 
-int a2d::TextureRegion::GetWidth() {
+int a2d::TextureRegion::GetWidth() const {
     return size.x;
 }
 
-int a2d::TextureRegion::GetHeight() {
+int a2d::TextureRegion::GetHeight() const {
     return size.y;
 }
 
-float a2d::TextureRegion::GetRatio() {
+float a2d::TextureRegion::GetRatio() const {
     return ratio;
 }
 
-a2d::Texture::Filtering a2d::TextureRegion::GetFiltering() {
+a2d::Texture::Filtering a2d::TextureRegion::GetFiltering() const {
     return filtering;
 }
 
-a2d::Texture::Wrapping a2d::TextureRegion::GetWrapping() {
+a2d::Texture::Wrapping a2d::TextureRegion::GetWrapping() const {
     return wrapping;
 }
 
