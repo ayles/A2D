@@ -66,7 +66,7 @@ bool a2d::Engine::IsPlaying() {
 bool a2d::Engine::Initialize() {
     ui_thread_id = std::this_thread::get_id();
     // Important for hierarchical activate/disable
-    root->is_active = true;
+    root->is_in_tree = true;
 
 #ifdef TARGET_ANDROID
     logger = spdlog::android_logger_mt("logger", "a2d_log");

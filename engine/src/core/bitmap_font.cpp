@@ -31,10 +31,10 @@ BitmapFont::BitmapFont(const std::vector<unsigned char> &ttf, int size) {
     FT_New_Memory_Face(GetFreeTypeLibrary(), &ttf[0], ttf.size(), 0, &face);
     FT_Set_Pixel_Sizes(face, 0, size);
 
-    int face_height = (int)std::ceil((float)face->height / 64);
+    int face_height = (int)std::ceil((float)face->size->metrics.height / 64);
 
     int glyph_max_height = (int)std::ceil(face_height * 3);
-    int glyph_max_width = (int)std::ceil((float)face->max_advance_width / 64);
+    int glyph_max_width = (int)std::ceil((float)face->size->metrics.max_advance / 64);
 
     // Ceil bounds to the nearest power of two
     // This can be skipped, but it is not guaranteed that all glyphs will fit in such an image

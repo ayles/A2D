@@ -7,33 +7,8 @@
 
 namespace a2d {
 
-Object2D::Object2D() : is_active(false), layer(0), parent(nullptr), scale(1), position(), rotation(), drawable(nullptr) {
+Object2D::Object2D() : is_in_tree(false), layer(0), parent(nullptr), scale(1), position(), rotation(), drawable(nullptr) {
 
-}
-
-bool Object2D::IsActive() const {
-    return is_active;
-}
-
-void Object2D::SetActive(bool active) {
-    if (is_active == active) return;
-    is_active = active;
-    for (const auto &s : components) {
-        for (const pComponent &c : s.second) {
-            c->SetActive(is_active);
-        }
-    }
-    for (const pObject2D &c : children) {
-        c->SetActive(is_active);
-    }
-}
-
-const Matrix4f &Object2D::GetTransformMatrix() const {
-    return transform_matrix;
-}
-
-int Object2D::GetLayer() const {
-    return layer;
 }
 
 void Object2D::SetLayer(int layer) {
@@ -47,23 +22,75 @@ pObject2D Object2D::GetParent() const {
     return parent;
 }
 
+int Object2D::GetLayer() const {
+    return layer;
+}
+
+bool Object2D::IsInTree() const {
+    return is_in_tree;
+}
+
+const Matrix4f &Object2D::GetTransformMatrix() const {
+    return transform_matrix;
+}
+
+const Matrix4f &Object2D::GetTransformMatrixRecalculated(bool recursive) {
+    transform_matrix.Identity();
+    transform_matrix.Translate(position.x, position.y, 0.0f);
+    transform_matrix.Rotate(rotation, 0.0f, 0.0f, 1.0f);
+    transform_matrix.Scale(scale.x, scale.y, 1.0f);
+
+    if (!parent) return transform_matrix;
+    return (transform_matrix =
+            (recursive ? parent->GetTransformMatrixRecalculated() : parent->GetTransformMatrix()) *
+            transform_matrix);
+}
+
+pDrawable Object2D::GetDrawable() const {
+    return drawable;
+}
+
+void Object2D::SetIsInTree(bool is_in_tree) {
+    if (this->is_in_tree == is_in_tree) return;
+    this->is_in_tree = is_in_tree;
+    for (const auto &s : components) {
+        for (const pComponent &c : s.second) {
+            c->SetActive(is_in_tree);
+        }
+    }
+    for (const pObject2D &c : children) {
+        c->SetIsInTree(is_in_tree);
+    }
+}
+
 pObject2D Object2D::AddChild(pObject2D child) {
     if (child->parent != this) {
         if (child->parent) child->parent->RemoveChild(child);
         child->parent = this;
         children.emplace(child);
-        child->SetActive(true);
+        child->SetIsInTree(true);
     }
     return child;
 }
 
 pObject2D Object2D::RemoveChild(const pObject2D &child) {
     if (child->parent == this) {
-        child->SetActive(false);
+        child->SetIsInTree(false);
         child->parent = nullptr;
         children.erase(child);
     }
     return child;
+}
+
+void Object2D::PhysicsUpdate() {
+    for (const auto &s : components) {
+        for (const pComponent &c : s.second) {
+            c->PhysicsUpdate();
+        }
+    }
+    for (const pObject2D &c : children) {
+        c->PhysicsUpdate();
+    }
 }
 
 void Object2D::Update() {
@@ -88,13 +115,8 @@ void Object2D::PostUpdate() {
     }
 }
 
-void Object2D::PreDraw(const a2d::Matrix4f &mat) {
-    transform_matrix.Identity();
-    transform_matrix.Translate(position.x, position.y, 0.0f);
-    transform_matrix.Rotate(rotation, 0.0f, 0.0f, -1.0f);
-    transform_matrix.Scale(scale.x, scale.y, 1.0f);
-
-    transform_matrix = mat * transform_matrix;
+void Object2D::PreDraw(const a2d::Matrix4f &parent_transform) {
+    GetTransformMatrixRecalculated(false);
 
     for (const auto &s : components) {
         for (const pComponent &c : s.second) {
@@ -170,6 +192,16 @@ bool Object2D::objects_compare::operator()(const pObject2D &lhs, const pObject2D
         }
     }
     return lhs < rhs;
+}
+
+Vector2f Object2D::WorldToLocal(const Vector2f &world_point) {
+    auto v = Matrix4f(GetTransformMatrixRecalculated()).Invert().Transform(world_point.x, world_point.y, 0, 1);
+    return Vector2f(v.x, v.y);
+}
+
+Vector2f Object2D::LocalToWorld(const Vector2f &local_point) {
+    auto v = GetTransformMatrixRecalculated().Transform(local_point.x, local_point.y, 0, 1);
+    return Vector2f(v.x, v.y);
 }
 
 } //namespace a2d

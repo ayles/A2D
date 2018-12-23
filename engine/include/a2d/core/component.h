@@ -33,6 +33,7 @@ protected:
     // Events
     virtual void Initialize() {};
     virtual void OnEnable() {};
+    virtual void PhysicsUpdate() {};
     virtual void Update() {};
     virtual void PostUpdate() {};
     virtual void PreDraw() {};

@@ -52,7 +52,8 @@ set(A2D_HEADERS
         include/a2d/core/components/text.h
         include/a2d/core/bitmap_font.h
         include/a2d/core/components/audio_source.h
-        include/a2d/core/audio_clip.h)
+        include/a2d/core/audio_clip.h
+        include/a2d/core/physics.h include/a2d/core/components/physics_body.h include/a2d/core/components/line.h)
 
 add_library(a2d STATIC ${A2D_SOURCES} ${A2D_HEADERS})
 target_include_directories(a2d PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

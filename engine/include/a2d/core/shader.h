@@ -72,12 +72,12 @@ public:
     virtual const std::map<std::string, Uniform> &GetUniforms() const;
     virtual Uniform *GetUniform(const std::string &name) const;
 
+    virtual bool Bind();
+
     static pShader GetShader(const std::string &name);
 
 private:
     Shader(const std::string &vertex_shader_text, const std::string &fragment_shader_text);
-
-    virtual bool Bind();
 
     virtual ~Shader();
 

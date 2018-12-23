@@ -318,7 +318,7 @@ a2d::Matrix<4, 4, T> a2d::Matrix<4, 4, T, IF_FLOATING_POINT>::operator*(const Ma
 }
 
 template<class T>
-a2d::Vector<4, T> &a2d::Matrix<4, 4, T, IF_FLOATING_POINT>::Transform(float x, float y, float z, float w, Vector<4, T> &dest) const {
+a2d::Vector<4, T> &a2d::Matrix<4, 4, T, IF_FLOATING_POINT>::Transform(T x, T y, T z, T w, Vector<4, T> &dest) const {
     T rx = data[0] * x + data[4] * y + data[8] * z + data[12] * w;
     T ry = data[1] * x + data[5] * y + data[9] * z + data[13] * w;
     T rz = data[2] * x + data[6] * y + data[10] * z + data[14] * w;
@@ -403,6 +403,12 @@ a2d::Matrix<4, 4, T> &a2d::Matrix<4, 4, T, IF_FLOATING_POINT>::Invert() {
     data[14] = (nm32);
     data[15] = (nm33);
     return *this;
+}
+
+template<class T>
+a2d::Vector<4, T> a2d::Matrix<4, 4, T, IF_FLOATING_POINT>::Transform(T x, T y, T z, T w) const {
+    Vector<4, T> v;
+    return Transform(x, y, z, w, v);
 }
 
 template class a2d::Matrix<4, 4, float>;

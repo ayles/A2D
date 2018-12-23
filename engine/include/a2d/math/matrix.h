@@ -30,7 +30,8 @@ public:
     // Const methods
     //
 
-    Vector<4, T> &Transform(float x, float y, float z, float w, Vector<4, T> &dest) const;
+    Vector<4, T> Transform(T x, T y, T z, T w) const;
+    Vector<4, T> &Transform(T x, T y, T z, T w, Vector<4, T> &dest) const;
     Vector<4, T> &Transform(Vector<4, T> &v) const;
     Vector<4, T> &Transform(const Vector<4, T> &v, Vector<4, T> &dest) const;
 

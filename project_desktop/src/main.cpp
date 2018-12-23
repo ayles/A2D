@@ -28,12 +28,14 @@ public:
         if (!a2d::Engine::Initialize()) return false;
         if (!a2d::Renderer::Initialize()) return false;
         if (!a2d::Input::Initialize()) return false;
+        if (!a2d::Physics::Initialize()) return false;
         a2d::Engine::GetRoot()->AddComponent<a2d::RootComponent>();
         return true;
     }
 
     static bool Step() {
-        return a2d::Engine::Update() &&
+        return a2d::Physics::Step() &&
+               a2d::Engine::Update() &&
                a2d::Engine::PostUpdate() &&
                a2d::Engine::PreDraw() &&
                a2d::Renderer::Draw() &&
@@ -41,6 +43,7 @@ public:
     }
 
     static void Uninitialize() {
+        a2d::Physics::Uninitialize();
         a2d::Input::Uninitialize();
         a2d::Engine::Uninitialize();
         a2d::Renderer::Uninitialize();

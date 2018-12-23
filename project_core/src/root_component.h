@@ -29,6 +29,7 @@ public:
         text->AddComponent<Text>()->SetFont(new BitmapFont(FileSystem::LoadRaw("fonts/impact.ttf"), 96));
         text->GetComponent<Text>()->SetOrigin(0.5f, 0.5f);
         text->GetComponent<Text>()->SetText(U"Hello, A2D!");
+        text->AddComponent<PhysicsBody>();
 
         auto bunny_texture = Texture::GetTexture("bunny");
 
@@ -58,6 +59,7 @@ public:
 
         bunny = a2d::Engine::GetRoot()->AddChild(new Object2D);
         bunny->AddComponent<Sprite>()->SetOrigin(0.5f, 0.5f);
+        bunny->GetComponent<Sprite>()->SetTextureRegion(f_left[0].texture_region);
         bunny->scale.Set(2);
         auto a = bunny->AddComponent<Animator>();
         a->AddAnimation("right", new Animation(f_right));
@@ -65,6 +67,7 @@ public:
         bunny->SetLayer(1);
         bunny->AddComponent<MoveCharacter>();
         bunny->AddComponent<AudioSource>()->SetAudioClip(new AudioClip(a2d::FileSystem::LoadRaw("audio/just.mp3")));
+        bunny->AddComponent<PhysicsBody>();
     }
 };
 

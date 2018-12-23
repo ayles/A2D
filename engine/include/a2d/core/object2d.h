@@ -14,12 +14,9 @@
 #include <a2d/core/drawable.h>
 
 #include <set>
-#include <map>
+#include <unordered_map>
 #include <typeindex>
 #include <type_traits>
-#include <a2d/core/components/sprite.h>
-#include <a2d/core/components/animator.h>
-
 
 #include "drawable.h"
 
@@ -31,18 +28,20 @@ DECLARE_SMART_POINTER(Object2D)
 class Object2D final : public ref_counter {
     friend class Engine;
     friend class Renderer;
-
-    pObject2D parent;
-    int layer;
-    bool is_active;
-    Matrix4f transform_matrix;
-    pDrawable drawable;
+    friend class Physics;
 
     struct objects_compare {
         bool operator()(const pObject2D &lhs, const pObject2D &rhs) const;
     };
 
-    std::map<std::type_index, std::set<SMART_POINTER(Component)>> components;
+    std::set<pObject2D, objects_compare> children;
+    pObject2D parent;
+    int layer;
+    bool is_in_tree;
+    Matrix4f transform_matrix;
+    pDrawable drawable;
+
+    std::unordered_map<std::type_index, std::set<SMART_POINTER(Component)>> components;
 
 public:
     Vector2f position;
@@ -55,10 +54,12 @@ public:
 
     void SetLayer(int layer);
 
-    bool IsActive() const;
-    const a2d::Matrix4f &GetTransformMatrix() const;
-    int GetLayer() const;
     pObject2D GetParent() const;
+    int GetLayer() const;
+    bool IsInTree() const;
+    const a2d::Matrix4f &GetTransformMatrix() const;
+    const a2d::Matrix4f &GetTransformMatrixRecalculated(bool recursive = true);
+    pDrawable GetDrawable() const;
 
     pObject2D AddChild(pObject2D child);
     pObject2D RemoveChild(const pObject2D &child);
@@ -83,15 +84,18 @@ public:
     typename std::enable_if<std::is_base_of<Component, T>::value, void>::type
     RemoveComponent(const SMART_POINTER(T) &component);
 
+    Vector2f WorldToLocal(const Vector2f &world_point);
+    Vector2f LocalToWorld(const Vector2f &local_point);
+
     ~Object2D() override;
+
 private:
-    std::set<pObject2D, objects_compare> children;
+    void SetIsInTree(bool is_in_tree);
 
-    void SetActive(bool active);
-
+    void PhysicsUpdate();
     void Update();
     void PostUpdate();
-    void PreDraw(const a2d::Matrix4f &mat);
+    void PreDraw(const a2d::Matrix4f &parent_transform);
     void Draw(SpriteBatch &sprite_batch);
     void PostDraw();
     void OnPause();
@@ -112,7 +116,7 @@ Object2D::AddComponent() {
     components[t_index].emplace(component);
     component->object_2d = this;
     component->Initialize();
-    component->SetActive(IsActive());
+    component->SetActive(IsInTree());
     if (a2d::Engine::IsPlaying()) component->OnResume();
 
     auto drawable = dynamic_cast<Drawable *>(component.get());

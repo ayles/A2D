@@ -97,6 +97,8 @@ void SpriteBatch::Flush() {
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     glDrawElements(GL_TRIANGLES, buffer_size / 8 * 3, GL_UNSIGNED_SHORT, nullptr);
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
 
     buffer_size = 0;
 }
