@@ -6,8 +6,8 @@
 #define DESKTOP_MOVE_CAMERA_H
 
 #include <a2d/core/component.h>
-#include <a2d/math.h>
-#include <a2d/core/input.h>
+#include <a2d/math/math.h>
+#include <a2d/input/input.h>
 #include <a2d/core/object2d.h>
 #include <a2d/core/components/camera.h>
 

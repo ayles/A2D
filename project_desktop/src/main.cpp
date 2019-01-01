@@ -2,11 +2,11 @@
 // Created by selya on 05.11.2018.
 //
 
-#include <a2d/core.h>
-#include <a2d/core/renderer.h>
+#include <a2d/a2d.h>
+#include <a2d/graphics/renderer.h>
 #include <root_component.h>
-#include <a2d/core/filesystem.h>
-#include <a2d/core/input.h>
+#include <a2d/filesystem/filesystem.h>
+#include <a2d/input/input.h>
 #include <a2d/core/audio.h>
 
 
@@ -23,7 +23,6 @@ namespace a2d {
 class NativeConnector {
 public:
     static bool Initialize() {
-        if (!a2d::FileSystem::Initialize()) return false;
         if (!a2d::Audio::Initialize()) return false;
         if (!a2d::Engine::Initialize()) return false;
         if (!a2d::Renderer::Initialize()) return false;
@@ -48,7 +47,6 @@ public:
         a2d::Engine::Uninitialize();
         a2d::Renderer::Uninitialize();
         a2d::Audio::Uninitialize();
-        a2d::FileSystem::Uninitialize();
     }
 };
 

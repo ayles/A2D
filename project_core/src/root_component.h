@@ -5,13 +5,14 @@
 #ifndef CORE_ROOT_COMPONENT_H
 #define CORE_ROOT_COMPONENT_H
 
-#include <a2d/core.h>
+#include <a2d/a2d.h>
 
 #include "move_character.h"
 #include "move_camera.h"
 
 #include <cmath>
 #include <string>
+#include <a2d/core/components/physics/circle_collider.h>
 
 namespace a2d {
 
@@ -30,6 +31,7 @@ public:
         text->GetComponent<Text>()->SetOrigin(0.5f, 0.5f);
         text->GetComponent<Text>()->SetText(U"Hello, A2D!");
         text->AddComponent<PhysicsBody>();
+        text->AddComponent<CircleCollider>()->radius = text->GetComponent<Drawable>(true)->GetHeight() / 2;
 
         auto bunny_texture = Texture::GetTexture("bunny");
 
@@ -42,19 +44,20 @@ public:
             f_right.emplace_back(
                     new TextureRegion(
                             bunny_texture,
-                            j * bunny_texture->width / frames, 0,
-                            bunny_texture->width / frames, bunny_texture->height,
+                            j * bunny_texture->GetWidth() / frames, 0,
+                            bunny_texture->GetWidth() / frames, bunny_texture->GetHeight(),
                             Texture::Filtering::NEAREST),
                     frame_time
             );
             f_left.emplace_back(
                     new TextureRegion(
                             bunny_texture,
-                            (j + 1) * bunny_texture->width / frames, 0,
-                            -bunny_texture->width / frames, bunny_texture->height,
+                            j * bunny_texture->GetWidth() / frames, 0,
+                            bunny_texture->GetWidth() / frames, bunny_texture->GetHeight(),
                             Texture::Filtering::NEAREST),
                     frame_time
             );
+            f_left[f_left.size() - 1].texture_region->SetFlippedHorizontally(true);
         }
 
         bunny = a2d::Engine::GetRoot()->AddChild(new Object2D);
@@ -67,7 +70,9 @@ public:
         bunny->SetLayer(1);
         bunny->AddComponent<MoveCharacter>();
         bunny->AddComponent<AudioSource>()->SetAudioClip(new AudioClip(a2d::FileSystem::LoadRaw("audio/just.mp3")));
-        bunny->AddComponent<PhysicsBody>();
+        auto pb = bunny->AddComponent<PhysicsBody>();
+        pb->SetType(PhysicsBody::BodyType::KINEMATIC);
+        bunny->AddComponent<CircleCollider>()->radius = bunny->GetComponent<Drawable>(true)->GetHeight() / 2;
     }
 };
 

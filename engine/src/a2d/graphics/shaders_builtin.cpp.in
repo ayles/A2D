@@ -1,0 +1,7 @@
+#include <a2d/graphics/shader.h>
+
+void a2d::Shader::CreateDefaultShaders() {
+
+${DEFAULT_SHADERS_INIT_CODE}
+
+}

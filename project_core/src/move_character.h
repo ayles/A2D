@@ -6,12 +6,28 @@
 #define DESKTOP_TRUMP_H
 
 #include <a2d/core/component.h>
-#include <a2d/math.h>
+#include <a2d/math/math.h>
 #include <a2d/core/components/animator.h>
 #include <a2d/core/components/sprite.h>
-#include <a2d/core/input.h>
+#include <a2d/input/input.h>
 #include <a2d/core/object2d.h>
 #include <a2d/core/components/audio_source.h>
+#include <a2d/core/components/physics/physics_body.h>
+
+using namespace a2d;
+
+class Particle : public Component {
+
+    void Initialize() override {
+
+    }
+};
+
+class Emitter : public Component {
+    void Update() override {
+
+    }
+};
 
 class MoveCharacter : public a2d::Component {
     a2d::Vector2f direction = a2d::Vector2f(0.0f, 0.0f);
@@ -21,8 +37,7 @@ class MoveCharacter : public a2d::Component {
         direction = 0;
 
         auto m = a2d::Input::GetMousePosition();
-        auto pos = a2d::Engine::GetCamera()->ScreenToWorld(a2d::Vector2f(m.x / a2d::Renderer::GetWidth(),
-                1.0f - m.y / a2d::Renderer::GetHeight()));
+        auto pos = a2d::Engine::GetCamera()->ScreenToWorld(Vector2f(m.x, a2d::Renderer::GetHeight() - m.y));
 
         direction = pos - GetObject2D()->position;
 
@@ -47,7 +62,8 @@ class MoveCharacter : public a2d::Component {
             GetObject2D()->GetComponent<a2d::Animator>()->PauseAnimation();
         }
 
-        GetObject2D()->position += direction * a2d::Engine::GetDeltaTime() * speed;
+        auto po = GetObject2D()->GetComponent<a2d::PhysicsBody>()->GetPosition();
+        GetObject2D()->GetComponent<a2d::PhysicsBody>()->SetPosition(po + direction * a2d::Engine::GetDeltaTime() * speed);
 
         GetObject2D()->GetComponent<a2d::AudioSource>()->Play();
         float pan = (GetObject2D()->position.x - a2d::Engine::GetCamera()->GetObject2D()->position.x) / (a2d::Engine::GetCamera()->GetWidth() / 2);
