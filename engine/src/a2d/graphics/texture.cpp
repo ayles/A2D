@@ -2,10 +2,10 @@
 // Created by selya on 29.12.2018.
 //
 
-#include <a2d/graphics/texture.h>
-#include <a2d/filesystem/filesystem.h>
+#include <a2d/graphics/texture.hpp>
+#include <a2d/filesystem/filesystem.hpp>
 
-#include <a2d/core/gl.h>
+#include <a2d/graphics/gl.hpp>
 
 #include <lodepng.h>
 

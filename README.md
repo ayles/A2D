@@ -25,14 +25,14 @@ in `project_core`. Then build any of platform projects.
 
 - **Windows** (MSVC)
 - **Linux** (tested partially)
-- **macOS** (not tested)
+- **macOS** (tested partially)
 - **Android** 
-- **IOS** (in the future)
+- **IOS** (in progress)
 
 # Getting Started
 
 For starting your own project you should implement `a2d::RootComponent` class
-and store it in the `root_component.h` in the root of your project source tree.
+and store it in the `root_component.hpp` in the root of your project source tree.
 
 `RootComponent` will be created on the `Engine.root` after engine initialization.
 

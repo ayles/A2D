@@ -2,12 +2,12 @@
 // Created by selya on 05.11.2018.
 //
 
-#include <a2d/a2d.h>
-#include <a2d/graphics/renderer.h>
-#include <root_component.h>
-#include <a2d/filesystem/filesystem.h>
-#include <a2d/input/input.h>
-#include <a2d/core/audio.h>
+#include <a2d/a2d.hpp>
+#include <a2d/graphics/renderer.hpp>
+#include <root_component.hpp>
+#include <a2d/filesystem/filesystem.hpp>
+#include <a2d/input/input.hpp>
+#include <a2d/core/audio.hpp>
 
 
 #if defined(TARGET_WINDOWS) && defined(FORCE_DISCRETE_GPU)

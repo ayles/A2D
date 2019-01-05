@@ -2,8 +2,8 @@
 // Created by selya on 23.11.2018.
 //
 
-#include <a2d/core/components/pixel_camera.h>
-#include <a2d/graphics/renderer.h>
+#include <a2d/core/components/pixel_camera.hpp>
+#include <a2d/graphics/renderer.hpp>
 
 
 a2d::PixelCamera::PixelCamera() : scale_factor(1) {

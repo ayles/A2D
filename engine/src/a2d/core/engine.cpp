@@ -2,21 +2,14 @@
 // Created by selya on 26.10.2018.
 //
 
-#include <a2d/core/engine.h>
-#include <a2d/core/object2d.h>
-#include <a2d/core/components/camera.h>
+#include <a2d/core/engine.hpp>
+#include <a2d/core/object2d.hpp>
+#include <a2d/core/components/camera.hpp>
 
 #ifdef TARGET_ANDROID
 #include <spdlog/sinks/android_sink.h>
 #else
 #include <spdlog/sinks/stdout_sinks.h>
-#endif
-
-#ifdef TARGET_ANDROID
-#include <GLES2/gl2.h>
-#elif TARGET_DESKTOP
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #endif
 
 #include <chrono>

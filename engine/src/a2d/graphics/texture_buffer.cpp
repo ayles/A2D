@@ -2,10 +2,10 @@
 // Created by selya on 28.12.2018.
 //
 
-#include <a2d/graphics/texture_buffer.h>
+#include <a2d/graphics/texture_buffer.hpp>
 
 #include <memory>
-#include "texture_buffer.h"
+#include "texture_buffer.hpp"
 
 
 namespace a2d {

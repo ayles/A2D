@@ -2,10 +2,10 @@
 // Created by selya on 17.11.2018.
 //
 
-#include <a2d/graphics/shader.h>
-#include <a2d/core/engine.h>
-#include <a2d/filesystem/filesystem.h>
-#include <a2d/core/gl.h>
+#include <a2d/graphics/shader.hpp>
+#include <a2d/core/engine.hpp>
+#include <a2d/filesystem/filesystem.hpp>
+#include <a2d/graphics/gl.hpp>
 
 #include <vector>
 #include <iostream>
@@ -117,7 +117,8 @@ shader_id(CompileProgram(
             case GL_FLOAT_VEC4: vt = ValueType::VECTOR_4_FLOAT; break;
             default: vt = UNSUPPORTED; break;
         }
-        uniforms.insert(std::make_pair(&name_data[0], Uniform { &name_data[0], vt, i }));
+        unsigned int location = (unsigned int)glGetUniformLocation(shader_id, &name_data[0]);
+        uniforms.insert(std::make_pair(&name_data[0], Uniform { &name_data[0], vt, location }));
     }
 
     GLint attributes_count;
@@ -138,6 +139,7 @@ shader_id(CompileProgram(
             case GL_FLOAT_VEC4: vt = ValueType::VECTOR_4_FLOAT; break;
             default: vt = UNSUPPORTED; break;
         }
+        unsigned int location = (unsigned int)glGetAttribLocation(shader_id, &name_data[0]);
         attributes.insert(std::make_pair(&name_data[0], Attribute { &name_data[0], vt, i }));
     }
 }

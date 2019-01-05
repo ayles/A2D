@@ -2,9 +2,9 @@
 // Created by selya on 09.11.2018.
 //
 
-#include <a2d/core/components/sprite.h>
-#include <a2d/graphics/renderer.h>
-#include <a2d/core/object2d.h>
+#include <a2d/core/components/sprite.hpp>
+#include <a2d/graphics/renderer.hpp>
+#include <a2d/core/object2d.hpp>
 
 namespace a2d {
 
@@ -36,7 +36,6 @@ void Sprite::SetTextureRegion(const pTextureRegion &texture_region, bool pixel_s
 }
 
 void Sprite::Draw(SpriteBatch &sprite_batch) {
-    if (!texture_region) return;
     static Vector2f p1, p2, p3, p4;
     p1.Set(-size.x * origin.x, -size.y * origin.y);
     p2.Set(size.x * (1 - origin.x), p1.y);

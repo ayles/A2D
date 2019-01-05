@@ -2,9 +2,9 @@
 // Created by selya on 14.11.2018.
 //
 
-#include <a2d/core/components/camera.h>
-#include <a2d/core/object2d.h>
-#include <a2d/a2d.h>
+#include <a2d/core/components/camera.hpp>
+#include <a2d/core/object2d.hpp>
+#include <a2d/a2d.hpp>
 
 namespace a2d {
 

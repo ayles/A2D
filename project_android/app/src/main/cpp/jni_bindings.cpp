@@ -6,7 +6,7 @@
 
 #include <a2d/core.h>
 #include <a2d/core/renderer.h>
-#include <root_component.h>
+#include <root_component.hpp>
 
 #include <android/asset_manager.h>
 #include <android/asset_manager_jni.h>

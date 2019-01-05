@@ -248,8 +248,7 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
 # this little macro lets you set any Xcode specific property
 macro(set_xcode_property TARGET XCODE_PROPERTY XCODE_VALUE)
-  set_property(TARGET ${TARGET}
-    PROPERTY XCODE_ATTRIBUTE_${XCODE_PROPERTY} ${XCODE_VALUE})
+  set_property(TARGET ${TARGET} PROPERTY XCODE_ATTRIBUTE_${XCODE_PROPERTY} ${XCODE_VALUE})
 endmacro(set_xcode_property)
 
 # this macro lets you find executable programs on the host system

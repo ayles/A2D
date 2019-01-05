@@ -2,11 +2,13 @@
 // Created by selya on 27.12.2018.
 //
 
-#include <a2d/filesystem/filesystem.h>
+#include <a2d/filesystem/filesystem.hpp>
 
 #ifdef TARGET_ANDROID
 #include <android/asset_manager.h>
 #include <android/asset_manager_jni.h>
+#elif TARGET_IOS
+#include <CoreFoundation/CoreFoundation.h>
 #endif
 
 #include <fstream>
@@ -31,6 +33,26 @@ std::vector<unsigned char> FileSystem::LoadRaw(const std::string &path) {
     AAsset_read (asset, &v[0], size);
     AAsset_close(asset);
     return v;
+#elif TARGET_IOS
+    std::string path_processed;
+    path_processed.resize(path.size());
+    for (int i = 0; i < path.size(); ++i) {
+        path_processed[i] = (path[i] == '/') ? '_' : path[i];
+    }
+    path_processed = "resources_" + path_processed;
+    const char *c = path_processed.c_str();
+    auto url = CFBundleCopyResourceURL(CFBundleGetMainBundle(), CFStringCreateWithCString(nullptr, c, kCFStringEncodingASCII), nullptr, nullptr);
+    unsigned char fs_path[1024];
+    CFURLGetFileSystemRepresentation(url, true, fs_path, sizeof(fs_path));
+    std::ifstream file((char *)fs_path, std::ios::binary);
+    if ((file.rdstate() & std::ifstream::failbit) != 0) {
+        std::vector<unsigned char> a;
+        return a;
+    }
+    return std::vector<unsigned char>(
+            (std::istreambuf_iterator<char>(file)),
+            (std::istreambuf_iterator<char>())
+    );
 #elif TARGET_DESKTOP
     std::ifstream file("resources/" + path, std::ios::binary);
     if ((file.rdstate() & std::ifstream::failbit) != 0) {

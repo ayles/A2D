@@ -2,7 +2,7 @@
 // Created by selya on 28.11.2018.
 //
 
-#include <a2d/core/bitmap_font.h>
+#include <a2d/core/bitmap_font.hpp>
 
 namespace a2d {
 

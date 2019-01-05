@@ -1294,7 +1294,7 @@ int main(int argc, char* argv[])
         {"lang", 'l', SX_CMDLINE_OPTYPE_REQUIRED, 0x0, 'l', "Convert to shader language", "gles/msl/hlsl/glsl"},
         {"defines", 'D', SX_CMDLINE_OPTYPE_OPTIONAL, 0x0, 'D', "Preprocessor definitions, seperated by comma or ';'", "Defines"},
         {"invert-y", 'Y', SX_CMDLINE_OPTYPE_FLAG_SET, &args.invert_y, 1, "Invert position.y in vertex shader", 0x0},
-        {"profile", 'p', SX_CMDLINE_OPTYPE_REQUIRED, 0x0, 'p', "Shader profile version (HLSL: 40, 50, 60), (ES: 200, 300), (GLSL: 330, 400, 420)", "ProfileVersion"},
+        {"profile", 'p', SX_CMDLINE_OPTYPE_REQUIRED, 0x0, 'p', "Shader profile version (HLSL: 40, 50, 60), (ES: 100, 200, 300), (GLSL: 330, 400, 420)", "ProfileVersion"},
         {"dumpc", 'C', SX_CMDLINE_OPTYPE_FLAG_SET, &dump_conf, 1, "Dump shader limits configuration", 0x0},
         {"include-dirs", 'I', SX_CMDLINE_OPTYPE_REQUIRED, 0x0, 'I', "Set include directory for <system> files, seperated by ';'", "Directory(s)"},
         {"preprocess", 'P', SX_CMDLINE_OPTYPE_FLAG_SET, &args.preprocess, 1, "Dump preprocessed result to terminal"},
@@ -1345,7 +1345,7 @@ int main(int argc, char* argv[])
         (args.cs_filepath && !sx_os_path_isfile(args.cs_filepath))) 
     {
         puts("input files are invalid");
-        exit(-1);
+        //exit(-1);
     }
 
     if (!args.vs_filepath && !args.fs_filepath && !args.cs_filepath) {

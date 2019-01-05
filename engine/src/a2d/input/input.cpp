@@ -1,8 +1,8 @@
 //
 // Created by selya on 19.11.2018.
 //
-#include <a2d/input/input.h>
-#include <a2d/core/engine.h>
+#include <a2d/input/input.hpp>
+#include <a2d/core/engine.hpp>
 
 namespace a2d {
 
@@ -137,14 +137,14 @@ void Input::ScrollCallback(GLFWwindow *window, double x_offset, double y_offset)
     GetInternalScrollDelta().Set((float)x_offset, (float)y_offset);
 }
 
-#elif TARGET_ANDROID
+#elif TARGET_MOBILE
 
-void Input::TouchCallback(int touches_count, int touch_index, int touch_action, float touch_x, float touch_y) {
+void Input::TouchCallback(int touches_count, int touch_index, TouchEvent touch_event, float touch_x, float touch_y) {
     auto &touch_internal_state = GetTouchInternalState(touch_index);
     auto &button_internal_state = GetMouseButtonInternalState(MouseButtonCode::MOUSE_BUTTON_LEFT);
 
-    switch (touch_action) {
-        case AMOTION_EVENT_ACTION_DOWN:
+    switch (touch_event) {
+        case TouchEvent::TOUCH_BEGAN:
             touch_internal_state.last_pressed = Engine::GetFrameIndex();
             touch_internal_state.state = Touch::TouchState::PRESSED;
             if (touch_index == 0) {
@@ -153,7 +153,7 @@ void Input::TouchCallback(int touches_count, int touch_index, int touch_action, 
             }
             break;
 
-        case AMOTION_EVENT_ACTION_UP:
+        case TouchEvent::TOUCH_ENDED:
             touch_internal_state.last_released = Engine::GetFrameIndex();
             touch_internal_state.state = Touch::TouchState::RELEASED;
             if (touch_index == 0) {
@@ -162,14 +162,14 @@ void Input::TouchCallback(int touches_count, int touch_index, int touch_action, 
             }
             break;
 
-        case AMOTION_EVENT_ACTION_MOVE:
+        case TouchEvent::TOUCH_MOVED:
             // if we lost a DOWN event
             if (touch_internal_state.state == Touch::TouchState::RELEASED) {
                 touch_internal_state.last_pressed = Engine::GetFrameIndex();
                 touch_internal_state.state = Touch::TouchState::PRESSED;
                 if (touch_index == 0) {
                     button_internal_state.last_released = Engine::GetFrameIndex();
-                    button_internal_state.state = KeyState::RELEASED;
+                    button_internal_state.state = KeyState::PRESSED;
                 }
             }
             break;

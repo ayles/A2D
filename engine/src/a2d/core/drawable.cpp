@@ -2,7 +2,7 @@
 // Created by selya on 05.12.2018.
 //
 
-#include <a2d/core/drawable.h>
+#include <a2d/core/drawable.hpp>
 
 namespace a2d {
 

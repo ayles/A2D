@@ -2,8 +2,8 @@
 // Created by selya on 13.11.2018.
 //
 
-#include <a2d/graphics/texture_region.h>
-#include <a2d/a2d.h>
+#include <a2d/graphics/texture_region.hpp>
+#include <a2d/a2d.hpp>
 
 namespace a2d {
 
@@ -22,6 +22,7 @@ TextureRegion::TextureRegion(
         Texture::Wrapping wrapping
 ) : texture(texture),
     offset(x, y), size(width, height),
+    uv_lb(0), uv_rt(0),
     filtering(filtering), wrapping(wrapping), flags(0) {
 
     RecalculateUV();
@@ -114,6 +115,7 @@ void TextureRegion::Bind(unsigned int texture_unit) {
 }
 
 void TextureRegion::RecalculateUV() {
+    if (!texture) return;
     // TODO optimize
 
     uv_lb = Vector2f(offset) / Vector2f(float(texture->GetWidth()), float(texture->GetHeight()));

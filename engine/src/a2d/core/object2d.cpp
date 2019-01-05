@@ -2,8 +2,8 @@
 // Created by selya on 04.11.2018.
 //
 
-#include <a2d/core/object2d.h>
-#include <a2d/core/component.h>
+#include <a2d/core/object2d.hpp>
+#include <a2d/core/component.hpp>
 
 namespace a2d {
 

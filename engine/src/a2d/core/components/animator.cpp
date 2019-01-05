@@ -2,8 +2,8 @@
 // Created by selya on 06.12.2018.
 //
 
-#include <a2d/core/components/animator.h>
-#include <a2d/core/object2d.h>
+#include <a2d/core/components/animator.hpp>
+#include <a2d/core/object2d.hpp>
 
 namespace a2d {
 

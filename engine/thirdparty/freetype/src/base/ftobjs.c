@@ -3206,9 +3206,9 @@
 
     /* signal the auto-hinter to recompute its size metrics */
     /* (if requested)                                       */
-    face->size->internal->autohint_metrics.x_scale = 0;
+face->size->internal->autohint_metrics.x_scale = 0;
 
-    clazz = face->driver->clazz;
+clazz = face->driver->clazz;
 
     if ( clazz->request_size )
     {

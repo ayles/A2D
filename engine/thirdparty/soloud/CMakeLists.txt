@@ -71,20 +71,20 @@ set (CORE_SOURCES
 # Audiosources
 set (AUDIOSOURCES_PATH ${SOURCE_PATH}/audiosource)
 set (AUDIOSOURCES_SOURCES
-	${AUDIOSOURCES_PATH}/monotone/soloud_monotone.cpp
-	${AUDIOSOURCES_PATH}/openmpt/soloud_openmpt.cpp
-	${AUDIOSOURCES_PATH}/openmpt/soloud_openmpt_dll.c
-	${AUDIOSOURCES_PATH}/sfxr/soloud_sfxr.cpp
-	${AUDIOSOURCES_PATH}/speech/darray.cpp
-	${AUDIOSOURCES_PATH}/speech/klatt.cpp
-	${AUDIOSOURCES_PATH}/speech/resonator.cpp
-	${AUDIOSOURCES_PATH}/speech/soloud_speech.cpp
-	${AUDIOSOURCES_PATH}/speech/tts.cpp
-	${AUDIOSOURCES_PATH}/tedsid/sid.cpp
-	${AUDIOSOURCES_PATH}/tedsid/soloud_tedsid.cpp
-	${AUDIOSOURCES_PATH}/tedsid/ted.cpp
-	${AUDIOSOURCES_PATH}/vic/soloud_vic.cpp
-	${AUDIOSOURCES_PATH}/vizsn/soloud_vizsn.cpp
+	#${AUDIOSOURCES_PATH}/monotone/soloud_monotone.cpp
+	#${AUDIOSOURCES_PATH}/openmpt/soloud_openmpt.cpp
+	#${AUDIOSOURCES_PATH}/openmpt/soloud_openmpt_dll.c
+	#${AUDIOSOURCES_PATH}/sfxr/soloud_sfxr.cpp
+	#${AUDIOSOURCES_PATH}/speech/darray.cpp
+	#${AUDIOSOURCES_PATH}/speech/klatt.cpp
+	#${AUDIOSOURCES_PATH}/speech/resonator.cpp
+	#${AUDIOSOURCES_PATH}/speech/soloud_speech.cpp
+	#${AUDIOSOURCES_PATH}/speech/tts.cpp
+	#${AUDIOSOURCES_PATH}/tedsid/sid.cpp
+	#${AUDIOSOURCES_PATH}/tedsid/soloud_tedsid.cpp
+	#${AUDIOSOURCES_PATH}/tedsid/ted.cpp
+	#${AUDIOSOURCES_PATH}/vic/soloud_vic.cpp
+	#${AUDIOSOURCES_PATH}/vizsn/soloud_vizsn.cpp
 	${AUDIOSOURCES_PATH}/wav/dr_impl.cpp
 	${AUDIOSOURCES_PATH}/wav/soloud_wav.cpp
 	${AUDIOSOURCES_PATH}/wav/soloud_wavstream.cpp

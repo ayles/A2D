@@ -2,12 +2,12 @@
 // Created by selya on 10.11.2018.
 //
 
-#include <a2d/graphics/renderer.h>
-#include <a2d/core/engine.h>
-#include <a2d/core/object2d.h>
-#include <a2d/core/components/camera.h>
+#include <a2d/graphics/renderer.hpp>
+#include <a2d/core/engine.hpp>
+#include <a2d/core/object2d.hpp>
+#include <a2d/core/components/camera.hpp>
 
-#include <a2d/core/gl.h>
+#include <a2d/graphics/gl.hpp>
 
 namespace a2d {
 
@@ -55,6 +55,11 @@ bool Renderer::Initialize() {
     int width = 640;
     int height = 480;
 
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
     window = glfwCreateWindow(width, height, "a2d", nullptr, nullptr);
     if (!window) {
         Engine::GetLogger()->error("Couldn't create window");
@@ -79,7 +84,7 @@ bool Renderer::Initialize() {
         ResolutionChanged(width, height);
     };
 
-    glfwSetFramebufferSizeCallback(window, update_camera);
+    glfwSetWindowSizeCallback(window, update_camera);
     update_camera(window, width, height);
 
     auto window_focus = [](GLFWwindow *window, int focus) {
@@ -89,6 +94,9 @@ bool Renderer::Initialize() {
 
     glfwSetWindowFocusCallback(window, window_focus);
 
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
 #endif
 
     glEnable(GL_BLEND);
@@ -145,10 +153,21 @@ void Renderer::Uninitialize() {
 #endif
 }
 
-void Renderer::ResolutionChanged(int width, int height) {
-    glViewport(0, 0, width, height);
+void Renderer::ResolutionChanged(int width, int height, int framebuffer_width, int framebuffer_height) {
+    if (width == Renderer::width && height == Renderer::height) return;
+    // On apple retina framebuffer can differ from window size
     Renderer::width = width;
     Renderer::height = height;
+#ifdef TARGET_DESKTOP
+    int f_w, f_h;
+    glfwGetFramebufferSize(window, &f_w, &f_h);
+    if (framebuffer_width < 0) framebuffer_width = f_w;
+    if (framebuffer_height < 0) framebuffer_height = f_h;
+#elif TARGET_MOBILE
+    if (framebuffer_width < 0) framebuffer_width = width;
+    if (framebuffer_height < 0) framebuffer_height = height;
+#endif
+    glViewport(0, 0, framebuffer_width, framebuffer_height);
 }
 
 } //namespace a2d
