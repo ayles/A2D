@@ -22,7 +22,6 @@
 #include "spdlog/formatter.h"
 #include "spdlog/sinks/sink.h"
 
-#include <locale>
 #include <memory>
 #include <string>
 #include <vector>
@@ -46,7 +45,12 @@ public:
     template<typename... Args>
     void log(level::level_enum lvl, const char *fmt, const Args &... args);
 
+    template<typename... Args>
+    void log(source_loc loc, level::level_enum lvl, const char *fmt, const Args &... args);
+
     void log(level::level_enum lvl, const char *msg);
+
+    void log(source_loc loc, level::level_enum lvl, const char *msg);
 
     template<typename... Args>
     void trace(const char *fmt, const Args &... args);
@@ -74,6 +78,9 @@ public:
     void log(level::level_enum lvl, const wchar_t *fmt, const Args &... args);
 
     template<typename... Args>
+    void log(source_loc source, level::level_enum lvl, const wchar_t *fmt, const Args &... args);
+
+    template<typename... Args>
     void trace(const wchar_t *fmt, const Args &... args);
 
     template<typename... Args>
@@ -97,9 +104,17 @@ public:
     template<class T, typename std::enable_if<std::is_convertible<T, spdlog::string_view_t>::value, T>::type * = nullptr>
     void log(level::level_enum lvl, const T &);
 
+    // T can be statically converted to string_view
+    template<class T, typename std::enable_if<std::is_convertible<T, spdlog::string_view_t>::value, T>::type * = nullptr>
+    void log(source_loc loc, level::level_enum lvl, const T &);
+
     // T cannot be statically converted to string_view
     template<class T, typename std::enable_if<!std::is_convertible<T, spdlog::string_view_t>::value, T>::type * = nullptr>
     void log(level::level_enum lvl, const T &);
+
+    // T cannot be statically converted to string_view
+    template<class T, typename std::enable_if<!std::is_convertible<T, spdlog::string_view_t>::value, T>::type * = nullptr>
+    void log(source_loc loc, level::level_enum lvl, const T &);
 
     template<typename T>
     void trace(const T &msg);
@@ -121,6 +136,8 @@ public:
 
     bool should_log(level::level_enum msg_level) const;
     void set_level(level::level_enum log_level);
+
+    static level::level_enum default_level();
     level::level_enum level() const;
     const std::string &name() const;
 
@@ -151,8 +168,8 @@ protected:
 
     bool should_flush_(const details::log_msg &msg);
 
-    // default error handler: print the error to stderr with the max rate of 1
-    // message/minute
+    // default error handler.
+    // print the error to stderr with the max rate of 1 message/minute.
     void default_err_handler_(const std::string &msg);
 
     // increment the message count (only if defined(SPDLOG_ENABLE_MESSAGE_COUNTER))
@@ -160,11 +177,11 @@ protected:
 
     const std::string name_;
     std::vector<sink_ptr> sinks_;
-    spdlog::level_t level_;
-    spdlog::level_t flush_level_;
-    log_err_handler err_handler_;
-    std::atomic<time_t> last_err_time_;
-    std::atomic<size_t> msg_counter_;
+    spdlog::level_t level_{spdlog::logger::default_level()};
+    spdlog::level_t flush_level_{level::off};
+    log_err_handler err_handler_{[this](const std::string &msg) { this->default_err_handler_(msg); }};
+    std::atomic<time_t> last_err_time_{0};
+    std::atomic<size_t> msg_counter_{1};
 };
 } // namespace spdlog
 

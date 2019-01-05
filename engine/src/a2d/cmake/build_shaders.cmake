@@ -24,7 +24,6 @@ foreach(SHADER_DIR ${SHADERS_DIRS})
             OUTPUT_VARIABLE out ERROR_VARIABLE err)
 
     message(STATUS "Shader \"${SHADER_DIR}\":\n${out} ${err}")
-    message(STATUS "${SHADERS_ROOT_DIR}/${SHADER_DIR}/vertex.glsl")
 
     file(READ "${SHADERS_GENERATION_PATH}/${SHADER_DIR}_vs.glsl" VERTEX_SHADER)
     file(READ "${SHADERS_GENERATION_PATH}/${SHADER_DIR}_fs.glsl" FRAGMENT_SHADER)

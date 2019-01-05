@@ -4,8 +4,7 @@
 
 #include <jni.h>
 
-#include <a2d/core.h>
-#include <a2d/core/renderer.h>
+#include <a2d/graphics/renderer.hpp>
 #include <root_component.hpp>
 
 #include <android/asset_manager.h>

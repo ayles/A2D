@@ -3,7 +3,6 @@
 //
 
 #include <a2d/graphics/texture_region.hpp>
-#include <a2d/a2d.hpp>
 
 namespace a2d {
 
