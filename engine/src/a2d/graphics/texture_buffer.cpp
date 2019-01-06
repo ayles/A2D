@@ -5,13 +5,12 @@
 #include <a2d/graphics/texture_buffer.hpp>
 
 #include <memory>
-#include "texture_buffer.hpp"
 
 
 namespace a2d {
 
 TextureBuffer::TextureBuffer(const TextureBuffer &other) :
-width(other.width), height(other.height), data(nullptr) {
+data(nullptr), width(other.width), height(other.height) {
     if (other.data) {
         Allocate();
         memcpy(data, other.data, size_t(width * height) * 4);
@@ -19,12 +18,12 @@ width(other.width), height(other.height), data(nullptr) {
 }
 
 TextureBuffer::TextureBuffer(TextureBuffer &&other) noexcept :
-width(other.width), height(other.height), data(other.data) {
+data(other.data), width(other.width), height(other.height) {
     other.data = nullptr;
 }
 
 TextureBuffer::TextureBuffer(int width, int height, const unsigned char *data) :
-        width(width), height(height), data(nullptr) {
+data(nullptr), width(width), height(height) {
     if (data) {
         Allocate();
         std::memcpy(this->data, data, size_t(width * height) * 4);

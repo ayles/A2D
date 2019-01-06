@@ -18,10 +18,10 @@
 namespace a2d {
 
 #ifdef TARGET_ANDROID
-AAssetManager *a2d::FileSystem::asset_manager = nullptr;
+AAssetManager *asset_manager = nullptr;
 
 void FileSystem::Initialize(void *asset_manager) {
-    FileSystem::asset_manager = (AAssetManager *)asset_manager;
+    a2d::asset_manager = (AAssetManager *)asset_manager;
 }
 #endif
 

@@ -27,11 +27,11 @@ public:
         camera_object->AddComponent<MoveCamera>();
 
         auto text = a2d::Engine::GetRoot()->AddChild(new Object2D);
-        text->AddComponent<Text>()->SetFont(new BitmapFont(FileSystem::LoadRaw("fonts/impact.ttf"), 96));
+        text->AddComponent<Text>()->SetFont(new BitmapFont(FileSystem::LoadRaw("fonts/impact.ttf"), 48));
         text->GetComponent<Text>()->SetOrigin(0.5f, 0.5f);
         text->GetComponent<Text>()->SetText(U"Hello, A2D!");
-        text->AddComponent<PhysicsBody>();
-        text->AddComponent<CircleCollider>()->radius = text->GetComponent<Drawable>(true)->GetHeight() / 2;
+        ////text->AddComponent<PhysicsBody>();
+        //text->AddComponent<CircleCollider>()->radius = text->GetComponent<Drawable>(true)->GetHeight() / 2;
 
         auto bunny_texture = Texture::GetTexture("bunny");
 
@@ -72,7 +72,7 @@ public:
         bunny->AddComponent<AudioSource>()->SetAudioClip(new AudioClip(a2d::FileSystem::LoadRaw("audio/just.mp3")));
         auto pb = bunny->AddComponent<PhysicsBody>();
         pb->SetType(PhysicsBody::BodyType::KINEMATIC);
-        bunny->AddComponent<CircleCollider>()->radius = bunny->GetComponent<Drawable>(true)->GetHeight() / 2;
+        //bunny->AddComponent<CircleCollider>()->radius = bunny->GetComponent<Drawable>(true)->GetHeight() / 2;
     }
 };
 

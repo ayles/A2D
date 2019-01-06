@@ -7,7 +7,7 @@
 
 namespace a2d {
 
-Object2D::Object2D() : is_in_tree(false), layer(0), parent(nullptr), scale(1), position(), rotation() {
+Object2D::Object2D() : parent(nullptr), layer(0), is_in_tree(false),  position(), scale(1), rotation() {
 
 }
 

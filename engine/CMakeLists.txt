@@ -134,9 +134,10 @@ if (TARGET_DESKTOP)
     target_link_libraries(a2d_engine_library ${OPENGL_gl_LIBRARY} glew glfw)
 endif ()
 
-# Shaders building with glslcc
-if (NOT GLSLCC_INCLUDED)
-    add_subdirectory(thirdparty/glslcc)
+if (UNIX)
+    set(GLSLCC_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/glslcc/glslcc")
+elseif (WIN32)
+    set(GLSLCC_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/glslcc/glslcc.exe")
 endif ()
 
 add_custom_target(build_shaders ALL
@@ -145,7 +146,7 @@ add_custom_target(build_shaders ALL
         -DSHADERS_GENERATED_FILE=${SHADERS_GENERATED_FILE}
         -DSHADERS_ROOT_DIR=${CMAKE_CURRENT_SOURCE_DIR}/src/a2d/graphics/shaders
         -DSHADERS_GENERATION_PATH=${CMAKE_CURRENT_BINARY_DIR}/shaders
-        -DGLSLCC_EXECUTABLE=$<TARGET_FILE:glslcc>
+        -DGLSLCC_EXECUTABLE=${GLSLCC_EXECUTABLE}#$<TARGET_FILE:glslcc>
         -DSHADERS_TARGET_LANG=${SHADERS_TARGET_LANG}
         -DSHADERS_TARGET_PROFILE=${SHADERS_TARGET_PROFILE}
         -P ${CMAKE_CURRENT_SOURCE_DIR}/src/a2d/cmake/build_shaders.cmake)
@@ -153,5 +154,14 @@ add_custom_target(build_shaders ALL
 # Ensure that this file is created
 file(WRITE ${SHADERS_GENERATED_FILE} "")
 
-add_dependencies(build_shaders glslcc)
+# Generate glslcc makefile
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/glslcc")
+execute_process(
+        COMMAND ${CMAKE_COMMAND} "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/glslcc"
+        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/glslcc")
+# Compile it after
+add_custom_target(build_glslcc ALL
+        COMMAND ${CMAKE_COMMAND} --build "${CMAKE_CURRENT_BINARY_DIR}/glslcc")
+
+add_dependencies(build_shaders build_glslcc)
 add_dependencies(a2d_engine_library build_shaders)

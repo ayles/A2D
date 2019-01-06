@@ -47,11 +47,6 @@ foreach (FILE ${RESOURCE_FILES})
 endforeach ()
 
 set(RESOURCES ${RESOURCES} ${RESOURCE_FILES_PROCESSED})
-message(STATUS ${RESOURCES})
-
-message(STATUS ${PROJECT_SOURCE_DIR})
-message(STATUS ${APP_SOURCE_FILES})
-
 
 add_executable(
         ${APP_NAME}
@@ -62,10 +57,9 @@ add_executable(
 
 
 # Set the C++ library to the the standard library
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fobjc-arc -stdlib=libc++ -isysroot ${CMAKE_OSX_SYSROOT}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fobjc-arc -stdlib=libc++ -isysroot ${CMAKE_OSX_SYSROOT}")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -miphoneos-version-min=${DEPLOYMENT_TARGET} -fobjc-arc -stdlib=libc++ -isysroot ${CMAKE_OSX_SYSROOT}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -miphoneos-version-min=${DEPLOYMENT_TARGET} -std=c++11 -fobjc-arc -stdlib=libc++ -isysroot ${CMAKE_OSX_SYSROOT}")
 set(CMAKE_Swift_FLAGS "${CMAKE_Swift_FLAGS} -import-objc-header BindingHeader.h")
-
 
 # Locate system libraries on iOS
 find_library(UIKIT UIKit)
@@ -110,7 +104,8 @@ set_target_properties(${APP_NAME} PROPERTIES
         XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES
         XCODE_ATTRIBUTE_COMBINE_HIDPI_IMAGES NO
         XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@executable_path/Frameworks"
-        XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER ${BUNDLE_IDENTIFIER})
+        XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER ${BUNDLE_IDENTIFIER}
+        XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO")
 
 add_subdirectory(${CORE_PROJECT_PATH} build_core)
 

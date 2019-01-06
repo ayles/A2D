@@ -22,6 +22,6 @@ public final class GL2JNI {
     public static native void on_touch_event(MotionEvent motion_event);
 
     private static void loadLibrary() {
-        System.loadLibrary("a2d_android_native");
+        System.loadLibrary("a2d_android_library");
     }
 }

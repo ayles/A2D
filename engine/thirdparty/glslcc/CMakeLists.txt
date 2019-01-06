@@ -1,4 +1,9 @@
 cmake_minimum_required(VERSION 3.0)
+
+# Unset compilers env to prevent mobile toolchain compiler inherit
+unset(ENV{CC})
+unset(ENV{CXX})
+
 project(glslcc)
 
 
@@ -86,4 +91,3 @@ if (MSVC)
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     target_link_libraries(glslcc PRIVATE -static-libgcc -static-libstdc++)
 endif()
-

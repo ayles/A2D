@@ -40,7 +40,7 @@ bool Renderer::Initialize() {
     static bool initialized = false;
     if (initialized) return initialized;
 
-#ifdef TARGET_ANDROID
+#ifdef TARGET_MOBILE
     Engine::GetLogger()->info("{} {}", "OpenGL ES version:", glGetString(GL_VERSION));
 #elif TARGET_DESKTOP
     glfwSetErrorCallback([](int id, const char *description) {

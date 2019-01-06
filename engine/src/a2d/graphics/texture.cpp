@@ -19,10 +19,10 @@ Texture::Texture(
 ) : Texture(TextureBuffer(width, height, data), mipmaps) {}
 
 Texture::Texture(const TextureBuffer &buffer, bool mipmaps) :
-mipmaps(mipmaps), filtering(NEAREST), wrapping(REPEAT), buffer(buffer), texture_id(0) {}
+mipmaps(mipmaps), buffer(buffer), texture_id(0), filtering(NEAREST), wrapping(REPEAT) {}
 
 Texture::Texture(TextureBuffer &&buffer, bool mipmaps) :
-mipmaps(mipmaps), filtering(NEAREST), wrapping(REPEAT), buffer(std::move(buffer)), texture_id(0) {}
+mipmaps(mipmaps), buffer(std::move(buffer)), texture_id(0), filtering(NEAREST), wrapping(REPEAT) {}
 
 int Texture::GetWidth() const {
     return buffer.GetWidth();

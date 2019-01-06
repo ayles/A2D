@@ -8,7 +8,7 @@
 
 namespace a2d {
 
-Sprite::Sprite() : color(1), texture_region(nullptr), shader(Shader::GetShader("default")) {
+Sprite::Sprite() : color(1), shader(Shader::GetShader("default")), texture_region(nullptr) {
 
 }
 
