@@ -10,8 +10,7 @@ namespace a2d {
 
 Animation::Frame::Frame(const pTextureRegion &texture_region, float time) : texture_region(texture_region), time(time) {}
 
-Animation::Animation(std::vector<Animation::Frame> frames) :
-frames(std::move(frames)), elapsed_frame_time(0), current_frame_index(0) {}
+Animation::Animation(std::vector<Animation::Frame> frames) : elapsed_frame_time(0), current_frame_index(0), frames(std::move(frames)) {}
 
 const Animation::Frame *Animation::GetCurrentFrame() const {
     if (frames.empty()) return nullptr;

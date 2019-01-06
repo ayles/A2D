@@ -3,12 +3,14 @@
 //
 
 #include <jni.h>
-
-#include <a2d/graphics/renderer.hpp>
+#include <a2d/a2d.hpp>
 #include <root_component.hpp>
 
+#include <android/input.h>
 #include <android/asset_manager.h>
 #include <android/asset_manager_jni.h>
+#include "../../../../../engine/src/a2d/a2d.hpp"
+#include "../../../../../../../Library/Android/sdk/ndk-bundle/sysroot/usr/include/android/input.h"
 
 namespace a2d {
 
@@ -36,7 +38,6 @@ public:
         a2d::Engine::Uninitialize();
         a2d::Renderer::Uninitialize();
         a2d::Audio::Uninitialize();
-        a2d::FileSystem::Uninitialize();
     }
 
     static void ResolutionChanged(int width, int height) {
@@ -52,7 +53,19 @@ public:
     }
 
     static void OnTouch(int touches_count, int touch_index, int touch_action, float touch_x, float touch_y) {
-        a2d::Input::TouchCallback(touches_count, touch_index, touch_action, touch_x, touch_y);
+        a2d::Input::TouchEvent touch_event;
+        switch (touch_action) {
+            case AMOTION_EVENT_ACTION_DOWN: touch_event = a2d::Input::TouchEvent::TOUCH_BEGAN; break;
+            case AMOTION_EVENT_ACTION_UP:
+            case AMOTION_EVENT_ACTION_CANCEL: touch_event = a2d::Input::TouchEvent::TOUCH_ENDED; break;
+            case AMOTION_EVENT_ACTION_MOVE: touch_event = a2d::Input::TouchEvent::TOUCH_MOVED; break;
+
+        }
+        a2d::Input::TouchCallback(touches_count, touch_index, touch_event, touch_x, touch_y);
+    }
+
+    static void InitializeFS(void *asset_manager) {
+        a2d::FileSystem::Initialize(asset_manager);
     }
 };
 
@@ -102,7 +115,7 @@ Java_com_selya_a2d_GL2JNI_on_1surface_1changed(JNIEnv *env, jclass type, jint wi
 JNIEXPORT void JNICALL
 Java_com_selya_a2d_GL2JNI_register_1asset_1manager(JNIEnv *env, jclass type,
                                                    jobject asset_manager) {
-    a2d::FileSystem::Initialize(AAssetManager_fromJava(env, asset_manager));
+    a2d::NativeConnector::InitializeFS(AAssetManager_fromJava(env, asset_manager));
 }
 
 JNIEXPORT void JNICALL
