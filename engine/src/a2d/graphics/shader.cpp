@@ -140,7 +140,7 @@ shader_id(CompileProgram(
             default: vt = UNSUPPORTED; break;
         }
         unsigned int location = (unsigned int)glGetAttribLocation(shader_id, &name_data[0]);
-        attributes.insert(std::make_pair(&name_data[0], Attribute { &name_data[0], vt, i }));
+        attributes.insert(std::make_pair(&name_data[0], Attribute { &name_data[0], vt, location }));
     }
 }
 
