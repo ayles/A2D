@@ -167,12 +167,28 @@ void Object2D::OnResume() {
     }
 }
 
-void Object2D::CleanTree() {
-    for (const auto &s : components) {
-        while (!s.second.empty()) RemoveComponent(*s.second.begin());
+void Object2D::RemoveAllComponents() {
+    if (parent) parent->children.erase(this);
+    drawables.clear();
+    if (parent) parent->children.emplace(this);
+    for (auto &c : components) {
+        for (const pComponent &component : c.second) {
+            if (a2d::Engine::IsPlaying()) {
+                component->OnPause();
+            }
+            component->SetActive(false);
+            component->OnDestroy();
+        }
+        c.second.clear();
     }
-    for (const pObject2D &c : children) {
-        c->CleanTree();
+    components.clear();
+}
+
+void Object2D::CleanTree() {
+    RemoveAllComponents();
+    while (!children.empty()) {
+        (*children.begin())->CleanTree();
+        children.erase(children.begin());
     }
 }
 

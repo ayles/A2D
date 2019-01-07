@@ -82,6 +82,8 @@ public:
     typename std::enable_if<std::is_base_of<Component, T>::value, void>::type
     RemoveComponent(const SMART_POINTER(T) &component);
 
+    void RemoveAllComponents();
+
     Vector2f WorldToLocal(const Vector2f &world_point);
     Vector2f LocalToWorld(const Vector2f &local_point);
 
