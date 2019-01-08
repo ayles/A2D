@@ -20,13 +20,13 @@ class Component : public ref_counter {
 public:
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Component)
 
-    virtual SMART_POINTER(Object2D) GetObject2D() const;
+    virtual intrusive_ptr<Object2D> GetObject2D() const;
 
     virtual bool IsActive() const;
 
 protected:
     bool is_active;
-    SMART_POINTER(Object2D) object_2d;
+    intrusive_ptr<Object2D> object_2d;
 
     virtual void SetActive(bool active);
 

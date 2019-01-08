@@ -59,7 +59,15 @@ private:
     std::map<std::string, Uniform> uniforms;
     std::map<std::string, Attribute> attributes;
 
+    static unsigned int bound_shader_id;
+
+    static void CreateDefaultShaders();
+
 public:
+    DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Shader)
+    Shader(const std::string &vertex_shader_text, const std::string &fragment_shader_text);
+    ~Shader() override;
+
     virtual void SetUniform(const std::string &name, float v);
     virtual void SetUniform(const std::string &name, int v);
     virtual void SetUniform(const std::string &name, unsigned int v);
@@ -78,18 +86,6 @@ public:
     virtual bool Bind();
 
     static void Unbind();
-    static pShader GetShader(const std::string &name);
-
-    DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Shader)
-
-private:
-    Shader(const std::string &vertex_shader_text, const std::string &fragment_shader_text);
-    ~Shader() override;
-
-    static void CreateDefaultShaders();
-
-    static std::map<std::string, pShader> shaders;
-    static unsigned int bound_shader_id;
 };
 
 } //namespace a2d

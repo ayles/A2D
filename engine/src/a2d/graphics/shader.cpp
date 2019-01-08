@@ -13,7 +13,6 @@
 namespace a2d {
 
 GLuint Shader::bound_shader_id = 0;
-std::map<std::string, pShader> Shader::shaders;
 
 static GLuint CompileShader(const std::string &shader_text, const GLenum &shader_type) {
     GLuint shader_id = glCreateShader(shader_type);
@@ -264,21 +263,6 @@ void Shader::Uniform::Set(const Matrix3f &mat) {
 
 void Shader::Uniform::Set(const Matrix4f &mat) {
     glUniformMatrix4fv(location, 1, GL_FALSE, mat[0]);
-}
-
-pShader Shader::GetShader(const std::string &name) {
-    auto s = shaders.find(name);
-    if (s != shaders.end()) {
-        return s->second;
-    }
-
-    pShader shader = new Shader(
-        FileSystem::LoadText("shaders/" + name + "/vertex.glsl"),
-        FileSystem::LoadText("shaders/" + name + "/fragment.glsl")
-    );
-
-    shaders[name] = shader;
-    return shader;
 }
 
 void Shader::Unbind() {

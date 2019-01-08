@@ -18,13 +18,13 @@ DECLARE_SMART_POINTER(PhysicsCollider)
 class PhysicsCollider : public Component {
 
 protected:
-    SMART_POINTER(PhysicsBody) body = nullptr;
+    intrusive_ptr<PhysicsBody> body = nullptr;
 
-    virtual void AttachToBody(const SMART_POINTER(PhysicsBody) &body) {
+    virtual void AttachToBody(const intrusive_ptr<PhysicsBody> &body) {
         this->body = body;
     }
 
-    virtual void DetachFromBody(const SMART_POINTER(PhysicsBody) &body) {
+    virtual void DetachFromBody(const intrusive_ptr<PhysicsBody> &body) {
         this->body = nullptr;
     }
 

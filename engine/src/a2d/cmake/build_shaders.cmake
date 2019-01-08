@@ -28,7 +28,7 @@ foreach(SHADER_DIR ${SHADERS_DIRS})
     file(READ "${SHADERS_GENERATION_PATH}/${SHADER_DIR}_vs.glsl" VERTEX_SHADER)
     file(READ "${SHADERS_GENERATION_PATH}/${SHADER_DIR}_fs.glsl" FRAGMENT_SHADER)
     set(SHADERS_INIT_CODE
-            "${SHADERS_INIT_CODE}shaders[\"${SHADER_DIR}\"] = new Shader(\n\nR\"(${VERTEX_SHADER})\",\n\nR\"(${FRAGMENT_SHADER})\"\n\n);\n\n")
+            "${SHADERS_INIT_CODE}SHADER_LOAD_MACRO(${SHADER_DIR},\n\nR\"(${VERTEX_SHADER})\",\n\nR\"(${FRAGMENT_SHADER})\"\n\n)\n\n")
 endforeach()
 
 message(STATUS "Shaders compilation done")

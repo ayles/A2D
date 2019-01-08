@@ -19,7 +19,7 @@ t &operator=(t &&) = delete;
 class classname; \
 typedef a2d::intrusive_ptr<classname> p##classname;
 
-#define SMART_POINTER(classname) a2d::intrusive_ptr<classname>
+//#define SMART_POINTER(classname) a2d::intrusive_ptr<classname>
 
 #define ASSERT_UI_THREAD assert(std::this_thread::get_id() == a2d::Engine::GetUIThreadID());
 

@@ -3,11 +3,12 @@
 //
 
 #include <a2d/core/components/text.hpp>
+#include <a2d/core/resources.hpp>
 
 namespace a2d {
 
 
-Text::Text() : text(), bitmap_font(nullptr), shader(Shader::GetShader("default")), color(1) {}
+Text::Text() : text(), bitmap_font(nullptr), shader(Resources::Get<Shader>("default")), color(1) {}
 
 void Text::SetText(const std::string &text) {
     // TODO fix Visual Studio bug

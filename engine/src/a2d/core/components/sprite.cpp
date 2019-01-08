@@ -5,10 +5,11 @@
 #include <a2d/core/components/sprite.hpp>
 #include <a2d/graphics/renderer.hpp>
 #include <a2d/core/object2d.hpp>
+#include <a2d/core/resources.hpp>
 
 namespace a2d {
 
-Sprite::Sprite() : color(1), shader(Shader::GetShader("default")), texture_region(nullptr) {
+Sprite::Sprite() : color(1), shader(Resources::Get<Shader>("default")), texture_region(nullptr) {
 
 }
 

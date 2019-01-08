@@ -15,11 +15,11 @@ public:
 
 private:
     b2Fixture *fixture = nullptr;
-    SMART_POINTER(Line) line;
+    intrusive_ptr<Line> line;
 
 protected:
 
-    void AttachToBody(const SMART_POINTER(PhysicsBody) &body) override {
+    void AttachToBody(const intrusive_ptr<PhysicsBody> &body) override {
         PhysicsCollider::AttachToBody(body);
 
         if (!fixture) {
@@ -29,7 +29,7 @@ protected:
         }
     }
 
-    void DetachFromBody(const SMART_POINTER(PhysicsBody) &body) override {
+    void DetachFromBody(const intrusive_ptr<PhysicsBody> &body) override {
         PhysicsCollider::DetachFromBody(body);
 
         if (fixture) {

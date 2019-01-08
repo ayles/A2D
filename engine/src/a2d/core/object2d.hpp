@@ -40,7 +40,7 @@ class Object2D final : public ref_counter {
     bool is_in_tree;
     Matrix4f transform_matrix;
     std::set<pDrawable> drawables;
-    std::unordered_map<std::type_index, std::set<SMART_POINTER(Component)>> components;
+    std::unordered_map<std::type_index, std::set<intrusive_ptr<Component>>> components;
 
 public:
     Vector2f position;
@@ -63,15 +63,15 @@ public:
     pObject2D RemoveChild(const pObject2D &child);
 
     template<class T>
-    typename std::enable_if<std::is_base_of<Component, T>::value, SMART_POINTER(T)>::type
+    typename std::enable_if<std::is_base_of<Component, T>::value, intrusive_ptr<T>>::type
     AddComponent();
 
     template<class T>
-    typename std::enable_if<std::is_base_of<Component, T>::value, SMART_POINTER(T)>::type
+    typename std::enable_if<std::is_base_of<Component, T>::value, intrusive_ptr<T>>::type
     GetComponent(bool look_for_base = false) const;
 
     template<class T>
-    typename std::enable_if<std::is_base_of<Component, T>::value, std::set<SMART_POINTER(T)>>::type
+    typename std::enable_if<std::is_base_of<Component, T>::value, std::set<intrusive_ptr<T>>>::type
     GetComponents(bool look_for_base = false) const;
 
     template<class T>
@@ -80,7 +80,7 @@ public:
 
     template<class T>
     typename std::enable_if<std::is_base_of<Component, T>::value, void>::type
-    RemoveComponent(const SMART_POINTER(T) &component);
+    RemoveComponent(const intrusive_ptr<T> &component);
 
     void RemoveAllComponents();
 
@@ -109,10 +109,10 @@ private:
 //
 
 template<class T>
-typename std::enable_if<std::is_base_of<a2d::Component, T>::value, SMART_POINTER(T)>::type
+typename std::enable_if<std::is_base_of<a2d::Component, T>::value, intrusive_ptr<T>>::type
 Object2D::AddComponent() {
     std::type_index t_index = typeid(T);
-    SMART_POINTER(Component) component = new T;
+    intrusive_ptr<Component> component = new T;
     components[t_index].emplace(component);
     component->object_2d = this;
     component->Initialize();
@@ -130,7 +130,7 @@ Object2D::AddComponent() {
 }
 
 template<class T>
-typename std::enable_if<std::is_base_of<a2d::Component, T>::value, SMART_POINTER(T)>::type
+typename std::enable_if<std::is_base_of<a2d::Component, T>::value, intrusive_ptr<T>>::type
 Object2D::GetComponent(bool look_for_base) const {
     if (look_for_base) {
         for (auto &i1 : components) {
@@ -150,10 +150,10 @@ Object2D::GetComponent(bool look_for_base) const {
 }
 
 template<class T>
-typename std::enable_if<std::is_base_of<a2d::Component, T>::value, std::set<SMART_POINTER(T)>>::type
+typename std::enable_if<std::is_base_of<a2d::Component, T>::value, std::set<intrusive_ptr<T>>>::type
 Object2D::GetComponents(bool look_for_base) const {
     if (look_for_base) {
-        std::set<SMART_POINTER(T)> s;
+        std::set<intrusive_ptr<T>> s;
         for (auto &i1 : components) {
             for (auto &i2 : i1.second) {
                 T *t = dynamic_cast<T *>(i2.get());
@@ -165,8 +165,8 @@ Object2D::GetComponents(bool look_for_base) const {
         return s;
     } else {
         auto iter = components.find(typeid(T));
-        if (iter == components.end()) return std::set<SMART_POINTER(T) >();
-        std::set<SMART_POINTER(T)> s(iter->second.begin(), iter->second.end());
+        if (iter == components.end()) return std::set<intrusive_ptr<T> >();
+        std::set<intrusive_ptr<T>> s(iter->second.begin(), iter->second.end());
         return s;
     }
 }
@@ -181,7 +181,7 @@ Object2D::RemoveComponent() {
 
 template<class T>
 typename std::enable_if<std::is_base_of<a2d::Component, T>::value, void>::type
-Object2D::RemoveComponent(const SMART_POINTER(T) &component) {
+Object2D::RemoveComponent(const intrusive_ptr<T> &component) {
     auto iter = components.find(typeid(*component));
     if (iter == components.end() || iter->second.empty()) return;
     if (iter->second.find(component) == iter->second.end()) return;

@@ -9,6 +9,7 @@
 #include <string>
 #include <a2d/core/bitmap_font.hpp>
 #include <a2d/core/object2d.hpp>
+#include <a2d/core/resources.hpp>
 
 #include <codecvt>
 
@@ -18,7 +19,7 @@ class Text : public Drawable {
 protected:
     std::u32string text;
     pBitmapFont bitmap_font = nullptr;
-    pShader shader = Shader::GetShader("default");
+    pShader shader = Resources::Get<Shader>("default");
 
 public:
     Vector4f color;

@@ -22,12 +22,12 @@ class Engine {
     friend class NativeConnector;
 
 public:
-    static void SetCamera(SMART_POINTER(Camera) camera);
+    static void SetCamera(intrusive_ptr<Camera> camera);
 
     static unsigned long long GetFrameIndex();
     static float GetDeltaTime();
-    static SMART_POINTER(Object2D) &GetRoot();
-    static SMART_POINTER(Camera) &GetCamera();
+    static intrusive_ptr<Object2D> &GetRoot();
+    static intrusive_ptr<Camera> &GetCamera();
     static std::shared_ptr<spdlog::logger> &GetLogger();
     static std::thread::id &GetUIThreadID();
     static bool IsPlaying();
@@ -48,8 +48,8 @@ private:
 
     static unsigned long long frame_index;
     static float delta_time;
-    static SMART_POINTER(Object2D) root;
-    static SMART_POINTER(Camera) camera;
+    static intrusive_ptr<Object2D> root;
+    static intrusive_ptr<Camera> camera;
     static std::shared_ptr<spdlog::logger> logger;
     static std::thread::id ui_thread_id;
     static bool playing;

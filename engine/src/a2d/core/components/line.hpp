@@ -9,6 +9,7 @@
 #include <a2d/math/vector.hpp>
 #include <a2d/graphics/shader.hpp>
 #include <a2d/core/object2d.hpp>
+#include <a2d/core/resources.hpp>
 
 #include <vector>
 
@@ -28,7 +29,7 @@ public:
     std::vector<Vertex> vertices;
     pShader shader;
 
-    Line() : shader(Shader::GetShader("line")) {}
+    Line() : shader(Resources::Get<Shader>("line")) {}
 
     void Initialize() override {
         glGenBuffers(1, &vbo);
