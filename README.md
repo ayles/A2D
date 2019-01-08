@@ -2,6 +2,7 @@
 
 Small cross-platform 2D game engine.
 
+[![Build status](https://ci.appveyor.com/api/projects/status/kuhmfco62gwb6kco?svg=true)](https://ci.appveyor.com/project/ayles/a2d)
 [![Build Status](https://travis-ci.com/ayles/A2D.svg?branch=master)](https://travis-ci.com/ayles/A2D)
 [![CodeFactor](https://www.codefactor.io/repository/github/ayles/a2d/badge)](https://www.codefactor.io/repository/github/ayles/a2d)
 

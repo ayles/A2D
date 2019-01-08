@@ -16,6 +16,9 @@ env:
 - BUILD_CONFIGURATION=Release
 
 matrix:
+  exclude:
+  - os:       osx
+    compiler: gcc
 
 install:
 - source ci/travis/install_$TRAVIS_OS_NAME.sh
