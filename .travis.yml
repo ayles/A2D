@@ -1,0 +1,27 @@
+dist: xenial
+sudo: required
+
+language: cpp
+
+os:
+- linux
+- osx
+
+compiler:
+- gcc
+- clang
+
+env:
+- BUILD_CONFIGURATION=Debug
+- BUILD_CONFIGURATION=Release
+
+matrix:
+
+install:
+- source ci/travis/install_$TRAVIS_OS_NAME.sh
+
+script:
+- mkdir build
+- cd build
+- cmake ../project_desktop -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION
+- cmake --build .

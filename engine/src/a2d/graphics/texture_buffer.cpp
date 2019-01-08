@@ -4,7 +4,7 @@
 
 #include <a2d/graphics/texture_buffer.hpp>
 
-#include <memory>
+#include <algorithm>
 
 
 namespace a2d {
@@ -13,7 +13,7 @@ TextureBuffer::TextureBuffer(const TextureBuffer &other) :
 data(nullptr), width(other.width), height(other.height) {
     if (other.data) {
         Allocate();
-        memcpy(data, other.data, size_t(width * height) * 4);
+        std::copy(other.data, other.data + size_t(width * height) * 4, data);
     }
 }
 
@@ -26,7 +26,7 @@ TextureBuffer::TextureBuffer(int width, int height, const unsigned char *data) :
 data(nullptr), width(width), height(height) {
     if (data) {
         Allocate();
-        std::memcpy(this->data, data, size_t(width * height) * 4);
+        std::copy(data, data + size_t(width * height) * 4, this->data);
     }
 }
 
@@ -40,7 +40,7 @@ TextureBuffer &TextureBuffer::operator=(const a2d::TextureBuffer &other) {
     SetHeight(other.height);
     if (other.data) {
         Allocate();
-        std::memcpy(this->data, data, size_t(width * height) * 4);
+        std::copy(other.data, other.data + size_t(width * height) * 4, data);
     }
     return *this;
 }
@@ -75,7 +75,7 @@ void TextureBuffer::SetHeight(int height) {
 void TextureBuffer::Allocate(bool fill_with_zeroes) {
     if (!data) {
         data = new unsigned char[width * height * 4];
-        if (fill_with_zeroes) std::memset(this->data, 0, size_t(width * height) * 4);
+        if (fill_with_zeroes) std::fill(this->data, this->data + size_t(width * height) * 4, 0);
     }
 }
 

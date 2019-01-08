@@ -14,6 +14,7 @@
 #include <fstream>
 #include <string>
 #include <codecvt>
+#include <locale>
 
 namespace a2d {
 
