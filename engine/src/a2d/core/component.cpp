@@ -4,7 +4,6 @@
 
 #include <a2d/core/component.hpp>
 #include <a2d/core/object2d.hpp>
-#include <a2d/core/commands/component_destroy_command.h>
 
 namespace a2d {
 
@@ -27,7 +26,11 @@ void Component::Destroy() {
     
     iter->second.erase(comp_iter);
 
-    Engine::AddCommand(new ComponentDestroyCommand(this));
+    Engine::AddCommand([this]() {
+        if (Engine::IsPlaying()) this->OnPause();
+        this->OnDestroy();
+        Engine::components.erase(std::find(Engine::components.begin(), Engine::components.end(), this));
+    });
 }
 
 } //namespace a2d

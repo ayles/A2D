@@ -12,7 +12,6 @@
 #include <a2d/core/engine.hpp>
 #include <a2d/core/component.hpp>
 #include <a2d/graphics/drawable.hpp>
-#include <a2d/core/commands/component_add_command.h>
 
 #include <list>
 #include <unordered_map>
@@ -29,8 +28,6 @@ class Object2D final : public ref_counter {
     friend class Renderer;
     friend class Physics;
     friend class Component;
-    friend class ComponentAddCommand;
-    friend class ComponentDestroyCommand;
 
     struct objects_compare {
         bool operator()(const pObject2D &lhs, const pObject2D &rhs) const;
@@ -38,7 +35,6 @@ class Object2D final : public ref_counter {
 
     Matrix4f transform_matrix;
     pObject2D parent;
-    std::list<pObject2D>::iterator iterator_in_parent;
     std::list<pObject2D> children;
     std::list<pDrawable> drawables;
     std::unordered_map<std::type_index, std::list<pComponent>> components;
@@ -80,7 +76,6 @@ public:
 
 private:
     void Draw(const a2d::Matrix4f &parent_transform, SpriteBatch &sprite_batch);
-    void CleanTree();
 };
 
 
@@ -93,13 +88,17 @@ typename std::enable_if<std::is_base_of<a2d::Component, T>::value, intrusive_ptr
 Object2D::AddComponent() {
     std::type_index t_index = typeid(T);
     intrusive_ptr<Component> component = new T;
-    components[t_index].emplace_back(component);
+    components[t_index].push_back(component);
     component->object_2d = this;
 
     auto drawable = dynamic_cast<Drawable *>(component.get());
     if (drawable) drawables.emplace_back(drawable);
 
-    Engine::AddCommand(new ComponentAddCommand(component));
+    Engine::AddCommand([component]() {
+        component->Initialize();
+        if (Engine::IsPlaying()) component->OnResume();
+        Engine::components.emplace_back(component);
+    });
 
     return component;
 }
@@ -133,14 +132,14 @@ Object2D::GetComponents(bool look_for_base) const {
             for (auto &i2 : i1.second) {
                 T *t = dynamic_cast<T *>(i2.get());
                 if (t) {
-                    s.emplace(t);
+                    s.emplace_back(t);
                 }
             }
         }
         return s;
     } else {
         auto iter = components.find(typeid(T));
-        if (iter == components.end()) return std::set<intrusive_ptr<T> >();
+        if (iter == components.end()) return std::list<intrusive_ptr<T> >();
         std::list<intrusive_ptr<T>> s(iter->second.begin(), iter->second.end());
         return s;
     }

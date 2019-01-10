@@ -18,7 +18,7 @@
 
 unsigned long long a2d::Engine::frame_index = 0;
 float a2d::Engine::delta_time = 0.0f;
-a2d::pObject2D a2d::Engine::root = new Object2D;
+a2d::pObject2D a2d::Engine::root = nullptr;
 a2d::pCamera a2d::Engine::camera = nullptr;
 std::shared_ptr<spdlog::logger> a2d::Engine::logger = nullptr;
 std::thread::id a2d::Engine::ui_thread_id;
@@ -61,8 +61,6 @@ bool a2d::Engine::IsPlaying() {
 
 
 bool a2d::Engine::Initialize() {
-    ui_thread_id = std::this_thread::get_id();
-
 #ifdef TARGET_ANDROID
     logger = spdlog::android_logger_mt("logger", "a2d_log");
 #else
@@ -71,6 +69,9 @@ bool a2d::Engine::Initialize() {
 
     logger->set_level(spdlog::level::info);
     logger->set_pattern("%+");
+
+    ui_thread_id = std::this_thread::get_id();
+    root = new Object2D;
 
     Resume();
 
@@ -126,7 +127,7 @@ void a2d::Engine::Resume() {
 
 void a2d::Engine::Uninitialize() {
     Pause();
-    root->CleanTree();
+    root->Destroy();
 }
 
 void a2d::Engine::AddCommand(const a2d::pCommand &command) {

@@ -28,7 +28,9 @@ Vector2f Input::GetScrollDelta() {
 }
 
 Vector2f Input::GetMousePosition() {
-    return GetInternalMousePosition();
+    Vector2f pos = GetInternalMousePosition();
+    pos.y = Renderer::GetHeight() - pos.y;
+    return pos;
 }
 
 Input::KeyState Input::GetMouseButtonState(Input::MouseButtonCode button_code) {
@@ -60,7 +62,9 @@ Input::Touch Input::GetTouch(int touch_index) {
                 Touch::TouchState::JUST_RELEASED : Touch::TouchState::RELEASED;
     }
 
-    return { touch_index, touch_internal_state.position, state };
+    Vector2f pos = touch_internal_state.position;
+    pos.y = Renderer::GetHeight() - pos.y;
+    return { touch_index, pos, state };
 }
 
 bool Input::Initialize() {

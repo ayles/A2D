@@ -221,7 +221,7 @@ public:
     static Vector2f GetScrollDelta();
 
     /**
-     * Returns mouse position relative to top-left screen corner.
+     * Returns mouse position relative to bottom-left screen corner.
      *
      * On mobile platforms it is just touch 0 position.
      *

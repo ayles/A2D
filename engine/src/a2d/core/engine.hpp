@@ -25,8 +25,8 @@ class Engine {
     friend class Renderer;
     friend class NativeRenderer;
     friend class NativeConnector;
-    friend class ComponentAddCommand;
-    friend class ComponentDestroyCommand;
+    friend class Component;
+    friend class Object2D;
     friend class Physics;
 
     static unsigned long long frame_index;

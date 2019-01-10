@@ -9,8 +9,8 @@
 
 namespace a2d {
 
-Object2D::Object2D() : parent(nullptr), layer(0),  position(), scale(1), rotation() {
-    Engine::GetRoot()->AddChild(this);
+Object2D::Object2D() : parent(nullptr), layer(0),  position(), scale(1), rotation(), components() {
+    if (Engine::GetRoot()) Engine::GetRoot()->AddChild(this);
 }
 Object2D::~Object2D() {}
 
@@ -36,19 +36,18 @@ const Matrix4f &Object2D::GetTransformMatrixRecalculated(bool recursive) {
 
 pObject2D Object2D::AddChild(const pObject2D &child) {
     if (child->parent != this) {
-        if (child->parent) child->parent->children.erase(iterator_in_parent);
+        if (child->parent) child->parent->children.erase(std::find(child->parent->children.begin(), child->parent->children.end(), child));
         child->parent = this;
         children.emplace_back(child);
-        child->iterator_in_parent = --children.end();
     }
     return child;
 }
 
 void Object2D::Destroy() {
-    for (auto &child : children) child->Destroy();
+    for (auto &c : children) c->Destroy();
     DestroyAllComponents();
     Engine::AddCommand([this]() {
-        if (parent) parent->children.erase(iterator_in_parent);
+        if (parent) parent->children.erase(std::find(parent->children.begin(), parent->children.end(), this));
     });
 }
 
@@ -66,17 +65,15 @@ void Object2D::Draw(const a2d::Matrix4f &parent_transform, SpriteBatch &sprite_b
 void Object2D::DestroyAllComponents() {
     for (auto &c : components) {
         for (const pComponent &component : c.second) {
-            component->Destroy();
+            Engine::AddCommand([component]() {
+                if (Engine::IsPlaying()) component->OnPause();
+                component->OnDestroy();
+                Engine::components.erase(std::find(Engine::components.begin(), Engine::components.end(), component));
+            });
         }
     }
-}
-
-void Object2D::CleanTree() {
-    DestroyAllComponents();
-    while (!children.empty()) {
-        (*children.begin())->CleanTree();
-        children.erase(children.begin());
-    }
+    components.clear();
+    drawables.clear();
 }
 
 bool Object2D::objects_compare::operator()(const pObject2D &lhs, const pObject2D &rhs) const {

@@ -18,8 +18,6 @@ class Component : public ref_counter {
     friend class Object2D;
     friend class Engine;
     friend class Physics;
-    friend class ComponentAddCommand;
-    friend class ComponentDestroyCommand;
 
 public:
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Component)
