@@ -4,30 +4,18 @@
 
 #include <a2d/core/object2d.hpp>
 #include <a2d/core/component.hpp>
+#include "object2d.hpp"
+
 
 namespace a2d {
 
-Object2D::Object2D() : parent(nullptr), layer(0), is_in_tree(false),  position(), scale(1), rotation() {
-
+Object2D::Object2D() : parent(nullptr), layer(0),  position(), scale(1), rotation() {
+    Engine::GetRoot()->AddChild(this);
 }
-
-void Object2D::SetLayer(int layer) {
-    if (layer == this->layer) return;
-    if (parent) parent->children.erase(this);
-    this->layer = layer;
-    if (parent) parent->children.emplace(this);
-}
+Object2D::~Object2D() {}
 
 pObject2D Object2D::GetParent() const {
     return parent;
-}
-
-int Object2D::GetLayer() const {
-    return layer;
-}
-
-bool Object2D::IsInTree() const {
-    return is_in_tree;
 }
 
 const Matrix4f &Object2D::GetTransformMatrix() const {
@@ -46,158 +34,53 @@ const Matrix4f &Object2D::GetTransformMatrixRecalculated(bool recursive) {
             transform_matrix);
 }
 
-void Object2D::SetIsInTree(bool is_in_tree) {
-    if (this->is_in_tree == is_in_tree) return;
-    this->is_in_tree = is_in_tree;
-    for (const auto &s : components) {
-        for (const pComponent &c : s.second) {
-            c->SetActive(is_in_tree);
-        }
-    }
-    for (const pObject2D &c : children) {
-        c->SetIsInTree(is_in_tree);
-    }
-}
-
-pObject2D Object2D::AddChild(pObject2D child) {
+pObject2D Object2D::AddChild(const pObject2D &child) {
     if (child->parent != this) {
-        if (child->parent) child->parent->RemoveChild(child);
+        if (child->parent) child->parent->children.erase(iterator_in_parent);
         child->parent = this;
-        children.emplace(child);
-        child->SetIsInTree(true);
+        children.emplace_back(child);
+        child->iterator_in_parent = --children.end();
     }
     return child;
 }
 
-pObject2D Object2D::RemoveChild(const pObject2D &child) {
-    if (child->parent == this) {
-        child->SetIsInTree(false);
-        child->parent = nullptr;
-        children.erase(child);
-    }
-    return child;
+void Object2D::Destroy() {
+    for (auto &child : children) child->Destroy();
+    DestroyAllComponents();
+    Engine::AddCommand([this]() {
+        if (parent) parent->children.erase(iterator_in_parent);
+    });
 }
 
-void Object2D::PhysicsUpdate() {
-    for (const auto &s : components) {
-        for (const pComponent &c : s.second) {
-            c->PhysicsUpdate();
-        }
-    }
-    for (const pObject2D &c : children) {
-        c->PhysicsUpdate();
-    }
-}
-
-void Object2D::Update() {
-    for (const auto &s : components) {
-        for (const pComponent &c : s.second) {
-            c->Update();
-        }
-    }
-    for (const pObject2D &c : children) {
-        c->Update();
-    }
-}
-
-void Object2D::PostUpdate() {
-    for (const auto &s : components) {
-        for (const pComponent &c : s.second) {
-            c->PostUpdate();
-        }
-    }
-    for (const pObject2D &c : children) {
-        c->PostUpdate();
-    }
-}
-
-void Object2D::PreDraw(const a2d::Matrix4f &parent_transform) {
+void Object2D::Draw(const a2d::Matrix4f &parent_transform, SpriteBatch &sprite_batch) {
     GetTransformMatrixRecalculated(false);
 
-    for (const auto &s : components) {
-        for (const pComponent &c : s.second) {
-            c->PreDraw();
-        }
-    }
-
-    for (const pObject2D &c : children) {
-        c->PreDraw(transform_matrix);
-    }
-}
-
-void Object2D::Draw(SpriteBatch &sprite_batch) {
     for (auto &drawable : drawables) {
         drawable->Draw(sprite_batch);
     }
     for (const pObject2D &c : children) {
-        c->Draw(sprite_batch);
+        c->Draw(transform_matrix, sprite_batch);
     }
 }
 
-void Object2D::PostDraw() {
-    for (const auto &s : components) {
-        for (const pComponent &c : s.second) {
-            c->PostDraw();
-        }
-    }
-    for (const pObject2D &c : children) {
-        c->PostDraw();
-    }
-}
-
-void Object2D::OnPause() {
-    for (const auto &s : components) {
-        for (const pComponent &c : s.second) {
-            c->OnPause();
-        }
-    }
-    for (const pObject2D &c : children) {
-        c->OnPause();
-    }
-}
-
-void Object2D::OnResume() {
-    for (const auto &s : components) {
-        for (const pComponent &c : s.second) {
-            c->OnResume();
-        }
-    }
-    for (const pObject2D &c : children) {
-        c->OnResume();
-    }
-}
-
-void Object2D::RemoveAllComponents() {
-    if (parent) parent->children.erase(this);
-    drawables.clear();
-    if (parent) parent->children.emplace(this);
+void Object2D::DestroyAllComponents() {
     for (auto &c : components) {
         for (const pComponent &component : c.second) {
-            if (a2d::Engine::IsPlaying()) {
-                component->OnPause();
-            }
-            component->SetActive(false);
-            component->OnDestroy();
+            component->Destroy();
         }
-        c.second.clear();
     }
-    components.clear();
 }
 
 void Object2D::CleanTree() {
-    RemoveAllComponents();
+    DestroyAllComponents();
     while (!children.empty()) {
         (*children.begin())->CleanTree();
         children.erase(children.begin());
     }
 }
 
-Object2D::~Object2D() {
-
-}
-
 bool Object2D::objects_compare::operator()(const pObject2D &lhs, const pObject2D &rhs) const {
-    if (lhs->GetLayer() != rhs->GetLayer()) return lhs->GetLayer() < rhs->GetLayer();
+    if (lhs->layer != rhs->layer) return lhs->layer < rhs->layer;
     pDrawable left = lhs->drawables.empty() ? nullptr : *(lhs->drawables.begin());
     pDrawable right = rhs->drawables.empty() ? nullptr : *(rhs->drawables.begin());
     if (left != right) {

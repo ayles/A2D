@@ -11,53 +11,29 @@
 #include <a2d/graphics/texture_region.hpp>
 #include <a2d/core/engine.hpp>
 #include <a2d/core/components/sprite.hpp>
+#include <a2d/graphics/animation.h>
 
 #include <vector>
 
 namespace a2d {
 
-DECLARE_SMART_POINTER(Animation)
-
-class Animation : public ref_counter {
-public:
-    class Frame {
-    public:
-        pTextureRegion texture_region;
-        float time;
-
-        Frame(const pTextureRegion &texture_region, float time);
-    };
-
-    Animation(std::vector<Frame> frames);
-
-    const Frame *GetCurrentFrame() const;
-
-    void AddDelta(float delta);
-    void Reset();
-
-private:
-    float elapsed_frame_time;
-    int current_frame_index;
-    const std::vector<Frame> frames;
-};
-
 class Animator : public Component {
     friend class Object2D;
 public:
     void AddAnimation(const std::string &name, const pAnimation &animation);
-    void PlayAnimation(const std::string &name, float reset = true);
+    void PlayAnimation(const std::string &name, bool reset = true);
     void PauseAnimation();
 
 private:
+    float time;
     bool playing;
     pAnimation current_animation;
     std::map<std::string, pAnimation> animations;
 
     Animator();
+    ~Animator() override;
 
     void Update() override;
-
-    ~Animator() override;
 };
 
 }//namespace a2d

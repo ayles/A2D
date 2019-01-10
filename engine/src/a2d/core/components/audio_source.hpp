@@ -6,8 +6,8 @@
 #define A2D_AUDIO_SOURCE_H
 
 #include <a2d/core/component.hpp>
-#include <a2d/core/audio_clip.hpp>
-#include <a2d/core/audio.hpp>
+#include <a2d/audio/audio_clip.hpp>
+#include <a2d/audio/audio.hpp>
 
 #include <soloud.h>
 

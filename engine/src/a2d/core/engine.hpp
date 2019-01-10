@@ -6,10 +6,15 @@
 #define A2D_ENGINE_H
 
 #include <a2d/core/macro.hpp>
+#include <a2d/core/command.hpp>
+#include <a2d/core/commands/lambda_command.h>
+#include <a2d/core/component.hpp>
 
 #include <spdlog/spdlog.h>
 
 #include <thread>
+#include <queue>
+#include <list>
 
 namespace a2d {
 
@@ -20,31 +25,9 @@ class Engine {
     friend class Renderer;
     friend class NativeRenderer;
     friend class NativeConnector;
-
-public:
-    static void SetCamera(intrusive_ptr<Camera> camera);
-
-    static unsigned long long GetFrameIndex();
-    static float GetDeltaTime();
-    static intrusive_ptr<Object2D> &GetRoot();
-    static intrusive_ptr<Camera> &GetCamera();
-    static std::shared_ptr<spdlog::logger> &GetLogger();
-    static std::thread::id &GetUIThreadID();
-    static bool IsPlaying();
-
-    Engine() = delete;
-    DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Engine)
-    ~Engine() = delete;
-
-private:
-    static bool Initialize();
-    static bool Update();
-    static bool PostUpdate();
-    static bool PreDraw();
-    static bool PostDraw();
-    static void OnPause();
-    static void OnResume();
-    static void Uninitialize();
+    friend class ComponentAddCommand;
+    friend class ComponentDestroyCommand;
+    friend class Physics;
 
     static unsigned long long frame_index;
     static float delta_time;
@@ -53,6 +36,35 @@ private:
     static std::shared_ptr<spdlog::logger> logger;
     static std::thread::id ui_thread_id;
     static bool playing;
+    static std::queue<pCommand> commands;
+    static std::list<pComponent> components;
+
+public:
+    static void SetCamera(const intrusive_ptr<Camera> &camera);
+
+    static unsigned long long GetFrameIndex();
+    static float GetDeltaTime();
+    static intrusive_ptr<Object2D> GetRoot();
+    static intrusive_ptr<Camera> GetCamera();
+    static std::shared_ptr<spdlog::logger> GetLogger();
+    static std::thread::id &GetUIThreadID();
+    static bool IsPlaying();
+
+    DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Engine)
+    Engine() = delete;
+    ~Engine() = delete;
+
+    static void AddCommand(const pCommand &command);
+    static void AddCommand(const std::function<void()> &lambda);
+private:
+    static void ExecuteCommands();
+
+    static bool Initialize();
+    static bool Update();
+    static bool PostUpdate();
+    static void Pause();
+    static void Resume();
+    static void Uninitialize();
 };
 
 } //namespace a2d

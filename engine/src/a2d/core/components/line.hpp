@@ -5,7 +5,7 @@
 #ifndef A2D_LINE_H
 #define A2D_LINE_H
 
-#include <a2d/core/drawable.hpp>
+#include <a2d/graphics/drawable.hpp>
 #include <a2d/math/vector.hpp>
 #include <a2d/graphics/shader.hpp>
 #include <a2d/core/object2d.hpp>

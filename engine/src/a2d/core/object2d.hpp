@@ -11,15 +11,14 @@
 #include <a2d/core/macro.hpp>
 #include <a2d/core/engine.hpp>
 #include <a2d/core/component.hpp>
-#include <a2d/core/drawable.hpp>
+#include <a2d/graphics/drawable.hpp>
+#include <a2d/core/commands/component_add_command.h>
 
-#include <set>
+#include <list>
 #include <unordered_map>
 #include <typeindex>
 #include <type_traits>
-
-#include "drawable.hpp"
-
+#include <vector>
 
 namespace a2d {
 
@@ -29,38 +28,38 @@ class Object2D final : public ref_counter {
     friend class Engine;
     friend class Renderer;
     friend class Physics;
+    friend class Component;
+    friend class ComponentAddCommand;
+    friend class ComponentDestroyCommand;
 
     struct objects_compare {
         bool operator()(const pObject2D &lhs, const pObject2D &rhs) const;
     };
 
-    std::set<pObject2D, objects_compare> children;
-    pObject2D parent;
-    int layer;
-    bool is_in_tree;
     Matrix4f transform_matrix;
-    std::set<pDrawable> drawables;
-    std::unordered_map<std::type_index, std::set<intrusive_ptr<Component>>> components;
+    pObject2D parent;
+    std::list<pObject2D>::iterator iterator_in_parent;
+    std::list<pObject2D> children;
+    std::list<pDrawable> drawables;
+    std::unordered_map<std::type_index, std::list<pComponent>> components;
 
 public:
+    int layer;
     Vector2f position;
     Vector2f scale;
     float rotation;
 
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Object2D)
-
     Object2D();
-
-    void SetLayer(int layer);
+    ~Object2D() override;
 
     pObject2D GetParent() const;
-    int GetLayer() const;
-    bool IsInTree() const;
     const a2d::Matrix4f &GetTransformMatrix() const;
     const a2d::Matrix4f &GetTransformMatrixRecalculated(bool recursive = true);
 
-    pObject2D AddChild(pObject2D child);
-    pObject2D RemoveChild(const pObject2D &child);
+    pObject2D AddChild(const pObject2D &child);
+
+    void Destroy();
 
     template<class T>
     typename std::enable_if<std::is_base_of<Component, T>::value, intrusive_ptr<T>>::type
@@ -71,35 +70,16 @@ public:
     GetComponent(bool look_for_base = false) const;
 
     template<class T>
-    typename std::enable_if<std::is_base_of<Component, T>::value, std::set<intrusive_ptr<T>>>::type
+    typename std::enable_if<std::is_base_of<Component, T>::value, std::list<intrusive_ptr<T>>>::type
     GetComponents(bool look_for_base = false) const;
 
-    template<class T>
-    typename std::enable_if<std::is_base_of<Component, T>::value, void>::type
-    RemoveComponent();
-
-    template<class T>
-    typename std::enable_if<std::is_base_of<Component, T>::value, void>::type
-    RemoveComponent(const intrusive_ptr<T> &component);
-
-    void RemoveAllComponents();
+    void DestroyAllComponents();
 
     Vector2f WorldToLocal(const Vector2f &world_point);
     Vector2f LocalToWorld(const Vector2f &local_point);
 
-    ~Object2D() override;
-
 private:
-    void SetIsInTree(bool is_in_tree);
-
-    void PhysicsUpdate();
-    void Update();
-    void PostUpdate();
-    void PreDraw(const a2d::Matrix4f &parent_transform);
-    void Draw(SpriteBatch &sprite_batch);
-    void PostDraw();
-    void OnPause();
-    void OnResume();
+    void Draw(const a2d::Matrix4f &parent_transform, SpriteBatch &sprite_batch);
     void CleanTree();
 };
 
@@ -113,18 +93,13 @@ typename std::enable_if<std::is_base_of<a2d::Component, T>::value, intrusive_ptr
 Object2D::AddComponent() {
     std::type_index t_index = typeid(T);
     intrusive_ptr<Component> component = new T;
-    components[t_index].emplace(component);
+    components[t_index].emplace_back(component);
     component->object_2d = this;
-    component->Initialize();
-    component->SetActive(IsInTree());
-    if (a2d::Engine::IsPlaying()) component->OnResume();
 
     auto drawable = dynamic_cast<Drawable *>(component.get());
-    if (drawable) {
-        if (parent) parent->children.erase(this);
-        this->drawables.emplace(drawable);
-        if (parent) parent->children.emplace(this);
-    }
+    if (drawable) drawables.emplace_back(drawable);
+
+    Engine::AddCommand(new ComponentAddCommand(component));
 
     return component;
 }
@@ -150,10 +125,10 @@ Object2D::GetComponent(bool look_for_base) const {
 }
 
 template<class T>
-typename std::enable_if<std::is_base_of<a2d::Component, T>::value, std::set<intrusive_ptr<T>>>::type
+typename std::enable_if<std::is_base_of<a2d::Component, T>::value, std::list<intrusive_ptr<T>>>::type
 Object2D::GetComponents(bool look_for_base) const {
     if (look_for_base) {
-        std::set<intrusive_ptr<T>> s;
+        std::list<intrusive_ptr<T>> s;
         for (auto &i1 : components) {
             for (auto &i2 : i1.second) {
                 T *t = dynamic_cast<T *>(i2.get());
@@ -166,42 +141,10 @@ Object2D::GetComponents(bool look_for_base) const {
     } else {
         auto iter = components.find(typeid(T));
         if (iter == components.end()) return std::set<intrusive_ptr<T> >();
-        std::set<intrusive_ptr<T>> s(iter->second.begin(), iter->second.end());
+        std::list<intrusive_ptr<T>> s(iter->second.begin(), iter->second.end());
         return s;
     }
 }
-
-template<class T>
-typename std::enable_if<std::is_base_of<a2d::Component, T>::value, void>::type
-Object2D::RemoveComponent() {
-    auto iter = components.find(typeid(T));
-    if (iter == components.end() || iter->second.empty()) return;
-    RemoveComponent(*iter->second.begin());
-}
-
-template<class T>
-typename std::enable_if<std::is_base_of<a2d::Component, T>::value, void>::type
-Object2D::RemoveComponent(const intrusive_ptr<T> &component) {
-    auto iter = components.find(typeid(*component));
-    if (iter == components.end() || iter->second.empty()) return;
-    if (iter->second.find(component) == iter->second.end()) return;
-    if (a2d::Engine::IsPlaying()) {
-        component->OnPause();
-    }
-    component->SetActive(false);
-    component->OnDestroy();
-
-    auto d = drawables.find(component);
-    if (d != drawables.end()) {
-        if (parent) parent->children.erase(this);
-        drawables.erase(d);
-        if (parent) parent->children.emplace(this);
-    }
-
-    iter->second.erase(component);
-}
-
-
 
 } //namespace a2d
 

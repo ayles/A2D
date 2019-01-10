@@ -21,7 +21,10 @@ public:
 
     static bool Step() {
         GetWorld().Step(Engine::GetDeltaTime(), 6, 2);
-        Engine::GetRoot()->PhysicsUpdate();
+        for (auto &component : Engine::components) {
+            component->PhysicsUpdate();
+        }
+        Engine::ExecuteCommands();
         return true;
     }
 

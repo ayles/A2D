@@ -353,7 +353,6 @@ public:
     }
 };
 
-// TODO move vector3 and vector4 definition from cpp to h
 template<class T>
 class Vector<3, T> {
 public:

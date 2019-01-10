@@ -2,7 +2,7 @@
 // Created by selya on 05.12.2018.
 //
 
-#include <a2d/core/drawable.hpp>
+#include <a2d/graphics/drawable.hpp>
 
 namespace a2d {
 
@@ -56,10 +56,21 @@ bool Drawable::operator<(const Drawable &other) const {
     const TextureRegion *t1, *t2;
     t1 = GetTextureRegionForSortOrNull();
     t2 = other.GetTextureRegionForSortOrNull();
-    if (t1 && t2 && t1->GetTexture() != t2->GetTexture()) return t1->GetTexture() < t2->GetTexture();
-    // TODO implement wrapping and filtering sort
+    if (t1 && t2) {
+        if (t1->GetTexture() != t2->GetTexture()) {
+            return t1->GetTexture() < t2->GetTexture();
+        }
+        if (t1->GetFiltering() != t2->GetFiltering()) {
+            return t1->GetFiltering() < t2->GetFiltering();
+        }
+        if (t1->GetWrapping() != t2->GetWrapping()) {
+            return t1->GetWrapping() < t2->GetWrapping();
+        }
+    }
     return this < &other;
 }
+
+void Drawable::SetFrame(const a2d::pTextureRegion &frame) {}
 
 const Shader *Drawable::GetShaderForSortOrNull() const {
     return nullptr;

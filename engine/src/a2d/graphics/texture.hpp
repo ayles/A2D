@@ -53,8 +53,6 @@ public:
     void Bind(unsigned int texture_unit = 0, Filtering filtering = NEAREST, Wrapping wrapping = REPEAT);
 
     static void Unbind(unsigned int texture_unit = 0);
-    static pTexture GetTexture(const std::string &name);
-
 private:
     unsigned int texture_id;
     Filtering filtering;

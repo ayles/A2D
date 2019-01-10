@@ -16,19 +16,6 @@
 
 using namespace a2d;
 
-class Particle : public Component {
-
-    void Initialize() override {
-
-    }
-};
-
-class Emitter : public Component {
-    void Update() override {
-
-    }
-};
-
 class MoveCharacter : public a2d::Component {
     a2d::Vector2f direction = a2d::Vector2f(0.0f, 0.0f);
     float speed = 200.0f;

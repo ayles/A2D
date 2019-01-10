@@ -5,9 +5,9 @@
 #ifndef A2D_TEXT_H
 #define A2D_TEXT_H
 
-#include <a2d/core/drawable.hpp>
+#include <a2d/graphics/drawable.hpp>
 #include <string>
-#include <a2d/core/bitmap_font.hpp>
+#include <a2d/graphics/bitmap_font.hpp>
 #include <a2d/core/object2d.hpp>
 #include <a2d/core/resources.hpp>
 

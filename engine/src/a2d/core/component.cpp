@@ -4,26 +4,32 @@
 
 #include <a2d/core/component.hpp>
 #include <a2d/core/object2d.hpp>
+#include <a2d/core/commands/component_destroy_command.h>
 
-a2d::Component::Component() : is_active(false) {
+namespace a2d {
 
-}
+Component::Component() {};
 
-a2d::pObject2D a2d::Component::GetObject2D() const {
+pObject2D Component::GetObject2D() const {
     return object_2d;
 }
 
-bool a2d::Component::IsActive() const {
-    return is_active;
+void Component::Destroy() {
+    auto &components = object_2d->components;
+    auto iter = components.find(typeid(*this));
+    if (iter == components.end() || iter->second.empty()) return;
+    auto comp_iter = std::find(iter->second.begin(), iter->second.end(), this);
+    if (comp_iter == iter->second.end()) return;
+
+    auto &drawables = object_2d->drawables;
+    auto d = std::find(drawables.begin(), drawables.end(), this);
+    if (d != drawables.end()) drawables.erase(d);
+    
+    iter->second.erase(comp_iter);
+
+    Engine::AddCommand(new ComponentDestroyCommand(this));
 }
 
-void a2d::Component::SetActive(bool active) {
-    if (active != is_active) {
-        is_active = active;
-        if (is_active) OnEnable();
-        else OnDisable();
-    }
-}
-
+} //namespace a2d
 
 

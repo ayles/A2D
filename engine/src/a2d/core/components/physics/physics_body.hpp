@@ -6,7 +6,7 @@
 #define A2D_PHYSICS_BODY_H
 
 #include <a2d/core/component.hpp>
-#include <a2d/core/physics.hpp>
+#include <a2d/physics/physics.hpp>
 #include <a2d/core/object2d.hpp>
 #include <a2d/core/components/line.hpp>
 

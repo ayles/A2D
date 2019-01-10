@@ -2,7 +2,7 @@
 // Created by selya on 05.12.2018.
 //
 
-#include <a2d/core/audio_clip.hpp>
+#include <a2d/audio/audio_clip.hpp>
 
 namespace a2d {
 

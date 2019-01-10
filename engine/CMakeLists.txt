@@ -15,10 +15,10 @@ set(A2D_SOURCES
         src/a2d/core/components/sprite.cpp
         src/a2d/core/components/camera.cpp
         src/a2d/core/components/pixel_camera.cpp
-        src/a2d/core/bitmap_font.cpp
-        src/a2d/core/drawable.cpp
-        src/a2d/core/audio_clip.cpp
-        src/a2d/core/audio.cpp
+        src/a2d/graphics/bitmap_font.cpp
+        src/a2d/graphics/drawable.cpp
+        src/a2d/audio/audio_clip.cpp
+        src/a2d/audio/audio.cpp
         src/a2d/core/components/audio_source.cpp
         src/a2d/core/components/text.cpp
         src/a2d/core/components/animator.cpp
@@ -30,7 +30,7 @@ set(A2D_SOURCES
         src/a2d/graphics/texture.cpp
         src/a2d/graphics/sprite_batch.cpp
         src/a2d/core/resources.cpp
-        ${SHADERS_GENERATED_FILE})
+        ${SHADERS_GENERATED_FILE} src/a2d/graphics/animation.cpp)
 
 set(A2D_HEADERS
         src/a2d/a2d.hpp
@@ -50,13 +50,13 @@ set(A2D_HEADERS
         src/a2d/core/components/animator.hpp
         src/a2d/core/components/events_test.hpp
         src/a2d/core/components/pixel_camera.hpp
-        src/a2d/core/audio.hpp
-        src/a2d/core/drawable.hpp
+        src/a2d/audio/audio.hpp
+        src/a2d/graphics/drawable.hpp
         src/a2d/core/components/text.hpp
-        src/a2d/core/bitmap_font.hpp
+        src/a2d/graphics/bitmap_font.hpp
         src/a2d/core/components/audio_source.hpp
-        src/a2d/core/audio_clip.hpp
-        src/a2d/core/physics.hpp
+        src/a2d/audio/audio_clip.hpp
+        src/a2d/physics/physics.hpp
         src/a2d/core/components/physics/physics_body.hpp
         src/a2d/core/components/line.hpp
         src/a2d/core/components/physics/physics_collider.hpp
@@ -69,7 +69,7 @@ set(A2D_HEADERS
         src/a2d/graphics/texture_buffer.hpp
         src/a2d/graphics/texture.hpp
         src/a2d/graphics/renderer.hpp
-        src/a2d/core/resources.hpp)
+        src/a2d/core/resources.hpp src/a2d/graphics/animation.h src/a2d/core/command.hpp src/a2d/core/commands/component_destroy_command.h src/a2d/core/commands/component_add_command.h src/a2d/core/commands/lambda_command.h)
 
 # A2D library target
 add_library(a2d_engine_library STATIC ${A2D_SOURCES} ${A2D_HEADERS})
@@ -153,7 +153,7 @@ add_custom_target(build_shaders ALL
         -DGLSLCC_EXECUTABLE=${GLSLCC_EXECUTABLE}#$<TARGET_FILE:glslcc>
         -DSHADERS_TARGET_LANG=${SHADERS_TARGET_LANG}
         -DSHADERS_TARGET_PROFILE=${SHADERS_TARGET_PROFILE}
-        -P ${CMAKE_CURRENT_SOURCE_DIR}/src/a2d/cmake/build_shaders.cmake)
+        -P "${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/build_shaders.cmake")
 
 # Ensure that this file is created
 file(WRITE ${SHADERS_GENERATED_FILE} "")

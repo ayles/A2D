@@ -7,7 +7,7 @@
 #include <root_component.hpp>
 #include <a2d/filesystem/filesystem.hpp>
 #include <a2d/input/input.hpp>
-#include <a2d/core/audio.hpp>
+#include <a2d/audio/audio.hpp>
 
 
 #if defined(TARGET_WINDOWS) && defined(FORCE_DISCRETE_GPU)
@@ -36,9 +36,7 @@ public:
         return a2d::Physics::Step() &&
                a2d::Engine::Update() &&
                a2d::Engine::PostUpdate() &&
-               a2d::Engine::PreDraw() &&
-               a2d::Renderer::Draw() &&
-               a2d::Engine::PostDraw();
+               a2d::Renderer::Draw();
     }
 
     static void Uninitialize() {

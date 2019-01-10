@@ -21,14 +21,14 @@ class Drawable : public Component {
 public:
 
     /**
-     * Returns width of this drawable (not accounting for scale).
+     * Returns width of this drawable (not accounting for Object2D scale).
      *
      * @return width
      */
     virtual float GetWidth() const;
 
     /**
-     * Returns height of this drawable (not accounting for scale).
+     * Returns height of this drawable (not accounting for Object2D scale).
      *
      * @return height
      */
@@ -69,6 +69,15 @@ public:
 protected:
     Vector2f size;
     Vector2f origin;
+
+    /**
+     * Called for setting next frame.
+     *
+     * This should be implemented for animation support.
+     *
+     * @param frame
+     */
+    virtual void SetFrame(const pTextureRegion &frame);
 
     /**
      * Returns shader for drawables sorting.

@@ -24,6 +24,10 @@ mipmaps(mipmaps), buffer(buffer), texture_id(0), filtering(NEAREST), wrapping(RE
 Texture::Texture(TextureBuffer &&buffer, bool mipmaps) :
 mipmaps(mipmaps), buffer(std::move(buffer)), texture_id(0), filtering(NEAREST), wrapping(REPEAT) {}
 
+Texture::~Texture() {
+    glDeleteTextures(1, &texture_id);
+}
+
 int Texture::GetWidth() const {
     return buffer.GetWidth();
 }
@@ -108,27 +112,5 @@ void Texture::Unbind(unsigned int texture_unit) {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-
-Texture::~Texture() {
-    glDeleteTextures(1, &texture_id);
-}
-
-pTexture Texture::GetTexture(const std::string &name) {
-    auto s = textures.find(name);
-    if (s != textures.end()) {
-        return s->second;
-    }
-
-    std::vector<unsigned char> raw_texture = FileSystem::LoadRaw("textures/" + name + ".png");
-    unsigned int width, height;
-    std::vector<unsigned char> image;
-    lodepng::decode(image, width, height, raw_texture);
-
-    pTexture texture = new Texture(width, height, &image[0]);
-    texture->buffer.FlipVertically();
-
-    textures[name] = texture;
-    return texture;
-}
 
 } //namespace a2d

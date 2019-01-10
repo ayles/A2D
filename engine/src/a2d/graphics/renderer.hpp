@@ -19,6 +19,13 @@ class Renderer {
     friend class Input;
     friend class NativeConnector;
 
+    static int width;
+    static int height;
+    static pSpriteBatch sprite_batch;
+#ifdef TARGET_DESKTOP
+    static GLFWwindow *window;
+#endif
+
 public:
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Renderer)
     Renderer() = delete;
@@ -33,13 +40,6 @@ public:
     static void SetSpriteBatch(const pSpriteBatch &sprite_batch);
 
 private:
-    static int width;
-    static int height;
-    static pSpriteBatch sprite_batch;
-#ifdef TARGET_DESKTOP
-    static GLFWwindow *window;
-#endif
-
     static bool Initialize();
     static bool Draw();
     static void Uninitialize();

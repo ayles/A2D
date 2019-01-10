@@ -7,40 +7,16 @@
 
 namespace a2d {
 
-
-Animation::Frame::Frame(const pTextureRegion &texture_region, float time) : texture_region(texture_region), time(time) {}
-
-Animation::Animation(std::vector<Animation::Frame> frames) : elapsed_frame_time(0), current_frame_index(0), frames(std::move(frames)) {}
-
-const Animation::Frame *Animation::GetCurrentFrame() const {
-    if (frames.empty()) return nullptr;
-    return &frames[current_frame_index];
-}
-
-void Animation::AddDelta(float delta) {
-    if (frames.empty()) return;
-    elapsed_frame_time += delta;
-    if (frames[current_frame_index].time <= elapsed_frame_time) {
-        if (++current_frame_index >= (int)frames.size()) {
-            current_frame_index = 0;
-        }
-        elapsed_frame_time = 0.0f;
-    }
-}
-
-void Animation::Reset() {
-    elapsed_frame_time = 0.0f;
-    current_frame_index = 0;
-}
+Animator::Animator() : time(0.0f), playing(false), current_animation(nullptr) {}
 
 void a2d::Animator::AddAnimation(const std::string &name, const pAnimation &animation) {
     animations[name] = animation;
 }
 
-void Animator::PlayAnimation(const std::string &name, float reset) {
+void Animator::PlayAnimation(const std::string &name, bool reset) {
     auto a = animations.find(name);
     if (a != animations.end()) {
-        if (current_animation != a->second || reset) a->second->Reset();
+        if (current_animation != a->second || reset) time = 0.0f;
         current_animation = a->second;
         playing = true;
     } else {
@@ -53,18 +29,14 @@ void Animator::PauseAnimation() {
     playing = false;
 }
 
-Animator::Animator() : playing(false), current_animation(nullptr) {
-
-}
-
 void Animator::Update() {
     if (!current_animation) return;
     auto sprite = GetObject2D()->GetComponent<Sprite>();
     if (!sprite) return;
-    auto frame = current_animation->GetCurrentFrame();
+    auto frame = current_animation->GetFrame(time);
     if (!frame) return;
     sprite->SetTextureRegion(frame->texture_region);
-    if (playing) current_animation->AddDelta(a2d::Engine::GetDeltaTime());
+    if (playing) time += a2d::Engine::GetDeltaTime();
 }
 
 Animator::~Animator() {}

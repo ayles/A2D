@@ -9,8 +9,15 @@
 
 namespace a2d {
 
-Sprite::Sprite() : color(1), shader(Resources::Get<Shader>("default")), texture_region(nullptr) {
+Sprite::Sprite() : color(1), shader(Resources::Get<Shader>("default")), texture_region(nullptr), scale_factor(1.0f) {}
 
+float Sprite::GetScaleFactor() const {
+    return scale_factor;
+}
+
+void Sprite::SetScaleFactor(float scale_factor) {
+    this->scale_factor = scale_factor;
+    if (texture_region) SetSize(texture_region->GetWidth() * scale_factor, texture_region->GetHeight() * scale_factor);
 }
 
 const pTextureRegion &Sprite::GetTextureRegion() {
@@ -25,15 +32,11 @@ const TextureRegion *Sprite::GetTextureRegionForSortOrNull() const {
     return texture_region.get();
 }
 
-void Sprite::SetTextureRegion(const pTextureRegion &texture_region, bool pixel_size, bool adjust_size) {
+void Sprite::SetTextureRegion(const pTextureRegion &texture_region, float scale_factor) {
+    if (!texture_region) SetSize(0.0f);
     this->texture_region = texture_region;
-    if (adjust_size) {
-        if (pixel_size) {
-            this->SetSize(float(texture_region->GetWidth()), float(texture_region->GetHeight()));
-        } else {
-            this->SetSize(1, texture_region->GetRatio());
-        }
-    }
+    if (scale_factor == 0.0f) scale_factor = this->scale_factor;
+    SetScaleFactor(scale_factor);
 }
 
 void Sprite::Draw(SpriteBatch &sprite_batch) {
@@ -43,14 +46,6 @@ void Sprite::Draw(SpriteBatch &sprite_batch) {
     p3.Set(p2.x, size.y * (1 - origin.y));
     p4.Set(p1.x, p3.y);
     sprite_batch.Draw(texture_region, shader, p1, p2, p3, p4, GetObject2D()->GetTransformMatrix(), color);
-}
-
-void Sprite::OnEnable() {
-
-}
-
-void Sprite::OnDisable() {
-
 }
 
 Sprite::~Sprite() {

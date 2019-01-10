@@ -88,8 +88,8 @@ bool Renderer::Initialize() {
     update_camera(window, width, height);
 
     auto window_focus = [](GLFWwindow *window, int focus) {
-        if (focus) Engine::OnResume();
-        else Engine::OnPause();
+        if (focus) Engine::Resume();
+        else Engine::Pause();
     };
 
     glfwSetWindowFocusCallback(window, window_focus);
@@ -137,7 +137,7 @@ bool Renderer::Draw() {
 
     if (Engine::camera) {
         sprite_batch->SetCameraMatrix(Engine::camera->GetMatrix());
-        Engine::GetRoot()->Draw(*sprite_batch);
+        Engine::GetRoot()->Draw(Matrix4f(), *sprite_batch);
         sprite_batch->Flush();
     }
 

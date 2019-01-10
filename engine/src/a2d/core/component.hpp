@@ -15,36 +15,32 @@ class Object2D;
 DECLARE_SMART_POINTER(Component)
 
 class Component : public ref_counter {
-    friend Object2D;
+    friend class Object2D;
+    friend class Engine;
+    friend class Physics;
+    friend class ComponentAddCommand;
+    friend class ComponentDestroyCommand;
 
 public:
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Component)
 
     virtual intrusive_ptr<Object2D> GetObject2D() const;
-
-    virtual bool IsActive() const;
+    virtual void Destroy() final;
 
 protected:
-    bool is_active;
-    intrusive_ptr<Object2D> object_2d;
+    Object2D *object_2d;
 
-    virtual void SetActive(bool active);
+    Component();
+    ~Component() override {};
 
     // Events
     virtual void Initialize() {};
-    virtual void OnEnable() {};
     virtual void PhysicsUpdate() {};
     virtual void Update() {};
     virtual void PostUpdate() {};
-    virtual void PreDraw() {};
-    virtual void PostDraw() {};
-    virtual void OnDisable() {};
     virtual void OnDestroy() {};
     virtual void OnPause() {};
     virtual void OnResume() {};
-
-    ~Component() override {};
-    Component();
 };
 
 } // namespace a2d
