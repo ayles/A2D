@@ -32,6 +32,7 @@ public:
     Line() : shader(Resources::Get<Shader>("line")) {}
 
     void Initialize() override {
+        Drawable::Initialize();
         glGenBuffers(1, &vbo);
     }
 

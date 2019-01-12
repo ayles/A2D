@@ -11,10 +11,10 @@
 #include <CoreFoundation/CoreFoundation.h>
 #endif
 
-#include <fstream>
 #include <string>
-#include <codecvt>
 #include <locale>
+#include <fstream>
+#include <codecvt>
 
 namespace a2d {
 

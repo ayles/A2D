@@ -8,7 +8,7 @@
 namespace a2d {
 
 SpriteBatch::SpriteBatch() : camera_matrix(), current_texture(nullptr),
-current_shader(nullptr), buffer_size(0), buffer_capacity(8192), buffer(new float[buffer_capacity]) {
+current_shader(nullptr), buffer_size(0), buffer_capacity(32768), buffer(new float[buffer_capacity]) {
     glGenBuffers(1, &vbo);
     glGenBuffers(1, &indices);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices);

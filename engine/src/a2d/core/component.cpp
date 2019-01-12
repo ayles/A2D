@@ -14,22 +14,13 @@ pObject2D Component::GetObject2D() const {
 }
 
 void Component::Destroy() {
-    auto &components = object_2d->components;
-    auto iter = components.find(typeid(*this));
-    if (iter == components.end() || iter->second.empty()) return;
-    auto comp_iter = std::find(iter->second.begin(), iter->second.end(), this);
-    if (comp_iter == iter->second.end()) return;
-
-    auto &drawables = object_2d->drawables;
-    auto d = std::find(drawables.begin(), drawables.end(), this);
-    if (d != drawables.end()) drawables.erase(d);
-    
-    iter->second.erase(comp_iter);
-
     Engine::AddCommand([this]() {
+        auto iter = object_2d->components.find(typeid(*this));
+        if (iter == object_2d->components.end() || iter->second.empty()) return;
+        iter->second.erase(this);
         if (Engine::IsPlaying()) this->OnPause();
         this->OnDestroy();
-        Engine::components.erase(std::find(Engine::components.begin(), Engine::components.end(), this));
+        Engine::components.erase(this);
     });
 }
 

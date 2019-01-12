@@ -3,8 +3,13 @@
 //
 
 #include <a2d/graphics/drawable.hpp>
+#include <a2d/core/resources.hpp>
+#include <a2d/core/object2d.hpp>
 
 namespace a2d {
+
+Drawable::Drawable() : shader(Resources::Get<Shader>("default")){};
+Drawable::~Drawable() = default;
 
 float Drawable::GetWidth() const {
     return size.x;
@@ -49,13 +54,10 @@ void Drawable::SetOrigin(const Vector2f &origin) {
 }
 
 bool Drawable::operator<(const Drawable &other) const {
-    const Shader *s1, *s2;
-    s1 = GetShaderForSortOrNull();
-    s2 = other.GetShaderForSortOrNull();
-    if (s1 != s2) return s1 < s2;
+    if (shader != other.shader) return shader < other.shader;
     const TextureRegion *t1, *t2;
-    t1 = GetTextureRegionForSortOrNull();
-    t2 = other.GetTextureRegionForSortOrNull();
+    t1 = texture_region.get();
+    t2 = other.texture_region.get();
     if (t1 && t2) {
         if (t1->GetTexture() != t2->GetTexture()) {
             return t1->GetTexture() < t2->GetTexture();
@@ -70,19 +72,46 @@ bool Drawable::operator<(const Drawable &other) const {
     return this < &other;
 }
 
-void Drawable::SetFrame(const a2d::pTextureRegion &frame) {}
-
-const Shader *Drawable::GetShaderForSortOrNull() const {
-    return nullptr;
+const pShader Drawable::GetShader() const {
+    return shader;
 }
 
-const TextureRegion *Drawable::GetTextureRegionForSortOrNull() const {
-    return nullptr;
+const pTextureRegion Drawable::GetTextureRegion() const {
+    return texture_region;
+}
+
+void Drawable::SetShader(const pShader &shader) {
+    pObject2D o = GetObject2D();
+    if (o) {
+        if (o->parent) o->parent->children.erase(o);
+        this->shader = shader;
+        if (o->parent) o->parent->children.emplace(o);
+    } else this->shader = shader;
+}
+
+void Drawable::SetTextureRegion(const pTextureRegion &texture_region) {
+    pObject2D o = GetObject2D();
+    if (o) {
+        if (o->parent) o->parent->children.erase(o);
+        this->texture_region = texture_region;
+        if (o->parent) o->parent->children.emplace(o);
+    } else this->texture_region = texture_region;
 }
 
 void Drawable::Draw(SpriteBatch &sprite_batch) {}
 
-Drawable::~Drawable() = default;
+void Drawable::Initialize() {
+    pObject2D o = object_2d;
+    if (object_2d->parent) object_2d->parent->children.erase(o);
+    object_2d->drawables.emplace(this);
+    if (object_2d->parent) object_2d->parent->children.emplace(o);
+}
 
+void Drawable::OnDestroy() {
+    pObject2D o = object_2d;
+    if (object_2d->parent) object_2d->parent->children.erase(o);
+    object_2d->drawables.erase(this);
+    if (object_2d->parent) object_2d->parent->children.emplace(o);
+}
 
 } //namespace a2d

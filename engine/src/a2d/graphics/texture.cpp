@@ -7,8 +7,6 @@
 
 #include <a2d/graphics/gl.hpp>
 
-#include <lodepng.h>
-
 
 namespace a2d {
 

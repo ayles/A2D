@@ -13,7 +13,7 @@
 #include <a2d/core/component.hpp>
 #include <a2d/graphics/drawable.hpp>
 
-#include <list>
+#include <set>
 #include <unordered_map>
 #include <typeindex>
 #include <type_traits>
@@ -27,20 +27,21 @@ class Object2D final : public ref_counter {
     friend class Engine;
     friend class Renderer;
     friend class Physics;
+    friend class Drawable;
     friend class Component;
 
-    struct objects_compare {
+    struct compare_objects {
         bool operator()(const pObject2D &lhs, const pObject2D &rhs) const;
     };
 
     Matrix4f transform_matrix;
     pObject2D parent;
-    std::list<pObject2D> children;
-    std::list<pDrawable> drawables;
-    std::unordered_map<std::type_index, std::list<pComponent>> components;
+    std::set<pObject2D, compare_objects> children;
+    std::set<pDrawable> drawables;
+    std::unordered_map<std::type_index, std::set<pComponent>> components;
+    int layer;
 
 public:
-    int layer;
     Vector2f position;
     Vector2f scale;
     float rotation;
@@ -49,9 +50,12 @@ public:
     Object2D();
     ~Object2D() override;
 
+    int GetLayer();
     pObject2D GetParent() const;
     const a2d::Matrix4f &GetTransformMatrix() const;
     const a2d::Matrix4f &GetTransformMatrixRecalculated(bool recursive = true);
+
+    void SetLayer(int layer);
 
     pObject2D AddChild(const pObject2D &child);
 
@@ -66,7 +70,7 @@ public:
     GetComponent(bool look_for_base = false) const;
 
     template<class T>
-    typename std::enable_if<std::is_base_of<Component, T>::value, std::list<intrusive_ptr<T>>>::type
+    typename std::enable_if<std::is_base_of<Component, T>::value, std::set<intrusive_ptr<T>>>::type
     GetComponents(bool look_for_base = false) const;
 
     void DestroyAllComponents();
@@ -88,16 +92,13 @@ typename std::enable_if<std::is_base_of<a2d::Component, T>::value, intrusive_ptr
 Object2D::AddComponent() {
     std::type_index t_index = typeid(T);
     intrusive_ptr<Component> component = new T;
-    components[t_index].push_back(component);
+    components[t_index].emplace(component);
     component->object_2d = this;
-
-    auto drawable = dynamic_cast<Drawable *>(component.get());
-    if (drawable) drawables.emplace_back(drawable);
 
     Engine::AddCommand([component]() {
         component->Initialize();
         if (Engine::IsPlaying()) component->OnResume();
-        Engine::components.emplace_back(component);
+        Engine::components.emplace(component);
     });
 
     return component;
@@ -117,6 +118,7 @@ Object2D::GetComponent(bool look_for_base) const {
         }
         return nullptr;
     } else {
+        if (components.empty()) return nullptr;
         auto iter = components.find(typeid(T));
         if (iter == components.end() || iter->second.empty()) return nullptr;
         return *iter->second.begin();
@@ -124,23 +126,23 @@ Object2D::GetComponent(bool look_for_base) const {
 }
 
 template<class T>
-typename std::enable_if<std::is_base_of<a2d::Component, T>::value, std::list<intrusive_ptr<T>>>::type
+typename std::enable_if<std::is_base_of<a2d::Component, T>::value, std::set<intrusive_ptr<T>>>::type
 Object2D::GetComponents(bool look_for_base) const {
     if (look_for_base) {
-        std::list<intrusive_ptr<T>> s;
+        std::set<intrusive_ptr<T>> s;
         for (auto &i1 : components) {
             for (auto &i2 : i1.second) {
                 T *t = dynamic_cast<T *>(i2.get());
                 if (t) {
-                    s.emplace_back(t);
+                    s.emplace(t);
                 }
             }
         }
         return s;
     } else {
         auto iter = components.find(typeid(T));
-        if (iter == components.end()) return std::list<intrusive_ptr<T> >();
-        std::list<intrusive_ptr<T>> s(iter->second.begin(), iter->second.end());
+        if (iter == components.end()) return std::set<intrusive_ptr<T> >();
+        std::set<intrusive_ptr<T>> s(iter->second.begin(), iter->second.end());
         return s;
     }
 }

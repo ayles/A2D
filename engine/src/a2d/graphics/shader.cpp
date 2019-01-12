@@ -4,10 +4,8 @@
 
 #include <a2d/graphics/shader.hpp>
 #include <a2d/core/engine.hpp>
-#include <a2d/filesystem/filesystem.hpp>
 #include <a2d/graphics/gl.hpp>
 
-#include <vector>
 #include <iostream>
 
 namespace a2d {

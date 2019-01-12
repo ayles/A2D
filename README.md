@@ -51,11 +51,11 @@ class RootComponent : public Component {
     // Initialize event is called after component creation
     void Initialize() override {
         // Create and set pixel camera
-        auto camera_object = Engine::GetRoot()->AddChild(new Object2D);
+        auto camera_object = new Object2D;
         Engine::SetCamera(camera_object->AddComponent<PixelCamera>());
         
         // Create text
-        text = Engine::GetRoot()->AddChild(new Object2D);
+        text = new Object2D;
         text->AddComponent<Text>()->SetFont(
             new BitmapFont(FileSystem::LoadRaw("fonts/impact.ttf"), 96)
         );

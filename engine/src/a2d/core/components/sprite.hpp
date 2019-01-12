@@ -19,20 +19,12 @@ class Sprite : public Drawable {
 
 public:
     Vector4f color;
-    pShader shader;
-
-    const pTextureRegion &GetTextureRegion();
-
-    const Shader *GetShaderForSortOrNull() const override;
-    const TextureRegion *GetTextureRegionForSortOrNull() const override;
 
     float GetScaleFactor() const;
-
     void SetScaleFactor(float scale_factor);
-    void SetTextureRegion(const pTextureRegion &texture_region, float scale_factor = 0.0f);
+    void SetTextureRegion(const pTextureRegion &texture_region) override;
 
 protected:
-    pTextureRegion texture_region;
     float scale_factor;
 
     Sprite();

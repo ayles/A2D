@@ -3,11 +3,7 @@
 //
 
 #include <a2d/a2d.hpp>
-#include <a2d/graphics/renderer.hpp>
 #include <root_component.hpp>
-#include <a2d/filesystem/filesystem.hpp>
-#include <a2d/input/input.hpp>
-#include <a2d/audio/audio.hpp>
 
 
 #if defined(TARGET_WINDOWS) && defined(FORCE_DISCRETE_GPU)

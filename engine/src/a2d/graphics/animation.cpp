@@ -4,8 +4,6 @@
 
 #include <a2d/graphics/animation.h>
 
-#include <cmath>
-
 
 namespace a2d {
 

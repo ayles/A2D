@@ -6,9 +6,7 @@
 #include <a2d/graphics/renderer.hpp>
 
 
-a2d::PixelCamera::PixelCamera() : scale_factor(1) {
-
-}
+a2d::PixelCamera::PixelCamera() : scale_factor(1) {}
 
 void a2d::PixelCamera::SetScaleFactor(float scale_factor) {
     this->scale_factor = scale_factor;

@@ -20,26 +20,29 @@ class Drawable : public Component {
     friend class Object2D;
 public:
 
+    Drawable();
+    ~Drawable() override = 0;
+
     /**
      * Returns width of this drawable (not accounting for Object2D scale).
      *
      * @return width
      */
-    virtual float GetWidth() const;
+    virtual float GetWidth() const final;
 
     /**
      * Returns height of this drawable (not accounting for Object2D scale).
      *
      * @return height
      */
-    virtual float GetHeight() const;
+    virtual float GetHeight() const final;
 
     /**
      * Returns size of this drawable (width, height).
      *
      * @return size (width, height)
      */
-    virtual Vector2f GetSize() const;
+    virtual Vector2f GetSize() const final;
 
     /**
      * Returns origin of this drawable.
@@ -50,7 +53,10 @@ public:
      *
      * @return origin
      */
-    virtual Vector2f GetOrigin() const;
+    virtual Vector2f GetOrigin() const final;
+
+    virtual const pTextureRegion GetTextureRegion() const final;
+    virtual const pShader GetShader() const final;
 
     virtual void SetWidth(float width);
     virtual void SetHeight(float height);
@@ -58,48 +64,25 @@ public:
     virtual void SetSize(const Vector2f &size);
     virtual void SetOrigin(float x, float y);
     virtual void SetOrigin(const Vector2f &origin);
+    virtual void SetTextureRegion(const pTextureRegion &texture_region);
+    virtual void SetShader(const pShader &shader);
+
 
     /**
      * Compares drawables for minimizing shader/texture switches.
      */
-    virtual bool operator<(const Drawable &other) const;
-
-    ~Drawable() override = 0;
+    virtual bool operator<(const Drawable &other) const final;
 
 protected:
     Vector2f size;
     Vector2f origin;
-
-    /**
-     * Called for setting next frame.
-     *
-     * This should be implemented for animation support.
-     *
-     * @param frame
-     */
-    virtual void SetFrame(const pTextureRegion &frame);
-
-    /**
-     * Returns shader for drawables sorting.
-     *
-     * If drawable uses more than one shader this should return nullptr.
-     *
-     * @return shader
-     */
-    virtual const Shader *GetShaderForSortOrNull() const;
-
-    /**
-     * Returns texture region for drawables sorting.
-     *
-     * If drawable uses more than one texture (not region!) this should return nullptr.
-     * If drawable uses one texture, but different texture regions, this should return one of them.
-     * TextureRegion will be used for sorting with filtering and wrapping
-     *
-     * @return texture region
-     */
-    virtual const TextureRegion *GetTextureRegionForSortOrNull() const;
+    pTextureRegion texture_region;
+    pShader shader;
 
     virtual void Draw(SpriteBatch &sprite_batch);
+
+    void Initialize() override;
+    void OnDestroy() override;
 };
 
 } //namespace a2d

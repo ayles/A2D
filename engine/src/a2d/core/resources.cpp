@@ -26,7 +26,7 @@ intrusive_ptr<Texture> Resources::Load(const std::string &name) {
     std::vector<unsigned char> image;
     lodepng::decode(image, width, height, raw_data);
 
-    auto texture = new Texture(width, height, &image[0]);
+    auto texture = new Texture(width, height, image.data());
     texture->buffer.FlipVertically();
 
     return texture;

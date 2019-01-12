@@ -7,6 +7,7 @@
 
 #include <a2d/core/macro.hpp>
 #include <a2d/core/ref_counter.hpp>
+#include <list>
 
 namespace a2d {
 

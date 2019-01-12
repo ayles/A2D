@@ -3,16 +3,33 @@
 //
 
 #include <a2d/core/object2d.hpp>
-#include <a2d/core/component.hpp>
 #include "object2d.hpp"
 
 
 namespace a2d {
 
+bool Object2D::compare_objects::operator()(const pObject2D &lhs, const pObject2D &rhs) const {
+    if (lhs->layer != rhs->layer) return lhs->layer < rhs->layer;
+    pDrawable left = lhs->drawables.empty() ? nullptr : *(lhs->drawables.begin());
+    pDrawable right = rhs->drawables.empty() ? nullptr : *(rhs->drawables.begin());
+    if (left != right) {
+        if (left && right) {
+            return *(left) < *(right);
+        } else {
+            return left < right;
+        }
+    }
+    return lhs < rhs;
+}
+
 Object2D::Object2D() : parent(nullptr), layer(0),  position(), scale(1), rotation(), components() {
     if (Engine::GetRoot()) Engine::GetRoot()->AddChild(this);
 }
 Object2D::~Object2D() {}
+
+int Object2D::GetLayer() {
+    return layer;
+}
 
 pObject2D Object2D::GetParent() const {
     return parent;
@@ -34,11 +51,18 @@ const Matrix4f &Object2D::GetTransformMatrixRecalculated(bool recursive) {
             transform_matrix);
 }
 
+void Object2D::SetLayer(int layer) {
+    pObject2D o = this; // prevent this object destruction
+    if (parent) parent->children.erase(o);
+    this->layer = layer;
+    if (parent) parent->children.emplace(o);
+}
+
 pObject2D Object2D::AddChild(const pObject2D &child) {
     if (child->parent != this) {
-        if (child->parent) child->parent->children.erase(std::find(child->parent->children.begin(), child->parent->children.end(), child));
+        if (child->parent) child->parent->children.erase(child);
         child->parent = this;
-        children.emplace_back(child);
+        children.emplace(child);
     }
     return child;
 }
@@ -47,7 +71,7 @@ void Object2D::Destroy() {
     for (auto &c : children) c->Destroy();
     DestroyAllComponents();
     Engine::AddCommand([this]() {
-        if (parent) parent->children.erase(std::find(parent->children.begin(), parent->children.end(), this));
+        if (parent) parent->children.erase(this);
     });
 }
 
@@ -65,29 +89,9 @@ void Object2D::Draw(const a2d::Matrix4f &parent_transform, SpriteBatch &sprite_b
 void Object2D::DestroyAllComponents() {
     for (auto &c : components) {
         for (const pComponent &component : c.second) {
-            Engine::AddCommand([component]() {
-                if (Engine::IsPlaying()) component->OnPause();
-                component->OnDestroy();
-                Engine::components.erase(std::find(Engine::components.begin(), Engine::components.end(), component));
-            });
+            component->Destroy();
         }
     }
-    components.clear();
-    drawables.clear();
-}
-
-bool Object2D::objects_compare::operator()(const pObject2D &lhs, const pObject2D &rhs) const {
-    if (lhs->layer != rhs->layer) return lhs->layer < rhs->layer;
-    pDrawable left = lhs->drawables.empty() ? nullptr : *(lhs->drawables.begin());
-    pDrawable right = rhs->drawables.empty() ? nullptr : *(rhs->drawables.begin());
-    if (left != right) {
-        if (left && right) {
-            return *(left) < *(right);
-        } else {
-            return left < right;
-        }
-    }
-    return lhs < rhs;
 }
 
 Vector2f Object2D::WorldToLocal(const Vector2f &world_point) {

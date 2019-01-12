@@ -5,9 +5,6 @@
 #include <a2d/graphics/renderer.hpp>
 #include <a2d/core/engine.hpp>
 #include <a2d/core/object2d.hpp>
-#include <a2d/core/components/camera.hpp>
-
-#include <a2d/graphics/gl.hpp>
 
 namespace a2d {
 

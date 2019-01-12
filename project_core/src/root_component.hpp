@@ -24,10 +24,16 @@ public:
         a2d::Engine::SetCamera(camera_object->AddComponent<PixelCamera>());
         camera_object->AddComponent<MoveCamera>();
 
-        //pObject2D text = new Object2D;
-        //text->AddComponent<Text>()->SetFont(new BitmapFont(FileSystem::LoadRaw("fonts/impact.ttf"), 48));
-        //text->GetComponent<Text>()->SetOrigin(0.5f, 0.5f);
-        //text->GetComponent<Text>()->SetText(U"Hello, A2D!");
+        pObject2D text = new Object2D;
+        text->AddComponent<Text>()->SetFont(new BitmapFont(FileSystem::LoadRaw("fonts/impact.ttf"), 48));
+        text->GetComponent<Text>()->SetOrigin(0.5f, 0.5f);
+        text->GetComponent<Text>()->SetText(U"Hello, A2D!");
+
+        pObject2D street_lamp = new Object2D;
+        auto s = street_lamp->AddComponent<Sprite>();
+        s->SetTextureRegion(new TextureRegion(Resources::Get<Texture>("street_lamp")));
+        s->SetScaleFactor(2);
+        street_lamp->SetLayer(3);
 
         pObject2D flash = new Object2D;
         flash->AddComponent<Flash>();

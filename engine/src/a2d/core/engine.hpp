@@ -14,7 +14,7 @@
 
 #include <thread>
 #include <queue>
-#include <list>
+#include <set>
 
 namespace a2d {
 
@@ -37,9 +37,13 @@ class Engine {
     static std::thread::id ui_thread_id;
     static bool playing;
     static std::queue<pCommand> commands;
-    static std::list<pComponent> components;
+    static std::set<pComponent> components;
 
 public:
+    DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Engine)
+    Engine() = delete;
+    ~Engine() = delete;
+
     static void SetCamera(const intrusive_ptr<Camera> &camera);
 
     static unsigned long long GetFrameIndex();
@@ -49,10 +53,6 @@ public:
     static std::shared_ptr<spdlog::logger> GetLogger();
     static std::thread::id &GetUIThreadID();
     static bool IsPlaying();
-
-    DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Engine)
-    Engine() = delete;
-    ~Engine() = delete;
 
     static void AddCommand(const pCommand &command);
     static void AddCommand(const std::function<void()> &lambda);

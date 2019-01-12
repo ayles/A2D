@@ -3,7 +3,6 @@
 //
 
 #include <a2d/core/components/text.hpp>
-#include <a2d/core/resources.hpp>
 
 namespace a2d {
 

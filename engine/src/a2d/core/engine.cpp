@@ -4,16 +4,12 @@
 
 #include <a2d/core/engine.hpp>
 #include <a2d/core/object2d.hpp>
-#include <a2d/core/components/camera.hpp>
 
 #ifdef TARGET_ANDROID
 #include <spdlog/sinks/android_sink.h>
 #else
 #include <spdlog/sinks/stdout_sinks.h>
 #endif
-
-#include <chrono>
-#include "engine.hpp"
 
 
 unsigned long long a2d::Engine::frame_index = 0;
@@ -24,7 +20,7 @@ std::shared_ptr<spdlog::logger> a2d::Engine::logger = nullptr;
 std::thread::id a2d::Engine::ui_thread_id;
 bool a2d::Engine::playing = false;
 std::queue<a2d::pCommand> a2d::Engine::commands;
-std::list<a2d::pComponent> a2d::Engine::components;
+std::set<a2d::pComponent> a2d::Engine::components;
 
 
 void a2d::Engine::SetCamera(const a2d::pCamera &camera) {
@@ -93,18 +89,14 @@ bool a2d::Engine::Update() {
     glfwPollEvents();
 #endif
 
-    for (auto &component : components) {
-        component->Update();
-    }
+    for (auto &component : components) component->Update();
     ExecuteCommands();
 
     return true;
 }
 
 bool a2d::Engine::PostUpdate() {
-    for (auto &component : components) {
-        component->PostUpdate();
-    }
+    for (auto &component : components) component->PostUpdate();
     ExecuteCommands();
     return true;
 }
@@ -112,17 +104,13 @@ bool a2d::Engine::PostUpdate() {
 void a2d::Engine::Pause() {
     if (!playing) return;
     playing = false;
-    for (auto &component : components) {
-        component->OnPause();
-    }
+    for (auto &component : components) component->OnPause();
 }
 
 void a2d::Engine::Resume() {
     if (playing) return;
     playing = true;
-    for (auto &component : components) {
-        component->OnResume();
-    }
+    for (auto &component : components) component->OnResume();
 }
 
 void a2d::Engine::Uninitialize() {
