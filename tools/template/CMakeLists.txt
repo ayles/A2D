@@ -1,15 +1,14 @@
 cmake_minimum_required(VERSION 3.2)
-project(Core CXX)
+project("%A2D_PROJECT_NAME% core")
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_subdirectory(../engine build_a2d_engine)
+add_subdirectory("%A2D_ENGINE_PATH%" a2d_engine)
 
 add_library(a2d_core_library
-        src/root_component.hpp
-        src/move_character.hpp
-        src/move_camera.hpp
-        src/root_component.cpp src/flash.h)
+        src/root_component.hpp src/root_component.cpp)
 
 target_link_libraries(a2d_core_library a2d_engine_library)
+
+# For root_component.hpp export
 target_include_directories(a2d_core_library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
