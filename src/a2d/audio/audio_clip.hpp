@@ -19,8 +19,8 @@ class AudioClip : public ref_counter {
     friend class AudioSource;
 
 public:
-    AudioClip(const std::vector<unsigned char> &audio_file);
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(AudioClip)
+    AudioClip(const std::vector<unsigned char> &audio_file);
     ~AudioClip() override;
 
 private:

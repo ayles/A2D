@@ -25,7 +25,7 @@ void Text::SetText(const std::u32string &text) {
     this->text = text;
     float width = 0;
     for (char32_t i : text) {
-        width += bitmap_font->GetCharacter(i)->width;
+        width += bitmap_font->GetCharacter(i)->advance_x;
     }
     size.Set(width, (float)bitmap_font->GetLineHeight());
 }
@@ -62,12 +62,14 @@ void Text::Draw(SpriteBatch &sprite_batch) {
     for (auto c : text) {
         auto t = bitmap_font->GetCharacter(c);
         if (!t || !t->texture_region) continue;
-        p1.Set(x1 + current_x, y1 - t->y);
-        p2.Set(x1 + current_x + t->texture_region->GetWidth(), y1 - t->y);
-        p3.Set(x1 + current_x + t->texture_region->GetWidth(), y1 - t->y + t->texture_region->GetHeight());
-        p4.Set(x1 + current_x, y1 - t->y + t->texture_region->GetHeight());
+        float x = x1 + current_x + t->x;
+        float y = y1 + t->y;
+        p1.Set(x, y);
+        p2.Set(x + t->texture_region->GetWidth(), y);
+        p3.Set(x + t->texture_region->GetWidth(), y + t->texture_region->GetHeight());
+        p4.Set(x, y + t->texture_region->GetHeight());
         sprite_batch.Draw(t->texture_region, shader, p1, p2, p3, p4, GetObject2D()->GetTransformMatrix(), color);
-        current_x += t->texture_region->GetWidth();
+        current_x += t->advance_x;
     }
 }
 

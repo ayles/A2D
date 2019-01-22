@@ -3,6 +3,7 @@
 //
 
 #include <a2d/filesystem/filesystem.hpp>
+#include <a2d/core/engine.hpp>
 
 #ifdef TARGET_ANDROID
 #include <android/asset_manager.h>
@@ -27,11 +28,13 @@ void FileSystem::Initialize(void *asset_manager) {
 #endif
 
 std::vector<unsigned char> FileSystem::LoadRaw(const std::string &path) {
+    ASSERT_MAIN_THREAD
 #ifdef TARGET_ANDROID
     auto asset = AAssetManager_open(asset_manager, path.c_str(), AASSET_MODE_UNKNOWN);
+    ASSERT(asset != nullptr)
     auto size = AAsset_getLength(asset);
     std::vector<unsigned char> v(size);
-    AAsset_read (asset, &v[0], size);
+    AAsset_read(asset, &v[0], size);
     AAsset_close(asset);
     return v;
 #elif TARGET_IOS
@@ -47,6 +50,7 @@ std::vector<unsigned char> FileSystem::LoadRaw(const std::string &path) {
     CFURLGetFileSystemRepresentation(url, true, fs_path, sizeof(fs_path));
     std::ifstream file((char *)fs_path, std::ios::binary);
     if ((file.rdstate() & std::ifstream::failbit) != 0) {
+        DEBUG_ERROR("Failed to load file")
         std::vector<unsigned char> a;
         return a;
     }
@@ -57,6 +61,7 @@ std::vector<unsigned char> FileSystem::LoadRaw(const std::string &path) {
 #elif TARGET_DESKTOP
     std::ifstream file("resources/" + path, std::ios::binary);
     if ((file.rdstate() & std::ifstream::failbit) != 0) {
+        DEBUG_ERROR("Failed to load file")
         std::vector<unsigned char> a;
         return a;
     }
@@ -68,11 +73,13 @@ std::vector<unsigned char> FileSystem::LoadRaw(const std::string &path) {
 }
 
 std::string FileSystem::LoadText(const std::string &path) {
+    ASSERT_MAIN_THREAD
     auto v = LoadRaw(path);
     return std::string(v.begin(), v.end());
 }
 
 std::u32string FileSystem::LoadTextUTF8(const std::string &path) {
+    ASSERT_MAIN_THREAD
     // MSVC bug
     // https://stackoverflow.com/questions/32055357/visual-studio-c-2015-stdcodecvt-with-char16-t-or-char32-t
 #if _MSC_VER >= 1900

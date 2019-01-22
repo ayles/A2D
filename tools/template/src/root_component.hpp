@@ -18,12 +18,12 @@ public:
     pObject2D text;
 
     void Initialize() override {
-        pObject2D camera = new Object2D;
+        auto camera = Object2D::Create();
         a2d::Engine::SetCamera(camera->AddComponent<PixelCamera>());
 
-        text = new Object2D;
-        text->AddComponent<Text>()->SetFont(new BitmapFont(FileSystem::LoadRaw("fonts/impact.ttf"), 48));
-        text->GetComponent<Text>()->SetOrigin(0.5f, 0.5f);
+        text = Object2D::Create();
+        text->AddComponent<Text>()->SetFont(BitmapFont::Create(FileSystem::LoadRaw("fonts/impact.ttf"), 48));
+        text->GetComponent<Text>()->SetOrigin(0.5f, 0.0f);
         text->GetComponent<Text>()->SetText(U"Hello, A2D!");
     }
 

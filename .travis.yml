@@ -26,5 +26,5 @@ install:
 script:
 - mkdir build
 - cd build
-- cmake ../project_desktop -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION
+- cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION
 - cmake --build .

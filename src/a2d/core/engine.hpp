@@ -34,7 +34,7 @@ class Engine {
     static intrusive_ptr<Object2D> root;
     static intrusive_ptr<Camera> camera;
     static std::shared_ptr<spdlog::logger> logger;
-    static std::thread::id ui_thread_id;
+    static std::thread::id main_thread_id;
     static bool playing;
     static std::queue<pCommand> commands;
     static std::set<pComponent> components;
@@ -51,7 +51,7 @@ public:
     static intrusive_ptr<Object2D> GetRoot();
     static intrusive_ptr<Camera> GetCamera();
     static std::shared_ptr<spdlog::logger> GetLogger();
-    static std::thread::id &GetUIThreadID();
+    static std::thread::id &GetMainThreadID();
     static bool IsPlaying();
 
     static void AddCommand(const pCommand &command);

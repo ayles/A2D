@@ -85,7 +85,7 @@ void TextureBuffer::Free() {
 }
 
 void TextureBuffer::SetPixel(int x, int y, unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
-    if (x < 0 || x >= width || y < 0 || y >= height) return;
+    ASSERT(x >= 0 && x < width && y >= 0 && y < height)
     Allocate();
     int offset = (y * width + x) * 4;
     data[offset] = r;
@@ -145,7 +145,7 @@ unsigned char *TextureBuffer::GetBuffer() {
 }
 
 Vector4f a2d::TextureBuffer::GetPixel(int x, int y) const {
-    if (!data || x < 0 || x >= width || y < 0 || y >= height) return Vector4f();
+    ASSERT(x >= 0 && x < width && y >= 0 && y < height)
     int offset = (y * width + x) * 4;
     return a2d::Vector4f(
             data[offset] / 255.0f,

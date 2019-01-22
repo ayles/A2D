@@ -25,11 +25,11 @@ public:
     public:
         pTextureRegion texture_region;
         int x, y;
-        int width, height;
-        float ratio;
+        int advance_x;
+        int advance_y;
 
         Character();
-        Character(const pTextureRegion &texture_region, int x, int y, int width, int height);
+        Character(const pTextureRegion &texture_region, int x, int y, int advance_x, int advance_y);
     };
 
 private:
@@ -40,10 +40,14 @@ public:
     const Character *GetCharacter(unsigned long char_code) const;
     int GetLineHeight() const;
 
+    DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(BitmapFont)
+
+    static pBitmapFont Create(const std::vector<unsigned char> &ttf, int size);
+
+private:
     BitmapFont(const std::vector<unsigned char> &ttf, int size);
     ~BitmapFont() override;
 
-private:
     static FT_Library GetFreeTypeLibrary();
 };
 

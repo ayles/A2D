@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.2)
-project(A2D CXX)
+project(A2D)
 
 set(CMAKE_CXX_STANDARD 11)
 
@@ -30,7 +30,8 @@ set(A2D_SOURCES
         src/a2d/graphics/texture.cpp
         src/a2d/graphics/sprite_batch.cpp
         src/a2d/core/resources.cpp
-        ${SHADERS_GENERATED_FILE} src/a2d/graphics/animation.cpp)
+        src/a2d/graphics/animation.cpp
+        ${SHADERS_GENERATED_FILE})
 
 set(A2D_HEADERS
         src/a2d/a2d.hpp
@@ -69,7 +70,10 @@ set(A2D_HEADERS
         src/a2d/graphics/texture_buffer.hpp
         src/a2d/graphics/texture.hpp
         src/a2d/graphics/renderer.hpp
-        src/a2d/core/resources.hpp src/a2d/graphics/animation.h src/a2d/core/command.hpp src/a2d/core/commands/lambda_command.h)
+        src/a2d/core/resources.hpp
+        src/a2d/graphics/animation.h
+        src/a2d/core/command.hpp
+        src/a2d/core/commands/lambda_command.h)
 
 # A2D library target
 add_library(a2d_engine_library STATIC ${A2D_SOURCES} ${A2D_HEADERS})

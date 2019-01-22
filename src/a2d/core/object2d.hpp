@@ -47,8 +47,6 @@ public:
     float rotation;
 
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Object2D)
-    Object2D();
-    ~Object2D() override;
 
     int GetLayer();
     pObject2D GetParent() const;
@@ -57,7 +55,7 @@ public:
 
     void SetLayer(int layer);
 
-    pObject2D AddChild(const pObject2D &child);
+    void Attach(const pObject2D &parent);
 
     void Destroy();
 
@@ -78,7 +76,12 @@ public:
     Vector2f WorldToLocal(const Vector2f &world_point);
     Vector2f LocalToWorld(const Vector2f &local_point);
 
+    static pObject2D Create();
+
 private:
+    Object2D();
+    ~Object2D() override;
+
     void Draw(const a2d::Matrix4f &parent_transform, SpriteBatch &sprite_batch);
 };
 
@@ -90,6 +93,7 @@ private:
 template<class T>
 typename std::enable_if<std::is_base_of<a2d::Component, T>::value, intrusive_ptr<T>>::type
 Object2D::AddComponent() {
+    ASSERT_MAIN_THREAD
     std::type_index t_index = typeid(T);
     intrusive_ptr<Component> component = new T;
     components[t_index].emplace(component);
@@ -107,6 +111,7 @@ Object2D::AddComponent() {
 template<class T>
 typename std::enable_if<std::is_base_of<a2d::Component, T>::value, intrusive_ptr<T>>::type
 Object2D::GetComponent(bool look_for_base) const {
+    ASSERT_MAIN_THREAD
     if (look_for_base) {
         for (auto &i1 : components) {
             for (auto &i2 : i1.second) {
@@ -116,11 +121,13 @@ Object2D::GetComponent(bool look_for_base) const {
                 }
             }
         }
+        DEBUG_ERROR("Could not find component")
         return nullptr;
     } else {
         if (components.empty()) return nullptr;
         auto iter = components.find(typeid(T));
         if (iter == components.end() || iter->second.empty()) return nullptr;
+        ASSERT(*iter->second.begin() != nullptr)
         return *iter->second.begin();
     }
 }
@@ -128,6 +135,7 @@ Object2D::GetComponent(bool look_for_base) const {
 template<class T>
 typename std::enable_if<std::is_base_of<a2d::Component, T>::value, std::set<intrusive_ptr<T>>>::type
 Object2D::GetComponents(bool look_for_base) const {
+    ASSERT_MAIN_THREAD
     if (look_for_base) {
         std::set<intrusive_ptr<T>> s;
         for (auto &i1 : components) {

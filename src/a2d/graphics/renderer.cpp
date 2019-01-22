@@ -56,6 +56,7 @@ bool Renderer::Initialize() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_SAMPLES, 4);
 
     window = glfwCreateWindow(width, height, "a2d", nullptr, nullptr);
     if (!window) {
@@ -99,6 +100,7 @@ bool Renderer::Initialize() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_DEPTH_TEST);
+    glEnable(GL_MULTISAMPLE);
 
     SetSpriteBatch(new SpriteBatch);
 
