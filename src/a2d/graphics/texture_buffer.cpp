@@ -3,6 +3,7 @@
 //
 
 #include <a2d/graphics/texture_buffer.hpp>
+#include <a2d/core/log.hpp>
 
 #include <algorithm>
 
@@ -85,7 +86,10 @@ void TextureBuffer::Free() {
 }
 
 void TextureBuffer::SetPixel(int x, int y, unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
-    ASSERT(x >= 0 && x < width && y >= 0 && y < height)
+    if (x < 0 || x >= width || y < 0 || y >= height) {
+        LOG_TRACE("Pixel out of bounds");
+        return;
+    }
     Allocate();
     int offset = (y * width + x) * 4;
     data[offset] = r;
@@ -145,7 +149,10 @@ unsigned char *TextureBuffer::GetBuffer() {
 }
 
 Vector4f a2d::TextureBuffer::GetPixel(int x, int y) const {
-    ASSERT(x >= 0 && x < width && y >= 0 && y < height)
+    if (x < 0 || x >= width || y < 0 || y >= height) {
+        LOG_TRACE("Pixel out of bounds");
+        return Vector4f();
+    }
     int offset = (y * width + x) * 4;
     return a2d::Vector4f(
             data[offset] / 255.0f,

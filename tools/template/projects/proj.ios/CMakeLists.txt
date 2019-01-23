@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.3.2)
 
 set(CMAKE_CXX_STANDARD 11)
-project(A2D)
+project("%A2D_PROJECT_NAME% ios")
 
 enable_language(Swift)
 include(BundleUtilities)
@@ -11,7 +11,7 @@ set(IOS TRUE)
 set(CODESIGNIDENTITY "iPhone Developer")
 set(DEPLOYMENT_TARGET 9.0)
 
-set(APP_NAME A2D_IOS)
+set(APP_NAME "%A2D_PROJECT_NAME%")
 set(BUNDLE_IDENTIFIER "com.selya")
 set(PRODUCT_NAME ${APP_NAME})
 set(EXECUTABLE_NAME ${APP_NAME})
@@ -37,7 +37,7 @@ set(RESOURCES
         )
 
 # Process resources
-set(CORE_PROJECT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../project_core")
+set(CORE_PROJECT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 
 file(GLOB RESOURCE_FILES RELATIVE "${CORE_PROJECT_PATH}" "${CORE_PROJECT_PATH}/resources/**/*.*")
 foreach (FILE ${RESOURCE_FILES})

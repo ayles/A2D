@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.4.1)
-project(A2D_Android)
+project("%A2D_PROJECT_NAME% android")
 
-set(CORE_PROJECT_PATH "../../../../../project_core")
+set(CORE_PROJECT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../../../../..")
 
 add_subdirectory(${CORE_PROJECT_PATH} build_a2d_core)
 

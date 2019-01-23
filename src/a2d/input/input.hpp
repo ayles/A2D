@@ -5,11 +5,8 @@
 #ifndef A2D_INPUT_H
 #define A2D_INPUT_H
 
-#include <a2d/graphics/renderer.hpp>
-
-#ifdef TARGET_ANDROID
-//#include <android/input.h>
-#endif
+#include <a2d/graphics/gl.hpp>
+#include <a2d/math/vector.hpp>
 
 namespace a2d {
 
@@ -159,8 +156,8 @@ public:
     };
 
     enum KeyState {
-        RELEASED = 0,
-        PRESSED = 1
+        KEY_STATE_RELEASED = 0,
+        KEY_STATE_PRESSED = 1
     };
 
     enum TouchEvent {
@@ -171,10 +168,10 @@ public:
 
     struct Touch {
         enum TouchState {
-            RELEASED = 0,
-            PRESSED = 1,
-            JUST_RELEASED = 2,
-            JUST_PRESSED = 3
+            TOUCH_STATE_RELEASED = 0,
+            TOUCH_STATE_PRESSED = 1,
+            TOUCH_STATE_JUST_RELEASED = 2,
+            TOUCH_STATE_JUST_PRESSED = 3
         };
 
         int index;
@@ -276,7 +273,6 @@ public:
 
 private:
     static bool Initialize();
-
     static void Uninitialize();
 
 #ifdef TARGET_DESKTOP
@@ -291,13 +287,13 @@ private:
     struct KeyInternalState {
         unsigned long long last_pressed = 0;
         unsigned long long last_released = 0;
-        KeyState state = KeyState::RELEASED;
+        KeyState state = KeyState::KEY_STATE_RELEASED;
     };
 
     struct TouchInternalState {
         unsigned long long last_pressed = 0;
         unsigned long long last_released = 0;
-        Touch::TouchState state = Touch::TouchState::RELEASED;
+        Touch::TouchState state = Touch::TouchState::TOUCH_STATE_RELEASED;
         Vector2f position = Vector2f();
     };
 

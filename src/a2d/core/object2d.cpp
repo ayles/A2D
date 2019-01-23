@@ -3,6 +3,7 @@
 //
 
 #include <a2d/core/object2d.hpp>
+#include <a2d/core/log.hpp>
 
 namespace a2d {
 
@@ -67,7 +68,10 @@ void Object2D::SetLayer(int layer) {
 
 void Object2D::Attach(const pObject2D &parent) {
     ASSERT_MAIN_THREAD
-    ASSERT(parent != nullptr)
+    if (!parent) {
+        LOG_TRACE("Parent is null");
+        return;
+    }
     if (parent != this->parent) {
         if (this->parent) this->parent->children.erase(this);
         this->parent = parent;

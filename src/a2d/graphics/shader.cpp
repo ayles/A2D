@@ -5,6 +5,7 @@
 #include <a2d/graphics/shader.hpp>
 #include <a2d/core/engine.hpp>
 #include <a2d/graphics/gl.hpp>
+#include <a2d/core/log.hpp>
 
 #include <iostream>
 
@@ -34,7 +35,7 @@ static GLuint CompileShader(const std::string &shader_text, const GLenum &shader
             std::vector<GLchar> info_log(max_length);
             glGetShaderInfoLog(shader_id, max_length, &max_length, &info_log[0]);
 
-            a2d::Engine::GetLogger()->error("{} shader: \n{}",
+            Logger::Error("{} shader: \n{}",
                                             shader_type == GL_VERTEX_SHADER ? "vertex" : "fragment",
                                             std::string(&*info_log.begin()));
         }
@@ -69,7 +70,7 @@ static GLuint CompileProgram(GLuint vertex_shader_id, GLuint fragment_shader_id)
 
             glDeleteProgram(program_id);
 
-            a2d::Engine::GetLogger()->error("Error linking shader:\n{}", std::string(&*info_log.begin()));
+            Logger::Error("Error linking shader:\n{}", std::string(&*info_log.begin()));
         }
 
         return 0;

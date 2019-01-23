@@ -73,7 +73,7 @@ set(A2D_HEADERS
         src/a2d/core/resources.hpp
         src/a2d/graphics/animation.h
         src/a2d/core/command.hpp
-        src/a2d/core/commands/lambda_command.h)
+        src/a2d/core/commands/lambda_command.h src/a2d/core/log.hpp)
 
 # A2D library target
 add_library(a2d_engine_library STATIC ${A2D_SOURCES} ${A2D_HEADERS})

@@ -3,10 +3,11 @@
 //
 #include <a2d/input/input.hpp>
 #include <a2d/core/engine.hpp>
+#include <a2d/graphics/renderer.hpp>
 
 namespace a2d {
 
-Input::Touch::Touch() : index(0), position(), state(Touch::TouchState::RELEASED) {}
+Input::Touch::Touch() : index(0), position(), state(Touch::TouchState::TOUCH_STATE_RELEASED) {}
 
 Input::Touch::Touch(int index, Vector2f position, Input::Touch::TouchState state) :
                     index(index), position(position), state(state) {}
@@ -62,14 +63,14 @@ Input::Touch Input::GetTouch(int touch_index) {
     ASSERT_MAIN_THREAD
     auto touch_internal_state = GetTouchInternalState(touch_index);
 
-    Touch::TouchState state = Touch::TouchState::RELEASED;
+    Touch::TouchState state = Touch::TouchState::TOUCH_STATE_RELEASED;
 
-    if (touch_internal_state.state == Touch::TouchState::PRESSED) {
+    if (touch_internal_state.state == Touch::TouchState::TOUCH_STATE_PRESSED) {
         state = (touch_internal_state.last_pressed == Engine::GetFrameIndex()) ?
-                Touch::TouchState::JUST_PRESSED : Touch::TouchState::PRESSED;
-    } else if (touch_internal_state.state == Touch::TouchState::RELEASED) {
+                Touch::TouchState::TOUCH_STATE_JUST_PRESSED : Touch::TouchState::TOUCH_STATE_PRESSED;
+    } else if (touch_internal_state.state == Touch::TouchState::TOUCH_STATE_RELEASED) {
         state = (touch_internal_state.last_released == Engine::GetFrameIndex()) ?
-                Touch::TouchState::JUST_RELEASED : Touch::TouchState::RELEASED;
+                Touch::TouchState::TOUCH_STATE_JUST_RELEASED : Touch::TouchState::TOUCH_STATE_RELEASED;
     }
 
     Vector2f pos = touch_internal_state.position;
@@ -103,19 +104,19 @@ void Input::KeyCallback(GLFWwindow *window, int key, int scancode, int action, i
     switch (action) {
         case GLFW_PRESS:
             key_internal_state.last_pressed = Engine::GetFrameIndex();
-            key_internal_state.state = KeyState::PRESSED;
+            key_internal_state.state = KeyState::KEY_STATE_PRESSED;
             break;
 
         case GLFW_RELEASE:
             key_internal_state.last_released = Engine::GetFrameIndex();
-            key_internal_state.state = KeyState::RELEASED;
+            key_internal_state.state = KeyState::KEY_STATE_RELEASED;
             break;
 
         case GLFW_REPEAT:
             // if we lost a PRESS event
-            if (key_internal_state.state == KeyState::RELEASED) {
+            if (key_internal_state.state == KeyState::KEY_STATE_RELEASED) {
                 key_internal_state.last_pressed = Engine::GetFrameIndex();
-                key_internal_state.state = KeyState::PRESSED;
+                key_internal_state.state = KeyState::KEY_STATE_PRESSED;
             }
             break;
 
@@ -134,12 +135,12 @@ void Input::MouseButtonCallback(GLFWwindow *window, int button, int action, int 
     switch (action) {
         case GLFW_PRESS:
             button_internal_state.last_pressed = Engine::GetFrameIndex();
-            button_internal_state.state = KeyState::PRESSED;
+            button_internal_state.state = KeyState::KEY_STATE_PRESSED;
             break;
 
         case GLFW_RELEASE:
             button_internal_state.last_released = Engine::GetFrameIndex();
-            button_internal_state.state = KeyState::RELEASED;
+            button_internal_state.state = KeyState::KEY_STATE_RELEASED;
             break;
 
         default:

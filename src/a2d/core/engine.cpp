@@ -4,20 +4,11 @@
 
 #include <a2d/core/engine.hpp>
 #include <a2d/core/object2d.hpp>
-#include <a2d/core/macro.hpp>
-
-#ifdef TARGET_ANDROID
-#include <spdlog/sinks/android_sink.h>
-#else
-#include <spdlog/sinks/stdout_sinks.h>
-#endif
-
 
 unsigned long long a2d::Engine::frame_index = 0;
 float a2d::Engine::delta_time = 0.0f;
 a2d::pObject2D a2d::Engine::root = nullptr;
 a2d::pCamera a2d::Engine::camera = nullptr;
-std::shared_ptr<spdlog::logger> a2d::Engine::logger = nullptr;
 std::thread::id a2d::Engine::main_thread_id;
 bool a2d::Engine::playing = false;
 std::queue<a2d::pCommand> a2d::Engine::commands;
@@ -49,11 +40,6 @@ a2d::pCamera a2d::Engine::GetCamera() {
     return camera;
 }
 
-std::shared_ptr<spdlog::logger> a2d::Engine::GetLogger() {
-    ASSERT_MAIN_THREAD
-    return logger;
-}
-
 std::thread::id &a2d::Engine::GetMainThreadID() {
     return main_thread_id;
 }
@@ -65,15 +51,6 @@ bool a2d::Engine::IsPlaying() {
 
 
 bool a2d::Engine::Initialize() {
-#ifdef TARGET_ANDROID
-    logger = spdlog::android_logger_mt("logger", "a2d_log");
-#else
-    logger = spdlog::stdout_logger_mt("logger");
-#endif
-
-    logger->set_level(spdlog::level::info);
-    logger->set_pattern("%+");
-
     main_thread_id = std::this_thread::get_id();
     root = new Object2D;
 

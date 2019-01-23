@@ -12,6 +12,7 @@
 #include <a2d/core/engine.hpp>
 #include <a2d/core/component.hpp>
 #include <a2d/graphics/drawable.hpp>
+#include <a2d/core/log.hpp>
 
 #include <set>
 #include <unordered_map>
@@ -121,13 +122,18 @@ Object2D::GetComponent(bool look_for_base) const {
                 }
             }
         }
-        DEBUG_ERROR("Could not find component")
+        LOG_TRACE("Can't find component");
         return nullptr;
     } else {
-        if (components.empty()) return nullptr;
+        if (components.empty()) {
+            LOG_TRACE("Can't find component");
+            return nullptr;
+        }
         auto iter = components.find(typeid(T));
-        if (iter == components.end() || iter->second.empty()) return nullptr;
-        ASSERT(*iter->second.begin() != nullptr)
+        if (iter == components.end() || iter->second.empty()) {
+            LOG_TRACE("Can't find component");
+            return nullptr;
+        }
         return *iter->second.begin();
     }
 }

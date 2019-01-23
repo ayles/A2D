@@ -10,11 +10,12 @@
 #include <a2d/core/commands/lambda_command.h>
 #include <a2d/core/component.hpp>
 
-#include <spdlog/spdlog.h>
-
 #include <thread>
 #include <queue>
 #include <set>
+#include <cassert>
+
+#define ASSERT_MAIN_THREAD assert(std::this_thread::get_id() == a2d::Engine::GetMainThreadID());
 
 namespace a2d {
 
@@ -33,7 +34,6 @@ class Engine {
     static float delta_time;
     static intrusive_ptr<Object2D> root;
     static intrusive_ptr<Camera> camera;
-    static std::shared_ptr<spdlog::logger> logger;
     static std::thread::id main_thread_id;
     static bool playing;
     static std::queue<pCommand> commands;
@@ -50,13 +50,12 @@ public:
     static float GetDeltaTime();
     static intrusive_ptr<Object2D> GetRoot();
     static intrusive_ptr<Camera> GetCamera();
-    static std::shared_ptr<spdlog::logger> GetLogger();
     static std::thread::id &GetMainThreadID();
     static bool IsPlaying();
 
+private:
     static void AddCommand(const pCommand &command);
     static void AddCommand(const std::function<void()> &lambda);
-private:
     static void ExecuteCommands();
 
     static bool Initialize();

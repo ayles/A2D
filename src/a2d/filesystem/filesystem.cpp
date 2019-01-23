@@ -4,6 +4,7 @@
 
 #include <a2d/filesystem/filesystem.hpp>
 #include <a2d/core/engine.hpp>
+#include <a2d/core/log.hpp>
 
 #ifdef TARGET_ANDROID
 #include <android/asset_manager.h>
@@ -12,8 +13,6 @@
 #include <CoreFoundation/CoreFoundation.h>
 #endif
 
-#include <string>
-#include <locale>
 #include <fstream>
 #include <codecvt>
 
@@ -61,7 +60,7 @@ std::vector<unsigned char> FileSystem::LoadRaw(const std::string &path) {
 #elif TARGET_DESKTOP
     std::ifstream file("resources/" + path, std::ios::binary);
     if ((file.rdstate() & std::ifstream::failbit) != 0) {
-        DEBUG_ERROR("Failed to load file")
+        LOG_TRACE("Failed to load file");
         std::vector<unsigned char> a;
         return a;
     }

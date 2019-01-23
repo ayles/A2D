@@ -5,6 +5,7 @@
 #include <a2d/graphics/renderer.hpp>
 #include <a2d/core/engine.hpp>
 #include <a2d/core/object2d.hpp>
+#include <a2d/core/log.hpp>
 
 namespace a2d {
 
@@ -41,11 +42,11 @@ bool Renderer::Initialize() {
     Engine::GetLogger()->info("{} {}", "OpenGL ES version:", glGetString(GL_VERSION));
 #elif TARGET_DESKTOP
     glfwSetErrorCallback([](int id, const char *description) {
-        Engine::GetLogger()->error(description);
+        Logger::Error(description);
     });
 
     if (!glfwInit()) {
-        Engine::GetLogger()->error("Couldn't init glfw");
+        Logger::Error("Couldn't init glfw");
         return initialized;
     }
 
@@ -60,7 +61,7 @@ bool Renderer::Initialize() {
 
     window = glfwCreateWindow(width, height, "a2d", nullptr, nullptr);
     if (!window) {
-        Engine::GetLogger()->error("Couldn't create window");
+        Logger::Error("Couldn't create window");
         glfwTerminate();
         return initialized;
     }
@@ -72,11 +73,11 @@ bool Renderer::Initialize() {
     GLenum glew_init_status = glewInit();
 
     if (glew_init_status != GLEW_OK) {
-        Engine::GetLogger()->error(glewGetErrorString(glew_init_status));
+        Logger::Error((char *)glewGetErrorString(glew_init_status));
         return initialized;
     }
 
-    Engine::GetLogger()->info("{} {}", "OpenGL version:", glGetString(GL_VERSION));
+    Logger::Info("{} {}", "OpenGL version:", glGetString(GL_VERSION));
 
     auto update_camera = [](GLFWwindow *window, int width, int height) {
         ResolutionChanged(width, height);

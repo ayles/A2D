@@ -4,32 +4,38 @@
 
 #include <a2d/graphics/bitmap_font.hpp>
 #include <a2d/graphics/gl.hpp>
-#include "bitmap_font.hpp"
+#include <a2d/core/log.hpp>
 
 
 namespace a2d {
 
 BitmapFont::Character::Character() :
 texture_region(nullptr), x(0), y(0), advance_x(0), advance_y(0) {
-
+    ASSERT_MAIN_THREAD
 }
 
 BitmapFont::Character::Character(const a2d::pTextureRegion &texture_region, int x, int y, int advance_x, int advance_y) :
 texture_region(texture_region), x(x), y(y), advance_x(advance_x), advance_y(advance_y) {
-
+    ASSERT_MAIN_THREAD
 }
 
 const BitmapFont::Character *BitmapFont::GetCharacter(unsigned long char_code) const {
+    ASSERT_MAIN_THREAD
     auto i = characters.find(char_code);
-    if (i == characters.end()) return nullptr;
+    if (i == characters.end()) {
+        LOG_TRACE("Can't find character");
+        return nullptr;
+    }
     return &i->second;
 }
 
 int BitmapFont::GetLineHeight() const {
+    ASSERT_MAIN_THREAD
     return line_height;
 }
 
 BitmapFont::BitmapFont(const std::vector<unsigned char> &ttf, int size) {
+    ASSERT_MAIN_THREAD
     FT_Face face;
     FT_New_Memory_Face(GetFreeTypeLibrary(), &ttf[0], ttf.size(), 0, &face);
     FT_Set_Pixel_Sizes(face, 0, (FT_UInt)size);
@@ -117,10 +123,12 @@ BitmapFont::BitmapFont(const std::vector<unsigned char> &ttf, int size) {
 }
 
 BitmapFont::~BitmapFont() {
+    ASSERT_MAIN_THREAD
     FT_Done_FreeType(GetFreeTypeLibrary());
 }
 
 FT_Library BitmapFont::GetFreeTypeLibrary() {
+    ASSERT_MAIN_THREAD
     static FT_Library ft_library;
     if (!ft_library) {
         FT_Init_FreeType(&ft_library);
@@ -129,6 +137,7 @@ FT_Library BitmapFont::GetFreeTypeLibrary() {
 }
 
 pBitmapFont BitmapFont::Create(const std::vector<unsigned char> &ttf, int size) {
+    ASSERT_MAIN_THREAD
     return new BitmapFont(ttf, size);
 }
 

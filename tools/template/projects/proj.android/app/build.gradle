@@ -33,7 +33,7 @@ android {
 
 task copyAssets(type: Copy) {
     description = 'Copy resources to assets folder'
-    from '../../project_core/resources'
+    from '../../../project_core/resources'
     into 'src/main/assets'
 }
 
