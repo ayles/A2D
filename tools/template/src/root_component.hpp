@@ -14,7 +14,6 @@ namespace a2d {
 
 class RootComponent : public Component {
 public:
-
     pObject2D text;
 
     void Initialize() override {

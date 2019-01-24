@@ -9,16 +9,16 @@ public class GLESRenderer implements Renderer {
 
     @Override
     public void onDrawFrame(GL10 arg0) {
-        GL2JNI.on_draw_frame();
+        A2DBridge.onDrawFrame();
     }
 
     @Override
     public void onSurfaceChanged(GL10 arg0, int width, int height) {
-        GL2JNI.on_surface_changed(width, height);
+        A2DBridge.onSurfaceChanged(width, height);
     }
 
     @Override
     public void onSurfaceCreated(GL10 arg0, EGLConfig arg1) {
-        GL2JNI.on_surface_created();
+        A2DBridge.onSurfaceCreated();
     }
 }

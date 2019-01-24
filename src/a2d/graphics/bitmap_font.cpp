@@ -72,7 +72,7 @@ BitmapFont::BitmapFont(const std::vector<unsigned char> &ttf, int size) {
     texture_width = (int)std::pow(2, std::ceil(std::log2(texture_width)));
     texture_height = (int)std::pow(2, std::ceil(std::log2(texture_height)));
 
-    pTexture texture = new Texture(texture_width, texture_height);
+    pTexture texture = Texture::Create(texture_width, texture_height);
     texture->buffer.Allocate(true);
 
 
@@ -95,7 +95,7 @@ BitmapFont::BitmapFont(const std::vector<unsigned char> &ttf, int size) {
         }
 
         characters[char_code] = Character(
-                new TextureRegion(
+                TextureRegion::Create(
                         texture,
                         current_x, current_y,
                         g->bitmap.width, g->bitmap.rows,

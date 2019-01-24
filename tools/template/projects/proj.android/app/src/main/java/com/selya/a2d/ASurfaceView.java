@@ -11,7 +11,7 @@ public class ASurfaceView extends GLSurfaceView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        GL2JNI.on_touch_event(event);
+        A2DBridge.onTouchEvent(event);
         return true;
     }
 }

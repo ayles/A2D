@@ -40,12 +40,6 @@ class TextureRegion : public ref_counter {
 
 public:
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(TextureRegion)
-    TextureRegion();
-    TextureRegion(pTexture texture,
-                  Texture::Filtering = Texture::Filtering::NEAREST, Texture::Wrapping = Texture::Wrapping::REPEAT);
-    TextureRegion(pTexture texture, int x, int y, int width, int height,
-                  Texture::Filtering = Texture::Filtering::NEAREST, Texture::Wrapping = Texture::Wrapping::REPEAT);
-    ~TextureRegion() override;
 
     void SetTexture(const pTexture &texture);
     void SetX(int x);
@@ -70,7 +64,22 @@ public:
 
     void Bind(unsigned int texture_unit = 0);
 
+    static pTextureRegion Create();
+    static pTextureRegion Create(
+            pTexture texture,
+            Texture::Filtering = Texture::Filtering::NEAREST, Texture::Wrapping = Texture::Wrapping::REPEAT);
+    static pTextureRegion Create(
+            pTexture texture, int x, int y, int width, int height,
+            Texture::Filtering = Texture::Filtering::NEAREST, Texture::Wrapping = Texture::Wrapping::REPEAT);
+
 private:
+    TextureRegion();
+    TextureRegion(pTexture texture,
+                  Texture::Filtering = Texture::Filtering::NEAREST, Texture::Wrapping = Texture::Wrapping::REPEAT);
+    TextureRegion(pTexture texture, int x, int y, int width, int height,
+                  Texture::Filtering = Texture::Filtering::NEAREST, Texture::Wrapping = Texture::Wrapping::REPEAT);
+    ~TextureRegion() override;
+
     void RecalculateUV();
 };
 

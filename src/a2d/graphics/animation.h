@@ -39,16 +39,21 @@ private:
 
 public:
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Animation)
-    Animation(const std::vector<Frame> &frames);
-    Animation(std::vector<Frame> &&frames);
 
-    const Frame *GetFrame(float animation_time);
-    const Frame *GetFrameByIndex(int frame_index);
+    const Frame *GetFrameByTime(float animation_time);
+    const Frame *GetFrame(int frame_index);
 
     PlayMode GetPlayMode() const;
     float GetDuration() const;
 
     void SetPlayMode(PlayMode play_mode);
+
+    static pAnimation Create(const std::vector<Frame> &frames);
+    static pAnimation Create(std::vector<Frame> &&frames);
+
+private:
+    Animation(const std::vector<Frame> &frames);
+    Animation(std::vector<Frame> &&frames);
 };
 
 } //namespace a2d

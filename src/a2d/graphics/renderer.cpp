@@ -7,6 +7,10 @@
 #include <a2d/core/object2d.hpp>
 #include <a2d/core/log.hpp>
 
+#ifdef TARGET_ANDROID
+void Android_setOrientation(int orientation);
+#endif
+
 namespace a2d {
 
 Vector4f Renderer::clear_color = Vector4f(0.0f, 0.0f, 0.0f, 1.0f);
@@ -19,27 +23,32 @@ GLFWwindow *Renderer::window = nullptr;
 #endif
 
 int Renderer::GetWidth() {
+    ASSERT_MAIN_THREAD
     return width;
 }
 
 int Renderer::GetHeight() {
+    ASSERT_MAIN_THREAD
     return height;
 }
 
 pSpriteBatch Renderer::GetSpriteBatch() {
+    ASSERT_MAIN_THREAD
     return sprite_batch;
 }
 
 void Renderer::SetSpriteBatch(const pSpriteBatch &sprite_batch) {
+    ASSERT_MAIN_THREAD
     Renderer::sprite_batch = sprite_batch;
 }
 
 bool Renderer::Initialize() {
+
     static bool initialized = false;
     if (initialized) return initialized;
 
 #ifdef TARGET_MOBILE
-    Engine::GetLogger()->info("{} {}", "OpenGL ES version:", glGetString(GL_VERSION));
+    Logger::Info("{} {}", "OpenGL ES version:", glGetString(GL_VERSION));
 #elif TARGET_DESKTOP
     glfwSetErrorCallback([](int id, const char *description) {
         Logger::Error(description);
@@ -101,7 +110,10 @@ bool Renderer::Initialize() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_DEPTH_TEST);
+
+#ifdef RENDERER_GL
     glEnable(GL_MULTISAMPLE);
+#endif
 
     SetSpriteBatch(new SpriteBatch);
 
@@ -112,14 +124,6 @@ bool Renderer::Initialize() {
 
 bool Renderer::Draw() {
     if (!Engine::camera) return true;
-
-    float half_height = Engine::camera->GetHeight() * 0.5f;
-    float ratio = Engine::camera->GetAspectRatio();
-    Engine::camera->SetOrtho2D(
-            -half_height * ratio, half_height * ratio,
-            -half_height, half_height
-    );
-
 
 #if TARGET_DESKTOP
     if (glfwWindowShouldClose(window))
@@ -169,5 +173,29 @@ void Renderer::ResolutionChanged(int width, int height, int framebuffer_width, i
 #endif
     glViewport(0, 0, framebuffer_width, framebuffer_height);
 }
+
+    void Renderer::SetScreenOrientation(Renderer::ScreenOrientation orientation) {
+#ifdef TARGET_ANDROID
+        int orientation_native = 0;
+        switch (orientation) {
+            case ScreenOrientation::ORIENTATION_LANDSCAPE:
+                orientation_native = 0;
+                break;
+
+            case ScreenOrientation::ORIENTATION_PORTRAIT:
+                orientation_native = 1;
+                break;
+
+            case ScreenOrientation::ORIENTATION_REVERSE_LANDSCAPE:
+                orientation_native = 8;
+                break;
+
+            case ScreenOrientation::ORIENTATION_REVERSE_PORTRAIT:
+                orientation_native = 9;
+                break;
+        }
+        Android_setOrientation(orientation_native);
+#endif
+    }
 
 } //namespace a2d

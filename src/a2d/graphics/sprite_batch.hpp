@@ -10,9 +10,11 @@
 #include <a2d/graphics/texture_region.hpp>
 #include <a2d/graphics/shader.hpp>
 #include <a2d/math/math.hpp>
-#include <a2d/core/components/camera.hpp>
-
+#include <a2d/components/camera.hpp>
 #include <a2d/graphics/gl.hpp>
+
+#include <vector>
+
 
 namespace a2d {
 
@@ -26,10 +28,10 @@ class SpriteBatch : public ref_counter {
     Texture::Wrapping wrapping;
     pTexture current_texture;
     pShader current_shader;
-    int buffer_size;
-    int buffer_capacity;
-    float *buffer;
+    std::vector<float> buffer;
     Vector4f v;
+
+    static const int max_sprites;
 
 public:
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(SpriteBatch)

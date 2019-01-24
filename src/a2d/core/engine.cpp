@@ -4,6 +4,8 @@
 
 #include <a2d/core/engine.hpp>
 #include <a2d/core/object2d.hpp>
+#include <a2d/components/camera.hpp>
+#include <a2d/core/log.hpp>
 
 unsigned long long a2d::Engine::frame_index = 0;
 float a2d::Engine::delta_time = 0.0f;
@@ -17,16 +19,15 @@ std::set<a2d::pComponent> a2d::Engine::components;
 
 void a2d::Engine::SetCamera(const a2d::pCamera &camera) {
     ASSERT_MAIN_THREAD
+    if (!camera) { LOG_TRACE("Camera is null"); }
     Engine::camera = camera;
 }
 
 unsigned long long a2d::Engine::GetFrameIndex() {
-    ASSERT_MAIN_THREAD
     return frame_index;
 }
 
 float a2d::Engine::GetDeltaTime() {
-    ASSERT_MAIN_THREAD
     return delta_time;
 }
 
@@ -45,7 +46,6 @@ std::thread::id &a2d::Engine::GetMainThreadID() {
 }
 
 bool a2d::Engine::IsPlaying() {
-    ASSERT_MAIN_THREAD
     return playing;
 }
 
@@ -104,17 +104,14 @@ void a2d::Engine::Uninitialize() {
 }
 
 void a2d::Engine::AddCommand(const a2d::pCommand &command) {
-    ASSERT_MAIN_THREAD
     commands.emplace(command);
 }
 
 void a2d::Engine::AddCommand(const std::function<void()> &lambda) {
-    ASSERT_MAIN_THREAD
     commands.emplace(new LambdaCommand(lambda));
 }
 
 void a2d::Engine::ExecuteCommands() {
-    ASSERT_MAIN_THREAD
     while (!commands.empty()) {
         commands.front()->Execute();
         commands.pop();

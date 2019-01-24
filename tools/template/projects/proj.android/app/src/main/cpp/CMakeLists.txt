@@ -9,9 +9,9 @@ add_library(a2d_android_library SHARED jni_bindings.cpp)
 
 # add lib dependencies
 target_link_libraries(a2d_android_library
-    android
-    EGL
-    GLESv2
-    log
-    a2d_core_library
-)
+        android
+        EGL
+        GLESv2
+        log
+        a2d_core_library
+        )

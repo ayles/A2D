@@ -12,16 +12,16 @@ set(A2D_SOURCES
         src/a2d/core/engine.cpp
         src/a2d/core/object2d.cpp
         src/a2d/core/component.cpp
-        src/a2d/core/components/sprite.cpp
-        src/a2d/core/components/camera.cpp
-        src/a2d/core/components/pixel_camera.cpp
+        src/a2d/components/sprite.cpp
+        src/a2d/components/camera.cpp
+        src/a2d/components/pixel_camera.cpp
         src/a2d/graphics/bitmap_font.cpp
         src/a2d/graphics/drawable.cpp
         src/a2d/audio/audio_clip.cpp
         src/a2d/audio/audio.cpp
-        src/a2d/core/components/audio_source.cpp
-        src/a2d/core/components/text.cpp
-        src/a2d/core/components/animator.cpp
+        src/a2d/components/audio_source.cpp
+        src/a2d/components/text.cpp
+        src/a2d/components/animator.cpp
         src/a2d/filesystem/filesystem.cpp
         src/a2d/graphics/shader.cpp
         src/a2d/graphics/renderer.cpp
@@ -46,22 +46,21 @@ set(A2D_HEADERS
         src/a2d/core/ref_counter.hpp
         src/a2d/core/intrusive_ptr.hpp
         src/a2d/core/macro.hpp
-        src/a2d/core/components/sprite.hpp
-        src/a2d/core/components/camera.hpp
-        src/a2d/core/components/animator.hpp
-        src/a2d/core/components/events_test.hpp
-        src/a2d/core/components/pixel_camera.hpp
+        src/a2d/components/sprite.hpp
+        src/a2d/components/camera.hpp
+        src/a2d/components/animator.hpp
+        src/a2d/components/pixel_camera.hpp
         src/a2d/audio/audio.hpp
         src/a2d/graphics/drawable.hpp
-        src/a2d/core/components/text.hpp
+        src/a2d/components/text.hpp
         src/a2d/graphics/bitmap_font.hpp
-        src/a2d/core/components/audio_source.hpp
+        src/a2d/components/audio_source.hpp
         src/a2d/audio/audio_clip.hpp
         src/a2d/physics/physics.hpp
-        src/a2d/core/components/physics/physics_body.hpp
-        src/a2d/core/components/line.hpp
-        src/a2d/core/components/physics/physics_collider.hpp
-        src/a2d/core/components/physics/circle_collider.hpp
+        src/a2d/components/physics/physics_body.hpp
+        src/a2d/components/line.hpp
+        src/a2d/components/physics/physics_collider.hpp
+        src/a2d/components/physics/circle_collider.hpp
         src/a2d/filesystem/filesystem.hpp
         src/a2d/graphics/gl.hpp
         src/a2d/graphics/sprite_batch.hpp
@@ -76,7 +75,7 @@ set(A2D_HEADERS
         src/a2d/core/commands/lambda_command.h src/a2d/core/log.hpp)
 
 # A2D library target
-add_library(a2d_engine_library STATIC ${A2D_SOURCES} ${A2D_HEADERS})
+add_library(a2d_engine_library STATIC ${A2D_SOURCES})
 target_include_directories(a2d_engine_library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Prepare variables
@@ -118,6 +117,14 @@ elseif (WIN32 OR APPLE OR UNIX)
     target_compile_definitions(a2d_engine_library PUBLIC TARGET_DESKTOP)
 endif ()
 
+if (WIN32)
+    set(TOOLS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/tools/win32")
+elseif (APPLE)
+    set(TOOLS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/tools/macos")
+elseif (UNIX)
+    set(TOOLS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/tools/linux")
+endif ()
+
 set(SOLOUD_STATIC TRUE)
 
 # Platform-independent dependencies
@@ -140,13 +147,7 @@ if (TARGET_DESKTOP)
     target_link_libraries(a2d_engine_library ${OPENGL_gl_LIBRARY} glew glfw)
 endif ()
 
-# Non-portable glslcc-executable path finding
-# TODO fix
-if (UNIX)
-    set(GLSLCC_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/glslcc/glslcc")
-elseif (WIN32)
-    set(GLSLCC_EXECUTABLE "${CMAKE_CURRENT_BINARY_DIR}/glslcc/glslcc.exe")
-endif ()
+set(GLSLCC_EXECUTABLE "${TOOLS_PATH}/glslcc${CMAKE_EXECUTABLE_SUFFIX}")
 
 add_custom_target(build_shaders ALL
         COMMAND ${CMAKE_COMMAND}
@@ -154,7 +155,7 @@ add_custom_target(build_shaders ALL
         -DSHADERS_GENERATED_FILE=${SHADERS_GENERATED_FILE}
         -DSHADERS_ROOT_DIR=${CMAKE_CURRENT_SOURCE_DIR}/src/a2d/graphics/shaders
         -DSHADERS_GENERATION_PATH=${CMAKE_CURRENT_BINARY_DIR}/shaders
-        -DGLSLCC_EXECUTABLE=${GLSLCC_EXECUTABLE}#$<TARGET_FILE:glslcc>
+        -DGLSLCC_EXECUTABLE=${GLSLCC_EXECUTABLE}
         -DSHADERS_TARGET_LANG=${SHADERS_TARGET_LANG}
         -DSHADERS_TARGET_PROFILE=${SHADERS_TARGET_PROFILE}
         -P "${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/build_shaders.cmake")
@@ -162,14 +163,4 @@ add_custom_target(build_shaders ALL
 # Ensure that this file is created
 file(WRITE ${SHADERS_GENERATED_FILE} "")
 
-# Generate glslcc makefile
-file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/glslcc")
-execute_process(
-        COMMAND ${CMAKE_COMMAND} "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/glslcc" -G ${CMAKE_GENERATOR}
-        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/glslcc")
-# Compile it after
-add_custom_target(build_glslcc ALL
-        COMMAND ${CMAKE_COMMAND} --build "${CMAKE_CURRENT_BINARY_DIR}/glslcc")
-
-add_dependencies(build_shaders build_glslcc)
 add_dependencies(a2d_engine_library build_shaders)

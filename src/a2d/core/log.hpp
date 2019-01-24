@@ -40,6 +40,11 @@ private:
 #endif
         logger->set_level(spdlog::level::info);
         logger->set_pattern("%+");
+#ifdef NDEBUG
+        logger->set_level(spdlog::level::level_enum::info);
+#else
+        logger->set_level(spdlog::level::level_enum::trace);
+#endif
         spdlog::set_default_logger(logger);
         return logger;
     }

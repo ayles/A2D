@@ -7,6 +7,7 @@
 
 #include <a2d/core/macro.hpp>
 #include <a2d/core/engine.hpp>
+#include <a2d/core/log.hpp>
 
 #include <string>
 #include <map>
@@ -26,6 +27,7 @@ public:
             return iter->second;
         }
         if (try_load) return LoadAndCache<T>(name);
+        LOG_TRACE("Can't find resource");
         return nullptr;
     }
 
@@ -33,14 +35,15 @@ public:
     static intrusive_ptr<T> LoadAndCache(const std::string &name) {
         ASSERT_MAIN_THREAD
         auto resource = Load<T>(name);
-        Put(name, resource);
+        if (resource) Put(name, resource);
+        else { LOG_TRACE("Can't load resource"); }
         return resource;
     }
 
     template<class T>
     static intrusive_ptr<T> Put(const std::string &name, const intrusive_ptr<T> &resource) {
         ASSERT_MAIN_THREAD
-        if (resource) GetStorage<T>()[name] = resource;
+        GetStorage<T>()[name] = resource;
         return resource;
     }
 

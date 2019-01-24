@@ -4,8 +4,9 @@
 
 #include <a2d/graphics/texture.hpp>
 #include <a2d/filesystem/filesystem.hpp>
-
 #include <a2d/graphics/gl.hpp>
+#include <a2d/core/engine.hpp>
+#include "texture.hpp"
 
 
 namespace a2d {
@@ -14,27 +15,37 @@ std::map<std::string, pTexture> Texture::textures;
 
 Texture::Texture(
         int width, int height, const unsigned char *data, bool mipmaps
-) : Texture(TextureBuffer(width, height, data), mipmaps) {}
+) : Texture(TextureBuffer(width, height, data), mipmaps) {
+    ASSERT_MAIN_THREAD
+}
 
 Texture::Texture(const TextureBuffer &buffer, bool mipmaps) :
-mipmaps(mipmaps), buffer(buffer), texture_id(0), filtering(NEAREST), wrapping(REPEAT) {}
+mipmaps(mipmaps), buffer(buffer), texture_id(0), filtering(NEAREST), wrapping(REPEAT) {
+    ASSERT_MAIN_THREAD
+}
 
 Texture::Texture(TextureBuffer &&buffer, bool mipmaps) :
-mipmaps(mipmaps), buffer(std::move(buffer)), texture_id(0), filtering(NEAREST), wrapping(REPEAT) {}
+mipmaps(mipmaps), buffer(std::move(buffer)), texture_id(0), filtering(NEAREST), wrapping(REPEAT) {
+    ASSERT_MAIN_THREAD
+}
 
 Texture::~Texture() {
+    ASSERT_MAIN_THREAD
     glDeleteTextures(1, &texture_id);
 }
 
 int Texture::GetWidth() const {
+    ASSERT_MAIN_THREAD
     return buffer.GetWidth();
 }
 
 int Texture::GetHeight() const {
+    ASSERT_MAIN_THREAD
     return buffer.GetHeight();
 }
 
 void Texture::Load() {
+    ASSERT_MAIN_THREAD
     if (texture_id) return;
 
     if ((GetWidth() & (GetWidth() - 1)) || (GetHeight() & (GetHeight() - 1))) mipmaps = false;
@@ -52,6 +63,7 @@ void Texture::Load() {
 }
 
 void Texture::Unload() {
+    ASSERT_MAIN_THREAD
     if (!texture_id) return;
 
     glDeleteTextures(1, &texture_id);
@@ -59,6 +71,7 @@ void Texture::Unload() {
 }
 
 void Texture::Bind(unsigned int texture_unit, Filtering filtering, Wrapping wrapping) {
+    ASSERT_MAIN_THREAD
     Load();
 
     glActiveTexture(GL_TEXTURE0 + texture_unit);
@@ -106,8 +119,21 @@ void Texture::Bind(unsigned int texture_unit, Filtering filtering, Wrapping wrap
 }
 
 void Texture::Unbind(unsigned int texture_unit) {
+    ASSERT_MAIN_THREAD
     glActiveTexture(GL_TEXTURE0 + texture_unit);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+pTexture Texture::Create(int width, int height, const unsigned char *data, bool mipmaps) {
+    return new Texture(width, height, data, mipmaps);
+}
+
+pTexture Texture::Create(const TextureBuffer &buffer, bool mipmaps) {
+    return new Texture(buffer, mipmaps);
+}
+
+pTexture Texture::Create(TextureBuffer &&buffer, bool mipmaps) {
+    return new Texture(std::move(buffer), mipmaps);
 }
 
 

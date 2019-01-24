@@ -40,10 +40,6 @@ public:
     TextureBuffer buffer;
 
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Texture)
-    Texture(int width, int height, const unsigned char *data = nullptr, bool mipmaps = false);
-    Texture(const TextureBuffer &buffer, bool mipmaps = false);
-    Texture(TextureBuffer &&buffer, bool mipmaps = false);
-    ~Texture() override;
 
     int GetWidth() const;
     int GetHeight() const;
@@ -52,11 +48,20 @@ public:
     void Unload();
     void Bind(unsigned int texture_unit = 0, Filtering filtering = NEAREST, Wrapping wrapping = REPEAT);
 
+    static pTexture Create(int width, int height, const unsigned char *data = nullptr, bool mipmaps = false);
+    static pTexture Create(const TextureBuffer &buffer, bool mipmaps = false);
+    static pTexture Create(TextureBuffer &&buffer, bool mipmaps = false);
+
     static void Unbind(unsigned int texture_unit = 0);
 private:
     unsigned int texture_id;
     Filtering filtering;
     Wrapping wrapping;
+
+    Texture(int width, int height, const unsigned char *data = nullptr, bool mipmaps = false);
+    Texture(const TextureBuffer &buffer, bool mipmaps = false);
+    Texture(TextureBuffer &&buffer, bool mipmaps = false);
+    ~Texture() override;
 
     static std::map<std::string, pTexture> textures;
 };

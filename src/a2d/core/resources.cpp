@@ -14,7 +14,7 @@ namespace a2d {
 template<>
 intrusive_ptr<Shader> Resources::Load(const std::string &name) {
     ASSERT_MAIN_THREAD
-    return new Shader(
+    return Shader::Create(
             FileSystem::LoadText("shaders/" + name + "/vertex.glsl"),
             FileSystem::LoadText("shaders/" + name + "/fragment.glsl")
     );
@@ -28,7 +28,7 @@ intrusive_ptr<Texture> Resources::Load(const std::string &name) {
     std::vector<unsigned char> image;
     lodepng::decode(image, width, height, raw_data);
 
-    auto texture = new Texture(width, height, image.data());
+    auto texture = Texture::Create(width, height, image.data());
     texture->buffer.FlipVertically();
 
     return texture;

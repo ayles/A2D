@@ -10,7 +10,7 @@
 namespace a2d {
 
 class Audio {
-    friend class NativeConnector;
+    friend class NativeBridge;
     friend class AudioSource;
 
 public:

@@ -7,50 +7,58 @@
 
 namespace a2d {
 
+const int SpriteBatch::max_sprites = 2048;
+
 SpriteBatch::SpriteBatch() : camera_matrix(), current_texture(nullptr),
-current_shader(nullptr), buffer_size(0), buffer_capacity(32768), buffer(new float[buffer_capacity]) {
+current_shader(nullptr) {
+    ASSERT_MAIN_THREAD
+    buffer.reserve(max_sprites * 32);
+
     glGenBuffers(1, &vbo);
     glGenBuffers(1, &indices);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices);
 
-    auto indices = new unsigned short[12288];
-    for (unsigned short i = 0; i < 2048; ++i) {
-        indices[i * 6 + 0] = static_cast<unsigned short>(i * 4 + 0);
-        indices[i * 6 + 1] = static_cast<unsigned short>(i * 4 + 1);
-        indices[i * 6 + 2] = static_cast<unsigned short>(i * 4 + 2);
-        indices[i * 6 + 3] = static_cast<unsigned short>(i * 4 + 0);
-        indices[i * 6 + 4] = static_cast<unsigned short>(i * 4 + 2);
-        indices[i * 6 + 5] = static_cast<unsigned short>(i * 4 + 3);
+    std::vector<unsigned int> indices;
+    indices.reserve(max_sprites * 6);
+    for (unsigned short i = 0; i < max_sprites; ++i) {
+        indices.push_back(i * 4 + 0u);
+        indices.push_back(i * 4 + 1u);
+        indices.push_back(i * 4 + 2u);
+        indices.push_back(i * 4 + 0u);
+        indices.push_back(i * 4 + 2u);
+        indices.push_back(i * 4 + 3u);
     }
 
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * 12288, indices, GL_STATIC_DRAW);
-    delete [] indices;
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_STATIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, buffer_capacity * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, max_sprites * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
 }
 
 SpriteBatch::~SpriteBatch() {
-    delete [] buffer;
+    ASSERT_MAIN_THREAD
     glDeleteBuffers(1, &vbo);
     glDeleteBuffers(1, &indices);
 }
 
 void SpriteBatch::SetCameraMatrix(const Matrix4f &camera_matrix) {
+    ASSERT_MAIN_THREAD
     this->camera_matrix = camera_matrix;
 }
 
 const Matrix4f &SpriteBatch::GetCameraMatrix() const {
+    ASSERT_MAIN_THREAD
     return camera_matrix;
 }
 
-void
-SpriteBatch::Draw(const pTextureRegion &texture_region, const pShader &shader, const Vector2f &p1, const Vector2f &p2,
-                  const Vector2f &p3, const Vector2f &p4, const Matrix4f &matrix, const Vector4f &color) {
+void SpriteBatch::Draw(const pTextureRegion &texture_region, const pShader &shader,
+        const Vector2f &p1, const Vector2f &p2, const Vector2f &p3, const Vector2f &p4,
+        const Matrix4f &matrix, const Vector4f &color) {
+    ASSERT_MAIN_THREAD
     static Vector2f uv_lb, uv_rt;
 
     if (!shader) return;
-    if (buffer_size >= buffer_capacity || (texture_region && (current_texture != texture_region->texture ||
+    if (buffer.size() >= max_sprites || (texture_region && (current_texture != texture_region->texture ||
         texture_region->filtering != filtering || texture_region->wrapping != wrapping)) || current_shader != shader) {
         Flush();
         if (texture_region) {
@@ -68,49 +76,53 @@ SpriteBatch::Draw(const pTextureRegion &texture_region, const pShader &shader, c
     }
 
     matrix.Transform(p1.x, p1.y, 0, 1, v);
-    buffer[buffer_size++] = v.x;
-    buffer[buffer_size++] = v.y;
-    buffer[buffer_size++] = uv_lb.x;
-    buffer[buffer_size++] = uv_lb.y;
-    buffer[buffer_size++] = color.x;
-    buffer[buffer_size++] = color.y;
-    buffer[buffer_size++] = color.z;
-    buffer[buffer_size++] = color.w;
+    buffer.push_back(v.x);
+    buffer.push_back(v.y);
+    buffer.push_back(uv_lb.x);
+    buffer.push_back(uv_lb.y);
+    buffer.push_back(color.x);
+    buffer.push_back(color.y);
+    buffer.push_back(color.z);
+    buffer.push_back(color.w);
 
     matrix.Transform(p2.x, p2.y, 0, 1, v);
-    buffer[buffer_size++] = v.x;
-    buffer[buffer_size++] = v.y;
-    buffer[buffer_size++] = uv_rt.x;
-    buffer[buffer_size++] = uv_lb.y;
-    buffer[buffer_size++] = color.x;
-    buffer[buffer_size++] = color.y;
-    buffer[buffer_size++] = color.z;
-    buffer[buffer_size++] = color.w;
+    buffer.push_back(v.x);
+    buffer.push_back(v.y);
+    buffer.push_back(uv_rt.x);
+    buffer.push_back(uv_lb.y);
+    buffer.push_back(color.x);
+    buffer.push_back(color.y);
+    buffer.push_back(color.z);
+    buffer.push_back(color.w);
 
     matrix.Transform(p3.x, p3.y, 0, 1, v);
-    buffer[buffer_size++] = v.x;
-    buffer[buffer_size++] = v.y;
-    buffer[buffer_size++] = uv_rt.x;
-    buffer[buffer_size++] = uv_rt.y;
-    buffer[buffer_size++] = color.x;
-    buffer[buffer_size++] = color.y;
-    buffer[buffer_size++] = color.z;
-    buffer[buffer_size++] = color.w;
+    buffer.push_back(v.x);
+    buffer.push_back(v.y);
+    buffer.push_back(uv_rt.x);
+    buffer.push_back(uv_rt.y);
+    buffer.push_back(color.x);
+    buffer.push_back(color.y);
+    buffer.push_back(color.z);
+    buffer.push_back(color.w);
 
     matrix.Transform(p4.x, p4.y, 0, 1, v);
-    buffer[buffer_size++] = v.x;
-    buffer[buffer_size++] = v.y;
-    buffer[buffer_size++] = uv_lb.x;
-    buffer[buffer_size++] = uv_rt.y;
-    buffer[buffer_size++] = color.x;
-    buffer[buffer_size++] = color.y;
-    buffer[buffer_size++] = color.z;
-    buffer[buffer_size++] = color.w;
+    buffer.push_back(v.x);
+    buffer.push_back(v.y);
+    buffer.push_back(uv_lb.x);
+    buffer.push_back(uv_rt.y);
+    buffer.push_back(color.x);
+    buffer.push_back(color.y);
+    buffer.push_back(color.z);
+    buffer.push_back(color.w);
 }
 
 void SpriteBatch::Flush() {
-    if (!buffer_size) return;
-    if (!current_shader) { buffer_size = 0; return; }
+    ASSERT_MAIN_THREAD
+    if (buffer.empty()) return;
+    if (!current_shader) {
+        buffer.clear();
+        return;
+    }
     current_shader->Bind();
     if (current_texture) {
         current_texture->Bind(0, filtering, wrapping);
@@ -120,7 +132,7 @@ void SpriteBatch::Flush() {
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, buffer_size * sizeof(float), buffer);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, buffer.size() * sizeof(float), &buffer[0]);
     auto p = current_shader->GetAttribute("position");
     auto uv = current_shader->GetAttribute("uv");
     auto color = current_shader->GetAttribute("color");
@@ -136,12 +148,13 @@ void SpriteBatch::Flush() {
         glVertexAttribPointer(color->location, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (void *)(sizeof(float) * 4));
         glEnableVertexAttribArray(color->location);
     }
-    glDrawElements(GL_TRIANGLES, buffer_size / 32 * 6, GL_UNSIGNED_SHORT, nullptr);
+    // TODO check on mobile devices
+    glDrawElements(GL_TRIANGLES, buffer.size() / 32 * 6, GL_UNSIGNED_INT, nullptr);
     if (p) glDisableVertexAttribArray(p->location);
     if (uv) glDisableVertexAttribArray(uv->location);
     if (color) glDisableVertexAttribArray(color->location);
 
-    buffer_size = 0;
+    buffer.clear();
 }
 
 } //namespace a2d

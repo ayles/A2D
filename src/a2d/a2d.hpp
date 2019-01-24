@@ -39,12 +39,12 @@
 #include <a2d/math/math.hpp>
 
 // Components
-#include <a2d/core/components/camera.hpp>
-#include <a2d/core/components/sprite.hpp>
-#include <a2d/core/components/text.hpp>
-#include <a2d/core/components/animator.hpp>
-#include <a2d/core/components/pixel_camera.hpp>
-#include <a2d/core/components/physics/physics_body.hpp>
-#include <a2d/core/components/line.hpp>
+#include <a2d/components/camera.hpp>
+#include <a2d/components/sprite.hpp>
+#include <a2d/components/text.hpp>
+#include <a2d/components/animator.hpp>
+#include <a2d/components/pixel_camera.hpp>
+#include <a2d/components/physics/physics_body.hpp>
+#include <a2d/components/line.hpp>
 
 #endif //A2D_A2D_H

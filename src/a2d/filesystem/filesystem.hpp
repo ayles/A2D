@@ -11,7 +11,7 @@
 namespace a2d {
 
 class FileSystem {
-    friend class NativeConnector;
+    friend class NativeBridge;
 
 #ifdef TARGET_ANDROID
     static void Initialize(void *asset_manager);

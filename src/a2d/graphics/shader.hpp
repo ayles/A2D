@@ -63,10 +63,11 @@ private:
 
     static void CreateDefaultShaders();
 
-public:
-    DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Shader)
     Shader(const std::string &vertex_shader_text, const std::string &fragment_shader_text);
     ~Shader() override;
+
+public:
+    DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Shader)
 
     virtual void SetUniform(const std::string &name, float v);
     virtual void SetUniform(const std::string &name, int v);
@@ -84,6 +85,8 @@ public:
     virtual Attribute *GetAttribute(const std::string &name) const;
 
     virtual bool Bind();
+
+    static pShader Create(const std::string &vertex_shader_text, const std::string &fragment_shader_text);
 
     static void Unbind();
 };

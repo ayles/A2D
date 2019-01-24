@@ -11,7 +11,7 @@
 namespace a2d {
 
 class Input {
-    friend class NativeConnector;
+    friend class NativeBridge;
 
 public:
     enum KeyCode {

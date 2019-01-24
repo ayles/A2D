@@ -1,9 +1,4 @@
 cmake_minimum_required(VERSION 3.0)
-
-# Unset compilers env to prevent mobile toolchain compiler inherit
-unset(ENV{CC})
-unset(ENV{CXX})
-
 project(glslcc)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${OUTPUT_DIRECTORY}")

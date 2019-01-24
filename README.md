@@ -6,24 +6,20 @@ Small cross-platform 2D game engine.
 [![Build Status](https://travis-ci.com/ayles/A2D.svg?branch=master)](https://travis-ci.com/ayles/A2D)
 [![CodeFactor](https://www.codefactor.io/repository/github/ayles/a2d/badge)](https://www.codefactor.io/repository/github/ayles/a2d)
 
-# Structure
+# Getting started (Build & Run)
 
-A2D consists of 3 main parts:
+For simple demonstration clone this repo and use `tools/generator.py` to
+generate project:
 
-- **Engine** - common engine code.
-- **Platfrom projects** - projects for building for a specific platform.
-- **Core project** - custom project. You should write your code in it.
+    python3 generator.py <project name> [-d destination]
 
-For now A2D have no project generating utility so any contributions in
-this direction will be appreciated.
+Entry point for your game will be `a2d::RootComponent` component located in
+`root_component.hpp`.  It will be created on the `Engine::root` after game launch.
 
-# Use (Build & Run)
+Then you can build one of projects located in `<project folder>/projects/`.
 
-For simple demonstration just clone this repo and build any of 
-available platform projects.
-
-For creating your own game with A2D clone this repo and edit/write code
-in `project_core`. Then build any of platform projects.
+Note that for building project you will need working glslcc under `tools/<platform name>`.
+Some of them are there for you, but you can rebuild it with `thirdparty/glslcc/CMakeLists.txt`.
 
 # Supported platforms
 
@@ -31,14 +27,12 @@ in `project_core`. Then build any of platform projects.
 - **Linux**
 - **macOS**
 - **Android** 
-- **IOS**
+- **iOS**
 
-# Getting Started
+# Sample
 
 For starting your own project you should implement `a2d::RootComponent` class
 and store it in the `root_component.hpp` in the root of your project source tree.
-
-`RootComponent` will be created on the `Engine.root` after engine initialization.
 
 **Sample code:**
 
@@ -46,29 +40,25 @@ and store it in the `root_component.hpp` in the root of your project source tree
 namespace a2d {
 
 class RootComponent : public Component {
+public:
     pObject2D text;
-    
-    // Initialize event is called after component creation
+
+    // Initialize called on component creation
     void Initialize() override {
-        // Create and set pixel camera
-        auto camera_object = new Object2D;
-        Engine::SetCamera(camera_object->AddComponent<PixelCamera>());
-        
-        // Create text
-        text = new Object2D;
-        text->AddComponent<Text>()->SetFont(
-            new BitmapFont(FileSystem::LoadRaw("fonts/impact.ttf"), 96)
-        );
-        text->GetComponent<Text>()->SetOrigin(0.5f, 0.5f);
+        auto camera = Object2D::Create();
+        a2d::Engine::SetCamera(camera->AddComponent<PixelCamera>());
+
+        text = Object2D::Create();
+        text->AddComponent<Text>()->SetFont(BitmapFont::Create(FileSystem::LoadRaw("fonts/impact.ttf"), 48));
+        text->GetComponent<Text>()->SetOrigin(0.5f, 0.0f);
         text->GetComponent<Text>()->SetText(U"Hello, A2D!");
     }
-    
-    // Update event is called each frame
+
+    // Update called each frame
     void Update() override {
-        // Make it spin
         text->rotation += Engine::GetDeltaTime();
     }
-}
+};
 
 }
 ```
@@ -76,7 +66,8 @@ class RootComponent : public Component {
 # Future plans
 
 - Integrate Box2D
-- Add platform-specific settings such as screen orientation (landscape/portrait) and other
+- Add support for texture atlas creation on-the-fly
+- And more...
 
 # Contact & Contribute
 

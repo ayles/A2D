@@ -30,7 +30,7 @@ std::vector<unsigned char> FileSystem::LoadRaw(const std::string &path) {
     ASSERT_MAIN_THREAD
 #ifdef TARGET_ANDROID
     auto asset = AAssetManager_open(asset_manager, path.c_str(), AASSET_MODE_UNKNOWN);
-    ASSERT(asset != nullptr)
+    if (asset == nullptr) { LOG_TRACE("Can't load file"); }
     auto size = AAsset_getLength(asset);
     std::vector<unsigned char> v(size);
     AAsset_read(asset, &v[0], size);
@@ -49,7 +49,7 @@ std::vector<unsigned char> FileSystem::LoadRaw(const std::string &path) {
     CFURLGetFileSystemRepresentation(url, true, fs_path, sizeof(fs_path));
     std::ifstream file((char *)fs_path, std::ios::binary);
     if ((file.rdstate() & std::ifstream::failbit) != 0) {
-        DEBUG_ERROR("Failed to load file")
+        LOG_TRACE("Can't load file");
         std::vector<unsigned char> a;
         return a;
     }
@@ -59,8 +59,8 @@ std::vector<unsigned char> FileSystem::LoadRaw(const std::string &path) {
     );
 #elif TARGET_DESKTOP
     std::ifstream file("resources/" + path, std::ios::binary);
-    if ((file.rdstate() & std::ifstream::failbit) != 0) {
-        LOG_TRACE("Failed to load file");
+    if (file.fail()) {
+        LOG_TRACE("Can't load file");
         std::vector<unsigned char> a;
         return a;
     }

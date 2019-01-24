@@ -25,7 +25,7 @@ class Camera;
 class Engine {
     friend class Renderer;
     friend class NativeRenderer;
-    friend class NativeConnector;
+    friend class NativeBridge;
     friend class Component;
     friend class Object2D;
     friend class Physics;

@@ -22,33 +22,37 @@ public class MainActivity extends Activity {
             finish();
             return;
         }
+
+        A2DBridge.getOrientationCallback = this::getRequestedOrientation;
+        A2DBridge.setOrientationCallback = this::setRequestedOrientation;
+
         glSurfaceView = new ASurfaceView(this);
         glSurfaceView.setEGLContextClientVersion(2);
         glSurfaceView.setPreserveEGLContextOnPause(true);
         glSurfaceView.setRenderer(new GLESRenderer());
         setContentView(glSurfaceView);
-        GL2JNI.register_asset_manager(getResources().getAssets());
-        GL2JNI.initialize();
+
+        A2DBridge.registerAssetManager(getResources().getAssets());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         glSurfaceView.onPause();
-        GL2JNI.on_pause();
+        A2DBridge.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         glSurfaceView.onResume();
-        GL2JNI.on_resume();
+        A2DBridge.onResume();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        GL2JNI.on_destroy();
+        A2DBridge.onDestroy();
     }
 
     @Override
@@ -60,18 +64,12 @@ public class MainActivity extends Activity {
     }
 
     private void hideSystemUI() {
-        // Enables regular immersive mode.
-        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
-        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-            // Set the content to appear under the system bars so that the
-            // content doesn't resize when the system bars hide and show.
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
             View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
             View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-            // Hide the nav bar and status bar
             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
             View.SYSTEM_UI_FLAG_FULLSCREEN
         );
@@ -88,8 +86,8 @@ public class MainActivity extends Activity {
 
     private boolean supportES2() {
         ActivityManager activityManager =
-                (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+                (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
         ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
-        return (configurationInfo.reqGlEsVersion >= 0x20000);
+        return configurationInfo.reqGlEsVersion >= 0x20000;
     }
 }
