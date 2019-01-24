@@ -44,6 +44,7 @@ BitmapFont::BitmapFont(const std::vector<unsigned char> &ttf, int size) {
 
     int max_texture_size;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max_texture_size);
+    Logger::Info("{}", max_texture_size);
 
     int texture_width = 0;
     int texture_height = 0;
@@ -58,13 +59,13 @@ BitmapFont::BitmapFont(const std::vector<unsigned char> &ttf, int size) {
     while (glyph_index) {
         FT_Load_Glyph(face, glyph_index, FT_LOAD_RENDER);
         max_height = max_height > g->bitmap.rows ? max_height : g->bitmap.rows;
-        current_x += g->bitmap.width;
-        texture_width = texture_width > current_x ? texture_width : current_x;
         if (current_x + g->bitmap.width > max_texture_size) {
             texture_height += max_height;
             current_x = 0;
             max_height = 0;
         }
+        current_x += g->bitmap.width;
+        texture_width = texture_width > current_x ? texture_width : current_x;
         char_code = FT_Get_Next_Char(face, char_code, &glyph_index);
     }
     texture_height += max_height;
@@ -83,6 +84,13 @@ BitmapFont::BitmapFont(const std::vector<unsigned char> &ttf, int size) {
     char_code = FT_Get_First_Char(face, &glyph_index);
     while (glyph_index) {
         FT_Load_Glyph(face, glyph_index, FT_LOAD_RENDER);
+
+        max_height = max_height > g->bitmap.rows ? max_height : g->bitmap.rows;
+        if (current_x + g->bitmap.width > max_texture_size) {
+            current_y += max_height;
+            current_x = 0;
+            max_height = 0;
+        }
 
         for (int x = 0; x < (int)g->bitmap.width; ++x) {
             for (int y = 0; y < (int)g->bitmap.rows; ++y) {
@@ -107,13 +115,7 @@ BitmapFont::BitmapFont(const std::vector<unsigned char> &ttf, int size) {
                 g->advance.y / 64
         );
 
-        max_height = max_height > g->bitmap.rows ? max_height : g->bitmap.rows;
         current_x += g->bitmap.width;
-        if (current_x + g->bitmap.width > max_texture_size) {
-            current_y += max_height;
-            current_x = 0;
-            max_height = 0;
-        }
 
         char_code = FT_Get_Next_Char(face, char_code, &glyph_index);
     }

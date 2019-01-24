@@ -53,9 +53,9 @@ public:
         Audio::Uninitialize();
     }
 
-#ifdef TARGET_ANDROID
-    static void ResolutionChanged(int width, int height) {
-        Renderer::ResolutionChanged(width, height);
+#ifdef TARGET_MOBILE
+    static void ResolutionChanged(int width, int height, int framebuffer_width = -1, int framebuffer_height = -1) {
+        Renderer::ResolutionChanged(width, height, framebuffer_width, framebuffer_height);
     }
 
     static void OnPause() {
@@ -66,18 +66,12 @@ public:
         Engine::Resume();
     }
 
-    static void OnTouch(int touches_count, int touch_index, int touch_action, float touch_x, float touch_y) {
-        Input::TouchEvent touch_event;
-        switch (touch_action) {
-            case AMOTION_EVENT_ACTION_DOWN: touch_event = Input::TouchEvent::TOUCH_BEGAN; break;
-            case AMOTION_EVENT_ACTION_UP:
-            case AMOTION_EVENT_ACTION_CANCEL: touch_event = Input::TouchEvent::TOUCH_ENDED; break;
-            case AMOTION_EVENT_ACTION_MOVE: touch_event = Input::TouchEvent::TOUCH_MOVED; break;
-
-        }
+    static void OnTouch(int touches_count, int touch_index, a2d::Input::TouchEvent touch_event, float touch_x, float touch_y) {
         Input::TouchCallback(touches_count, touch_index, touch_event, touch_x, touch_y);
     }
+#endif
 
+#ifdef TARGET_ANDROID
     static void InitializeFS(void *asset_manager) {
         FileSystem::Initialize(asset_manager);
     }
@@ -150,7 +144,15 @@ Java_com_selya_a2d_A2DBridge_onTouchEvent(JNIEnv *env, jclass type, jobject moti
     auto x = env->CallFloatMethod(motion_event, get_x);
     auto y = env->CallFloatMethod(motion_event, get_y);
 
-    a2d::NativeBridge::OnTouch(pointer_count, index, action, x, y);
+    Input::TouchEvent touch_event;
+    switch (action) {
+        case AMOTION_EVENT_ACTION_DOWN: touch_event = Input::TouchEvent::TOUCH_BEGAN; break;
+        case AMOTION_EVENT_ACTION_UP:
+        case AMOTION_EVENT_ACTION_CANCEL: touch_event = Input::TouchEvent::TOUCH_ENDED; break;
+        case AMOTION_EVENT_ACTION_MOVE: touch_event = Input::TouchEvent::TOUCH_MOVED; break;
+    }
+
+    a2d::NativeBridge::OnTouch(pointer_count, index, touch_event, x, y);
 }
 
 }
@@ -167,6 +169,49 @@ int Android_getOrientation() {
     if (!current_env) { LOG_TRACE("No env"); }
     static auto get_orientation = current_env->GetStaticMethodID(a2d_bridge, "getOrientation", "()I");
     return current_env->CallStaticIntMethod(a2d_bridge, get_orientation);
+}
+
+#endif
+
+#ifdef TARGET_IOS
+
+enum TouchPhase {
+    BEGAN = 0,
+    MOVED,
+    STATIONARY,
+    ENDED,
+    CANCELLED
+};
+
+extern "C" {
+
+void a2d_initialize() {
+    a2d::NativeBridge::Initialize();
+}
+
+void a2d_step() {
+    a2d::NativeBridge::Step();
+}
+
+void a2d_uninitialize() {
+    a2d::NativeBridge::Uninitialize();
+}
+
+void a2d_resolution_changed(int width, int height, int framebuffer_width, int framebuffer_height) {
+    a2d::NativeBridge::ResolutionChanged(width, height, framebuffer_width, framebuffer_height);
+}
+
+void a2d_touch_event(int touches_count, int touch_index, int touch_phase, float touch_x, float touch_y) {
+    switch (touch_phase) {
+        case TouchPhase::BEGAN: a2d::NativeBridge::OnTouch(touches_count, touch_index, a2d::Input::TouchEvent::TOUCH_BEGAN, touch_x, touch_y); break;
+        case TouchPhase::MOVED:
+        case TouchPhase::STATIONARY: a2d::NativeBridge::OnTouch(touches_count, touch_index, a2d::Input::TouchEvent::TOUCH_MOVED, touch_x, touch_y); break;
+        case TouchPhase::ENDED:
+        case TouchPhase::CANCELLED: a2d::NativeBridge::OnTouch(touches_count, touch_index, a2d::Input::TouchEvent::TOUCH_ENDED, touch_x, touch_y); break;
+        default: break;
+    }
+}
+
 }
 
 #endif
