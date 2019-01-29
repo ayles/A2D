@@ -31,7 +31,7 @@ set(A2D_SOURCES
         src/a2d/graphics/sprite_batch.cpp
         src/a2d/core/resources.cpp
         src/a2d/graphics/animation.cpp
-        ${SHADERS_GENERATED_FILE})
+        ${SHADERS_GENERATED_FILE} src/a2d/physics/physics.cpp src/a2d/components/physics/rigidbody.cpp)
 
 set(A2D_HEADERS
         src/a2d/a2d.hpp
@@ -57,7 +57,7 @@ set(A2D_HEADERS
         src/a2d/components/audio_source.hpp
         src/a2d/audio/audio_clip.hpp
         src/a2d/physics/physics.hpp
-        src/a2d/components/physics/physics_body.hpp
+        src/a2d/components/physics/rigidbody.hpp
         src/a2d/components/line.hpp
         src/a2d/components/physics/physics_collider.hpp
         src/a2d/components/physics/circle_collider.hpp
@@ -70,12 +70,14 @@ set(A2D_HEADERS
         src/a2d/graphics/texture.hpp
         src/a2d/graphics/renderer.hpp
         src/a2d/core/resources.hpp
-        src/a2d/graphics/animation.h
+        src/a2d/graphics/animation.hpp
         src/a2d/core/command.hpp
-        src/a2d/core/commands/lambda_command.h src/a2d/core/log.hpp)
+        src/a2d/core/commands/lambda_command.hpp
+        src/a2d/core/log.hpp
+        src/a2d/components/physics/box_collider.hpp)
 
 # A2D library target
-add_library(a2d_engine_library STATIC ${A2D_SOURCES})
+add_library(a2d_engine_library STATIC ${A2D_SOURCES} ${A2D_HEADERS})
 target_include_directories(a2d_engine_library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Prepare variables

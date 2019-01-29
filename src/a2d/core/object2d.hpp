@@ -41,20 +41,34 @@ class Object2D final : public ref_counter {
     std::set<pDrawable> drawables;
     std::unordered_map<std::type_index, std::set<pComponent>> components;
     int layer;
+    Vector2f local_position;
+    Vector2f local_scale;
+    float local_rotation;
+    float world_rotation;
 
 public:
-    Vector2f position;
-    Vector2f scale;
-    float rotation;
-
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Object2D)
 
     int GetLayer();
     pObject2D GetParent() const;
     const a2d::Matrix4f &GetTransformMatrix() const;
-    const a2d::Matrix4f &GetTransformMatrixRecalculated(bool recursive = true);
+    Vector2f GetPosition() const;
+    float GetRotation() const;
+    Vector2f GetRelativePosition(const pObject2D &origin);
+    float GetRelativeRotation(const pObject2D &origin);
+    const Vector2f &GetLocalPosition() const;
+    const Vector2f &GetLocalScale() const;
+    float GetLocalRotation() const;
 
     void SetLayer(int layer);
+    void SetLocalPosition(float x, float y);
+    void SetLocalPosition(const Vector2f &position);
+    void SetLocalScale(float x, float y);
+    void SetLocalScale(const Vector2f &scale);
+    void SetLocalRotation(float rotation);
+    void SetPosition(float x, float y);
+    void SetPosition(const Vector2f &position);
+    void SetRotation(float rotation);
 
     void Attach(const pObject2D &parent);
 
@@ -74,8 +88,8 @@ public:
 
     void DestroyAllComponents();
 
-    Vector2f WorldToLocal(const Vector2f &world_point);
-    Vector2f LocalToWorld(const Vector2f &local_point);
+    Vector2f WorldToLocalPoint(const Vector2f &world_point);
+    Vector2f LocalToWorldPoint(const Vector2f &local_point);
 
     static pObject2D Create();
 
@@ -83,7 +97,11 @@ private:
     Object2D();
     ~Object2D() override;
 
-    void Draw(const a2d::Matrix4f &parent_transform, SpriteBatch &sprite_batch);
+    void Draw(SpriteBatch &sprite_batch);
+
+    void OnAttach();
+    void OnDetach();
+    void OnTransform(const pObject2D &object);
 };
 
 
@@ -100,11 +118,13 @@ Object2D::AddComponent() {
     components[t_index].emplace(component);
     component->object_2d = this;
 
-    Engine::AddCommand([component]() {
-        component->Initialize();
-        if (Engine::IsPlaying()) component->OnResume();
-        Engine::components.emplace(component);
-    });
+    //Engine::AddCommand([component]() {
+    component->Initialize();
+    component->initialized = true;
+    component->OnAttach();
+    if (Engine::IsPlaying()) component->OnResume();
+    Engine::components.emplace(component);
+    //});
 
     return component;
 }
@@ -122,16 +142,16 @@ Object2D::GetComponent(bool look_for_base) const {
                 }
             }
         }
-        LOG_TRACE("Can't find component");
+        //LOG_TRACE("Can't find component");
         return nullptr;
     } else {
         if (components.empty()) {
-            LOG_TRACE("Can't find component");
+            //LOG_TRACE("Can't find component");
             return nullptr;
         }
         auto iter = components.find(typeid(T));
         if (iter == components.end() || iter->second.empty()) {
-            LOG_TRACE("Can't find component");
+            //LOG_TRACE("Can't find component");
             return nullptr;
         }
         return *iter->second.begin();

@@ -6,59 +6,51 @@
 #define A2D_CIRCLE_COLLIDER_H
 
 #include <a2d/components/physics/physics_collider.hpp>
+#include "rigidbody.hpp"
+
 
 namespace a2d {
 
 class CircleCollider : public PhysicsCollider {
-public:
-    float radius = 1.0f;
-
 private:
-    b2Fixture *fixture = nullptr;
+    float radius = 0.0f;
+
+#ifndef NDEBUG
     intrusive_ptr<Line> line;
+#endif
 
-protected:
+public:
+    void SetRadius(float radius) {
+        this->radius = radius;
+        Reattach();
 
-    void AttachToBody(const intrusive_ptr<PhysicsBody> &body) override {
-        PhysicsCollider::AttachToBody(body);
-
-        if (!fixture) {
-            b2CircleShape circle;
-            circle.m_radius = radius;
-            fixture = body->body->CreateFixture(&circle, 1);
-        }
-    }
-
-    void DetachFromBody(const intrusive_ptr<PhysicsBody> &body) override {
-        PhysicsCollider::DetachFromBody(body);
-
-        if (fixture) {
-            body->body->DestroyFixture(fixture);
-            fixture = nullptr;
-        }
-    }
-
-    void Initialize() override {
-        PhysicsCollider::Initialize();
-
-        auto c = GetObject2D()->AddChild(new Object2D);
-        line = c->AddComponent<Line>();
-    }
-
-    void PhysicsUpdate() override {
-        PhysicsCollider::PhysicsUpdate();
-
+#ifndef NDEBUG
+        if (!line) line = GetObject2D()->AddComponent<Line>();
         line->vertices.clear();
-
         int v = 16;
         for (int i = 0; i < v; ++i) {
             float angle = (float)i / v * 2 * 3.14159265358979323846f;
-            line->vertices.emplace_back(Vector2f(std::cos(angle) * radius, std::sin(angle) * radius), Vector4f(0, 1, 0, 1));
+            line->vertices.emplace_back(Vector2f(std::cos(angle) * radius, std::sin(angle) * radius),
+                                        Vector4f(0, 1, 0, 1));
         }
-
         line->vertices.push_back(line->vertices[0]);
         line->vertices.emplace_back(Vector2f(), Vector4f(0, 1, 0, 1));
+        line->Load();
+#endif
     }
+
+    float GetRadius() {
+        return radius;
+    }
+
+protected:
+    std::shared_ptr<b2Shape> CalculateShape(const Vector2f &position, float rotation) override {
+        auto circle_shape = new b2CircleShape;
+        float s = Physics::GetWorldScale();
+        circle_shape->m_radius = radius * s;
+        circle_shape->m_p = b2Vec2(position.x * s, position.y * s);
+        return std::shared_ptr<b2Shape>(circle_shape);
+    };
 };
 
 } //namespace a2d

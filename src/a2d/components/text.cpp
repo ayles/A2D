@@ -8,7 +8,7 @@
 namespace a2d {
 
 
-Text::Text() : text(), bitmap_font(nullptr), shader(Resources::Get<Shader>("default")), color(1) {}
+Text::Text() : text(), bitmap_font(nullptr), shader(Resources::Get<Shader>("default")), text_width(0), color(1) {}
 
 void Text::SetText(const std::string &text) {
     ASSERT_MAIN_THREAD
@@ -26,11 +26,11 @@ void Text::SetText(const std::string &text) {
 void Text::SetText(const std::u32string &text) {
     ASSERT_MAIN_THREAD
     this->text = text;
-    float width = 0;
+    text_width = 0;
     for (char32_t i : text) {
-        width += bitmap_font->GetCharacter(i)->advance_x;
+        text_width += bitmap_font->GetCharacter(i)->advance_x;
     }
-    size.Set(width, (float)bitmap_font->GetLineHeight());
+    size.Set(text_width, (float)bitmap_font->GetLineHeight());
 }
 
 void Text::SetFont(const pBitmapFont &bitmap_font) {
@@ -73,7 +73,8 @@ void Text::Draw(SpriteBatch &sprite_batch) {
         float y = y1 + t->y;
         p1.Set(x, y);
         p2.Set(x + t->texture_region->GetWidth(), y);
-        p3.Set(x + t->texture_region->GetWidth(), y + t->texture_region->GetHeight());
+        p3.Set(x + t->texture_region->GetWidth(), y + t->texture_region->GetHeight()
+        );
         p4.Set(x, y + t->texture_region->GetHeight());
         sprite_batch.Draw(t->texture_region, shader, p1, p2, p3, p4, GetObject2D()->GetTransformMatrix(), color);
         current_x += t->advance_x;

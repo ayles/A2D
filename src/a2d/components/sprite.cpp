@@ -7,22 +7,12 @@
 
 namespace a2d {
 
-Sprite::Sprite() : color(1), scale_factor(1.0f) {}
-
-float Sprite::GetScaleFactor() const {
-    return scale_factor;
-}
-
-void Sprite::SetScaleFactor(float scale_factor) {
-    this->scale_factor = scale_factor;
-    if (texture_region) SetSize(texture_region->GetWidth() * scale_factor, texture_region->GetHeight() * scale_factor);
-}
+Sprite::Sprite() : color(1) {}
 
 void Sprite::SetTextureRegion(const pTextureRegion &texture_region) {
     Drawable::SetTextureRegion(texture_region);
     if (!texture_region) SetSize(0.0f);
     this->texture_region = texture_region;
-    SetScaleFactor(scale_factor);
 }
 
 void Sprite::Draw(SpriteBatch &sprite_batch) {

@@ -141,7 +141,7 @@ bool Renderer::Draw() {
 
     if (Engine::camera) {
         sprite_batch->SetCameraMatrix(Engine::camera->GetMatrix());
-        Engine::GetRoot()->Draw(Matrix4f(), *sprite_batch);
+        Engine::GetRoot()->Draw(*sprite_batch);
         sprite_batch->Flush();
     }
 

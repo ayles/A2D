@@ -2,9 +2,9 @@
 // Created by selya on 09.01.2019.
 //
 
-#include <a2d/graphics/animation.h>
+#include <a2d/graphics/animation.hpp>
 #include <a2d/core/engine.hpp>
-#include "animation.h"
+#include "animation.hpp"
 
 
 namespace a2d {

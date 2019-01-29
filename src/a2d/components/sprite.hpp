@@ -20,13 +20,9 @@ class Sprite : public Drawable {
 public:
     Vector4f color;
 
-    float GetScaleFactor() const;
-    void SetScaleFactor(float scale_factor);
     void SetTextureRegion(const pTextureRegion &texture_region) override;
 
 protected:
-    float scale_factor;
-
     Sprite();
     ~Sprite() override;
 

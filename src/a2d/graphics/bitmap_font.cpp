@@ -44,7 +44,6 @@ BitmapFont::BitmapFont(const std::vector<unsigned char> &ttf, int size) {
 
     int max_texture_size;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max_texture_size);
-    Logger::Info("{}", max_texture_size);
 
     int texture_width = 0;
     int texture_height = 0;

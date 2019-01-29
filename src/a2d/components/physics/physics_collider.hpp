@@ -7,56 +7,89 @@
 
 #include <a2d/core/component.hpp>
 #include <a2d/core/object2d.hpp>
-#include <a2d/components/physics/physics_body.hpp>
+#include <a2d/components/physics/rigidbody.hpp>
+
+#include <memory>
 
 namespace a2d {
-
-class PhysicsBody;
 
 DECLARE_SMART_POINTER(PhysicsCollider)
 
 class PhysicsCollider : public Component {
+    friend class Rigidbody;
+    friend class Object2D;
 
-protected:
-    intrusive_ptr<PhysicsBody> body = nullptr;
-
-    virtual void AttachToBody(const intrusive_ptr<PhysicsBody> &body) {
-        this->body = body;
+public:
+    void SetDensity(float density) {
+        if (this->density == density) return;
+        this->density = density;
+        Reattach();
     }
 
-    virtual void DetachFromBody(const intrusive_ptr<PhysicsBody> &body) {
-        this->body = nullptr;
+    void SetFriction(float friction) {
+        if (this->friction == friction) return;
+        this->friction = friction;
+        Reattach();
+    }
+
+    void SetRestitution(float restitution) {
+        if (this->restitution == restitution) return;
+        this->restitution = restitution;
+        Reattach();
+    }
+
+protected:
+    float density = 1.0f;
+    float friction = 1.0f;
+    float restitution = 0.0f;
+    b2Fixture *fixture = nullptr;
+
+    virtual std::shared_ptr<b2Shape> CalculateShape(const Vector2f &position, float rotation) = 0;
+
+    virtual void AttachToRigidbody(b2Body *body) {
+        if (fixture || !body) return;
+        b2FixtureDef fixture_def;
+        fixture_def.density = density;
+        fixture_def.friction = friction;
+        fixture_def.restitution = restitution;
+        auto o = ((Rigidbody *)body->GetUserData())->GetObject2D();
+        auto shape = CalculateShape(
+                GetObject2D()->GetRelativePosition(o), GetObject2D()->GetRelativeRotation(o));
+        fixture_def.shape = shape.get();
+        fixture_def.userData = this;
+        fixture = body->CreateFixture(&fixture_def);
+    }
+
+    virtual b2Body *DetachFromRigidbody() {
+        if (!fixture) return nullptr;
+        auto body = fixture->GetBody();
+        fixture->GetBody()->DestroyFixture(fixture);
+        fixture = nullptr;
+        return body;
+    }
+
+    virtual void Reattach() {
+        AttachToRigidbody(DetachFromRigidbody());
     }
 
     void FindAndAttach() {
         auto o = GetObject2D();
-
-        do {
-            auto c = o->GetComponent<PhysicsBody>();
+        while (o) {
+            auto c = o->GetComponent<Rigidbody>();
             if (c) {
-                AttachToBody(c);
+                AttachToRigidbody(c->body);
                 break;
             }
             o = o->GetParent();
-        } while (o);
-    }
-
-    void Initialize() override {
-        FindAndAttach();
-    }
-
-    void PhysicsUpdate() override {
-        if (!body) FindAndAttach();
-        else {
-            // TODO fix this by checking transform changes
-            auto b = body;
-            DetachFromBody(b);
-            AttachToBody(b);
         }
     }
 
-    void OnDestroy() override {
-        if (body) DetachFromBody(body);
+    void OnAttach() override {
+        FindAndAttach();
+    }
+
+    void OnDetach() override {
+        DetachFromRigidbody();
     }
 };
 

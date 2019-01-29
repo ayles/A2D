@@ -20,6 +20,8 @@ class Component : public ref_counter {
     friend class Engine;
     friend class Physics;
 
+    bool initialized;
+
 public:
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Component)
 
@@ -40,6 +42,8 @@ protected:
     virtual void OnDestroy() {};
     virtual void OnPause() {};
     virtual void OnResume() {};
+    virtual void OnAttach() {};
+    virtual void OnDetach() {};
 };
 
 } // namespace a2d

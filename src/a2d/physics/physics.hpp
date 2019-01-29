@@ -10,29 +10,27 @@
 
 #include <Box2D/Box2D.h>
 
+#include <set>
+
 namespace a2d {
 
 class Physics {
-    friend class PhysicsBody;
+    friend class Rigidbody;
+    friend class NativeBridge;
 
+    static float world_scale;
+    static float world_scale_inverted;
 public:
-    static bool Initialize() { return true; }
-    static void Uninitialize() {}
 
-    static bool Step() {
-        GetWorld().Step(Engine::GetDeltaTime(), 6, 2);
-        for (auto &component : Engine::components) {
-            component->PhysicsUpdate();
-        }
-        Engine::ExecuteCommands();
-        return true;
-    }
+    static bool Initialize();
+    static void Uninitialize();
+
+    static float GetWorldScale();
+    static void SetWorldScale(float world_scale);
 
 private:
-    static b2World &GetWorld() {
-        static b2World world(b2Vec2(0.0f, -9.0f));
-        return world;
-    }
+    static bool Step();
+    static b2World &GetWorld();
 };
 
 } //namespace a2d

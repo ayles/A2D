@@ -7,7 +7,7 @@
 
 namespace a2d {
 
-Component::Component() {
+Component::Component() : initialized(false) {
     ASSERT_MAIN_THREAD
 };
 
@@ -23,6 +23,7 @@ void Component::Destroy() {
         if (iter == object_2d->components.end() || iter->second.empty()) return;
         iter->second.erase(this);
         if (Engine::IsPlaying()) this->OnPause();
+        this->OnDetach();
         this->OnDestroy();
         Engine::components.erase(this);
     });

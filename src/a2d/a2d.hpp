@@ -44,7 +44,11 @@
 #include <a2d/components/text.hpp>
 #include <a2d/components/animator.hpp>
 #include <a2d/components/pixel_camera.hpp>
-#include <a2d/components/physics/physics_body.hpp>
+#include <a2d/components/physics/rigidbody.hpp>
 #include <a2d/components/line.hpp>
+#include <a2d/components/physics/rigidbody.hpp>
+#include <a2d/components/physics/physics_collider.hpp>
+#include <a2d/components/physics/circle_collider.hpp>
+#include <a2d/components/physics/box_collider.hpp>
 
 #endif //A2D_A2D_H

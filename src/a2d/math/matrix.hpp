@@ -428,7 +428,7 @@ public:
         return Transform(v.x, v.y, v.z, v.w, dest);
     }
 
-    Vector<4, T> Unproject(T x, T y, T z) {
+    Vector<4, T> Unproject(T x, T y, T z) const {
         Vector<4, T> v;
 
         T a = data[0]  * data[5]  - data[1]  * data[4];
@@ -479,8 +479,12 @@ public:
         return v;
     }
 
-    Vector<4, T> Unproject(const Vector<3, T> &v) {
+    Vector<4, T> Unproject(const Vector<3, T> &v) const {
         return Unproject(v.x, v.y, v.z);
+    }
+
+    Vector<3, T> GetTranslation() const {
+        return Vector<3, T>(data[12], data[13], data[14]);
     }
 };
 

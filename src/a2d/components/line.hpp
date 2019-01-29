@@ -31,15 +31,21 @@ public:
 
     Line() : shader(Resources::Get<Shader>("line")) {}
 
+    void Load() {
+        if (!vertices.size()) return;
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], GL_DYNAMIC_DRAW);
+    }
+
     void Initialize() override {
         Drawable::Initialize();
         glGenBuffers(1, &vbo);
     }
 
     void Draw(SpriteBatch &batch) override {
+        if (!vertices.size()) return;
         shader->Bind();
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], GL_DYNAMIC_DRAW);
         auto p = shader->GetAttribute("position");
         auto color = shader->GetAttribute("color");
         if (p) {
@@ -55,6 +61,10 @@ public:
         glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
         if (p) glDisableVertexAttribArray(p->location);
         if (color) glDisableVertexAttribArray(color->location);
+    }
+
+    void OnDestroy() override {
+        glDeleteBuffers(1, &vbo);
     }
 };
 

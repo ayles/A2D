@@ -11,7 +11,7 @@
 #include <a2d/graphics/texture_region.hpp>
 #include <a2d/core/engine.hpp>
 #include <a2d/components/sprite.hpp>
-#include <a2d/graphics/animation.h>
+#include <a2d/graphics/animation.hpp>
 
 #include <vector>
 

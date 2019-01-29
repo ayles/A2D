@@ -7,7 +7,7 @@
 
 #include <a2d/core/macro.hpp>
 #include <a2d/core/command.hpp>
-#include <a2d/core/commands/lambda_command.h>
+#include <a2d/core/commands/lambda_command.hpp>
 #include <a2d/core/component.hpp>
 
 #include <thread>

@@ -9,7 +9,7 @@
 
 namespace a2d {
 
-Drawable::Drawable() : shader(Resources::Get<Shader>("default")){};
+Drawable::Drawable() : shader(Resources::Get<Shader>("default")) {};
 Drawable::~Drawable() = default;
 
 float Drawable::GetWidth() const {
