@@ -13,13 +13,12 @@ generate project:
 
     python3 generator.py <project name> [-d destination]
 
-Entry point for your game will be `a2d::RootComponent` component located in
-`root_component.hpp`.  It will be created on the `Engine::root` after game launch.
+Entry point of game is `a2d::RootComponent` component located in
+`root_component.hpp`.
+
+It will be created on the `a2d::Engine::root` after game launch.
 
 Then you can build one of projects located in `<project folder>/projects/`.
-
-Note that for building project you will need working glslcc under `tools/<platform name>`.
-Some of them are there for you, but you can rebuild it with `thirdparty/glslcc/CMakeLists.txt`.
 
 # Supported platforms
 
@@ -31,12 +30,14 @@ Some of them are there for you, but you can rebuild it with `thirdparty/glslcc/C
 
 # Sample
 
-For starting your own project you should implement `a2d::RootComponent` class
-and store it in the `root_component.hpp` in the root of your project source tree.
+For starting your own project create `a2d::RootComponent` class
+and store it in the `root_component.hpp`.
 
 **Sample code:**
 
 ```cpp
+// root_component.hpp
+
 namespace a2d {
 
 class RootComponent : public Component {
@@ -46,7 +47,7 @@ public:
     // Initialize called on component creation
     void Initialize() override {
         auto camera = Object2D::Create();
-        a2d::Engine::SetCamera(camera->AddComponent<PixelCamera>());
+        Engine::SetCamera(camera->AddComponent<PixelCamera>());
 
         text = Object2D::Create();
         text->AddComponent<Text>()->SetFont(BitmapFont::Create(FileSystem::LoadRaw("fonts/impact.ttf"), 48));
@@ -56,7 +57,7 @@ public:
 
     // Update called each frame
     void Update() override {
-        text->rotation += Engine::GetDeltaTime();
+        text->SetRotation(text->GetRotation() + Engine::GetDeltaTime());
     }
 };
 
@@ -65,7 +66,7 @@ public:
 
 # Future plans
 
-- Integrate Box2D
+- Rework audio
 - Add support for texture atlas creation on-the-fly
 - And more...
 
