@@ -27,7 +27,7 @@ public:
     }
 
     void Update() override {
-        text->rotation += Engine::GetDeltaTime();
+        text->SetRotation(text->GetRotation() + Engine::GetDeltaTime());
     }
 };
 
