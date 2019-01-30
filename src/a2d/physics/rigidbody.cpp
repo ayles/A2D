@@ -2,8 +2,8 @@
 // Created by selya on 28.01.2019.
 //
 
-#include <a2d/components/physics/rigidbody.hpp>
-#include "rigidbody.hpp"
+#include <a2d/physics/rigidbody.hpp>
+#include <a2d/physics/physics_collider.hpp>
 
 
 namespace a2d {
@@ -170,6 +170,11 @@ void Rigidbody::Initialize() {
 }
 
 void Rigidbody::OnDestroy() {
+    auto f = body->GetFixtureList();
+    while (f) {
+        ((PhysicsCollider *)f->GetUserData())->DetachFromRigidbody();
+        f = f->GetNext();
+    }
     Physics::GetWorld().DestroyBody(body);
 }
 

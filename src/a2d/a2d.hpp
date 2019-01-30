@@ -39,16 +39,16 @@
 #include <a2d/math/math.hpp>
 
 // Components
-#include <a2d/components/camera.hpp>
-#include <a2d/components/sprite.hpp>
-#include <a2d/components/text.hpp>
-#include <a2d/components/animator.hpp>
-#include <a2d/components/pixel_camera.hpp>
-#include <a2d/components/physics/rigidbody.hpp>
-#include <a2d/components/line.hpp>
-#include <a2d/components/physics/rigidbody.hpp>
-#include <a2d/components/physics/physics_collider.hpp>
-#include <a2d/components/physics/circle_collider.hpp>
-#include <a2d/components/physics/box_collider.hpp>
+#include <a2d/core/camera.hpp>
+#include <a2d/graphics/sprite.hpp>
+#include <a2d/graphics/text.hpp>
+#include <a2d/graphics/animator.hpp>
+#include <a2d/core/pixel_camera.hpp>
+#include <a2d/physics/rigidbody.hpp>
+#include <a2d/graphics/line.hpp>
+#include <a2d/physics/rigidbody.hpp>
+#include <a2d/physics/physics_collider.hpp>
+#include <a2d/physics/circle_collider.hpp>
+#include <a2d/physics/box_collider.hpp>
 
 #endif //A2D_A2D_H

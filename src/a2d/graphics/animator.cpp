@@ -2,7 +2,7 @@
 // Created by selya on 06.12.2018.
 //
 
-#include <a2d/components/animator.hpp>
+#include <a2d/graphics/animator.hpp>
 #include <a2d/core/object2d.hpp>
 
 namespace a2d {

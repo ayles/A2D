@@ -5,7 +5,7 @@
 #ifndef A2D_CIRCLE_COLLIDER_H
 #define A2D_CIRCLE_COLLIDER_H
 
-#include <a2d/components/physics/physics_collider.hpp>
+#include <a2d/physics/physics_collider.hpp>
 #include "rigidbody.hpp"
 
 

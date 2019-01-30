@@ -2,7 +2,7 @@
 // Created by selya on 09.11.2018.
 //
 
-#include <a2d/components/sprite.hpp>
+#include <a2d/graphics/sprite.hpp>
 #include <a2d/core/object2d.hpp>
 
 namespace a2d {

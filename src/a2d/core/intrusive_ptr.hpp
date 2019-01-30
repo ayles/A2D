@@ -6,6 +6,9 @@
 #define A2D_INTRUSIVE_PTR_H
 
 #include <a2d/core/ref_counter.hpp>
+#include <a2d/core/log.hpp>
+
+#include <string>
 
 namespace a2d {
 
@@ -19,23 +22,23 @@ class intrusive_ptr {
 public:
     typedef T element_type;
 
-    intrusive_ptr() : ptr(nullptr) {}
+    intrusive_ptr() : r_ptr(nullptr) {}
     intrusive_ptr(const intrusive_ptr &other) : ptr(other.ptr) {
-        if (ptr) r_ptr->add_ref();
+        if (r_ptr) r_ptr->add_ref();
     }
 
     intrusive_ptr(T *p) : ptr(p) {
-        if (ptr) r_ptr->add_ref();
+        if (r_ptr) r_ptr->add_ref();
     }
 
     template<class U>
     intrusive_ptr(const intrusive_ptr<U> &other) : ptr(dynamic_cast<T *>(other.get())) {
-        if (ptr) r_ptr->add_ref();
+        if (r_ptr) r_ptr->add_ref();
     }
 
     template<class U>
     intrusive_ptr(U *u) : ptr(dynamic_cast<T *>(u)) {
-        if (ptr) r_ptr->add_ref();
+        if (r_ptr) r_ptr->add_ref();
     }
 
     T *get() const {
@@ -43,9 +46,9 @@ public:
     }
 
     void swap(intrusive_ptr &other) {
-        T *p = other.ptr;
-        other.ptr = ptr;
-        ptr = p;
+        ref_counter *p = other.r_ptr;
+        other.r_ptr = r_ptr;
+        r_ptr = p;
     }
 
     T &operator*() const {
@@ -71,7 +74,7 @@ public:
     }
 
     bool operator==(const intrusive_ptr<T> &other) const {
-        return ptr == other.ptr;
+        return r_ptr == other.r_ptr;
     }
 
     bool operator!=(T *p) const {
@@ -79,27 +82,27 @@ public:
     }
 
     bool operator!=(const intrusive_ptr<T> &other) const {
-        return ptr != other.ptr;
+        return r_ptr != other.r_ptr;
     }
 
     bool operator<(const intrusive_ptr<T> &other) const {
-        return ptr < other.ptr;
+        return r_ptr < other.r_ptr;
     }
 
     bool operator>(const intrusive_ptr<T> &other) const {
-        return ptr > other.ptr;
+        return r_ptr > other.r_ptr;
     }
 
     bool operator!() const {
-        return ptr == 0;
+        return r_ptr == 0;
     }
 
     operator bool() const {
-        return ptr != 0;
+        return r_ptr != 0;
     }
 
     ~intrusive_ptr() {
-        if (ptr) r_ptr->release_ref();
+        if (r_ptr) r_ptr->release_ref();
     }
 };
 

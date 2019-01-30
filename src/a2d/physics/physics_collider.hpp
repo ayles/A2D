@@ -7,7 +7,7 @@
 
 #include <a2d/core/component.hpp>
 #include <a2d/core/object2d.hpp>
-#include <a2d/components/physics/rigidbody.hpp>
+#include <a2d/physics/rigidbody.hpp>
 
 #include <memory>
 
@@ -36,6 +36,15 @@ public:
         if (this->restitution == restitution) return;
         this->restitution = restitution;
         Reattach();
+    }
+
+    float GetDensity() { return density; }
+    float GetFriction() { return friction; }
+    float GetRestitution() { return restitution; }
+
+    pRigidbody GetRigidbody() {
+        if (!fixture) return nullptr;
+        return (Rigidbody *)fixture->GetBody()->GetUserData();
     }
 
 protected:

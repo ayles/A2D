@@ -12,16 +12,16 @@ set(A2D_SOURCES
         src/a2d/core/engine.cpp
         src/a2d/core/object2d.cpp
         src/a2d/core/component.cpp
-        src/a2d/components/sprite.cpp
-        src/a2d/components/camera.cpp
-        src/a2d/components/pixel_camera.cpp
+        src/a2d/graphics/sprite.cpp
+        src/a2d/core/camera.cpp
+        src/a2d/core/pixel_camera.cpp
         src/a2d/graphics/bitmap_font.cpp
         src/a2d/graphics/drawable.cpp
         src/a2d/audio/audio_clip.cpp
         src/a2d/audio/audio.cpp
-        src/a2d/components/audio_source.cpp
-        src/a2d/components/text.cpp
-        src/a2d/components/animator.cpp
+        src/a2d/audio/audio_source.cpp
+        src/a2d/graphics/text.cpp
+        src/a2d/graphics/animator.cpp
         src/a2d/filesystem/filesystem.cpp
         src/a2d/graphics/shader.cpp
         src/a2d/graphics/renderer.cpp
@@ -31,7 +31,7 @@ set(A2D_SOURCES
         src/a2d/graphics/sprite_batch.cpp
         src/a2d/core/resources.cpp
         src/a2d/graphics/animation.cpp
-        ${SHADERS_GENERATED_FILE} src/a2d/physics/physics.cpp src/a2d/components/physics/rigidbody.cpp)
+        ${SHADERS_GENERATED_FILE} src/a2d/physics/physics.cpp src/a2d/physics/rigidbody.cpp)
 
 set(A2D_HEADERS
         src/a2d/a2d.hpp
@@ -46,21 +46,21 @@ set(A2D_HEADERS
         src/a2d/core/ref_counter.hpp
         src/a2d/core/intrusive_ptr.hpp
         src/a2d/core/macro.hpp
-        src/a2d/components/sprite.hpp
-        src/a2d/components/camera.hpp
-        src/a2d/components/animator.hpp
-        src/a2d/components/pixel_camera.hpp
+        src/a2d/graphics/sprite.hpp
+        src/a2d/core/camera.hpp
+        src/a2d/graphics/animator.hpp
+        src/a2d/core/pixel_camera.hpp
         src/a2d/audio/audio.hpp
         src/a2d/graphics/drawable.hpp
-        src/a2d/components/text.hpp
+        src/a2d/graphics/text.hpp
         src/a2d/graphics/bitmap_font.hpp
-        src/a2d/components/audio_source.hpp
+        src/a2d/audio/audio_source.hpp
         src/a2d/audio/audio_clip.hpp
         src/a2d/physics/physics.hpp
-        src/a2d/components/physics/rigidbody.hpp
-        src/a2d/components/line.hpp
-        src/a2d/components/physics/physics_collider.hpp
-        src/a2d/components/physics/circle_collider.hpp
+        src/a2d/physics/rigidbody.hpp
+        src/a2d/graphics/line.hpp
+        src/a2d/physics/physics_collider.hpp
+        src/a2d/physics/circle_collider.hpp
         src/a2d/filesystem/filesystem.hpp
         src/a2d/graphics/gl.hpp
         src/a2d/graphics/sprite_batch.hpp
@@ -74,7 +74,7 @@ set(A2D_HEADERS
         src/a2d/core/command.hpp
         src/a2d/core/commands/lambda_command.hpp
         src/a2d/core/log.hpp
-        src/a2d/components/physics/box_collider.hpp)
+        src/a2d/physics/box_collider.hpp)
 
 # A2D library target
 add_library(a2d_engine_library STATIC ${A2D_SOURCES} ${A2D_HEADERS})

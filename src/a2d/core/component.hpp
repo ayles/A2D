@@ -7,6 +7,8 @@
 
 #include <a2d/core/macro.hpp>
 #include <a2d/core/ref_counter.hpp>
+#include <a2d/physics/physics.hpp>
+
 #include <list>
 
 namespace a2d {
@@ -44,6 +46,8 @@ protected:
     virtual void OnResume() {};
     virtual void OnAttach() {};
     virtual void OnDetach() {};
+    virtual void OnCollisionBegin(const intrusive_ptr<CollisionContact> &contact) {};
+    virtual void OnCollisionEnd(const intrusive_ptr<CollisionContact> &contact) {};
 };
 
 } // namespace a2d

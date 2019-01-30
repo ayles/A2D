@@ -5,7 +5,7 @@
 #ifndef A2D_PIXEL_CAMERA_H
 #define A2D_PIXEL_CAMERA_H
 
-#include <a2d/components/camera.hpp>
+#include <a2d/core/camera.hpp>
 
 namespace a2d {
 

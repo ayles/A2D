@@ -2,7 +2,7 @@
 // Created by selya on 05.12.2018.
 //
 
-#include <a2d/components/text.hpp>
+#include <a2d/graphics/text.hpp>
 #include <a2d/core/engine.hpp>
 
 namespace a2d {

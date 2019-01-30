@@ -2,7 +2,7 @@
 // Created by selya on 05.12.2018.
 //
 
-#include <a2d/components/audio_source.hpp>
+#include <a2d/audio/audio_source.hpp>
 #include <a2d/core/engine.hpp>
 
 namespace a2d {

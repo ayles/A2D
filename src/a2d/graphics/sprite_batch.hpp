@@ -10,7 +10,7 @@
 #include <a2d/graphics/texture_region.hpp>
 #include <a2d/graphics/shader.hpp>
 #include <a2d/math/math.hpp>
-#include <a2d/components/camera.hpp>
+#include <a2d/core/camera.hpp>
 #include <a2d/graphics/gl.hpp>
 
 #include <vector>

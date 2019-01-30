@@ -2,7 +2,7 @@
 // Created by selya on 14.11.2018.
 //
 
-#include <a2d/components/camera.hpp>
+#include <a2d/core/camera.hpp>
 #include <a2d/core/object2d.hpp>
 #include <a2d/core/engine.hpp>
 #include <a2d/graphics/renderer.hpp>

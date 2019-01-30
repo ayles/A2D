@@ -4,7 +4,7 @@
 
 #include <a2d/core/engine.hpp>
 #include <a2d/core/object2d.hpp>
-#include <a2d/components/camera.hpp>
+#include <a2d/core/camera.hpp>
 #include <a2d/core/log.hpp>
 
 unsigned long long a2d::Engine::frame_index = 0;

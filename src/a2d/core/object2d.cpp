@@ -4,8 +4,8 @@
 
 #include <a2d/core/object2d.hpp>
 #include <a2d/core/log.hpp>
-#include <a2d/components/physics/rigidbody.hpp>
-#include <a2d/components/physics/physics_collider.hpp>
+#include <a2d/physics/rigidbody.hpp>
+#include <a2d/physics/physics_collider.hpp>
 
 
 namespace a2d {
