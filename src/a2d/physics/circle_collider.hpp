@@ -48,7 +48,7 @@ protected:
         auto circle_shape = new b2CircleShape;
         float s = Physics::GetWorldScale();
         circle_shape->m_radius = radius * s;
-        circle_shape->m_p = b2Vec2(position.x * s, position.y * s);
+        circle_shape->m_p = b2Vec2(position.x, position.y);
         return std::shared_ptr<b2Shape>(circle_shape);
     };
 };

@@ -64,7 +64,7 @@ protected:
     std::shared_ptr<b2Shape> CalculateShape(const Vector2f &position, float rotation) override {
         auto box_shape = new b2PolygonShape;
         float s = Physics::GetWorldScale();
-        box_shape->SetAsBox(half_size.x * s, half_size.y * s, b2Vec2(position.x * s, position.y * s), rotation);
+        box_shape->SetAsBox(half_size.x * s, half_size.y * s, b2Vec2(position.x, position.y), rotation);
         return std::shared_ptr<b2Shape>(box_shape);
     }
 };

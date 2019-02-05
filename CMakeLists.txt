@@ -74,7 +74,7 @@ set(A2D_HEADERS
         src/a2d/core/command.hpp
         src/a2d/core/commands/lambda_command.hpp
         src/a2d/core/log.hpp
-        src/a2d/physics/box_collider.hpp)
+        src/a2d/physics/box_collider.hpp src/a2d/physics/chain_collider.h)
 
 # A2D library target
 add_library(a2d_engine_library STATIC ${A2D_SOURCES} ${A2D_HEADERS})

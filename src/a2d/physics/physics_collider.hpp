@@ -63,7 +63,7 @@ protected:
         fixture_def.restitution = restitution;
         auto o = ((Rigidbody *)body->GetUserData())->GetObject2D();
         auto shape = CalculateShape(
-                GetObject2D()->GetRelativePosition(o), GetObject2D()->GetRelativeRotation(o));
+                GetObject2D()->GetRelativePosition(o) * Physics::world_scale, GetObject2D()->GetRelativeRotation(o));
         fixture_def.shape = shape.get();
         fixture_def.userData = this;
         fixture = body->CreateFixture(&fixture_def);
