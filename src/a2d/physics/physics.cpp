@@ -28,6 +28,40 @@ class ContactListener : public b2ContactListener {
     }
 };
 
+intrusive_ptr<PhysicsCollider> CollisionContact::GetColliderA() {
+    return (PhysicsCollider*)contact->GetFixtureA()->GetUserData();
+}
+
+intrusive_ptr<PhysicsCollider> CollisionContact::GetColliderB() {
+    return (PhysicsCollider*)contact->GetFixtureB()->GetUserData();
+}
+
+Vector2f CollisionContact::GetNormal() {
+    contact->GetWorldManifold(&world_manifold);
+    return Vector2f(world_manifold.normal.x, world_manifold.normal.y);
+}
+
+int CollisionContact::GetPointCount() {
+    return contact->GetManifold()->pointCount;
+}
+
+Vector2f CollisionContact::GetPoint(int index) {
+    contact->GetWorldManifold(&world_manifold);
+    return Vector2f(world_manifold.points[index].x, world_manifold.points[index].y) *= Physics::world_scale_inverted;
+}
+
+bool CollisionContact::IsEnabled() {
+    return enabled;
+}
+
+bool CollisionContact::IsTouching() {
+    return contact->IsTouching();
+}
+
+void CollisionContact::SetEnabled(bool enabled) {
+    this->enabled = enabled;
+}
+
 bool Physics::Initialize() {
     GetWorld().SetContactListener(new ContactListener);
     return true;

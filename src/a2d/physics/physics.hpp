@@ -60,39 +60,14 @@ class CollisionContact : public ref_counter {
     CollisionContact(b2Contact *contact) : contact(contact), enabled(contact->IsEnabled()) {}
 
 public:
-    intrusive_ptr<PhysicsCollider> GetColliderA() {
-        return (PhysicsCollider*)contact->GetFixtureA()->GetUserData();
-    }
-
-    intrusive_ptr<PhysicsCollider> GetColliderB() {
-        return (PhysicsCollider*)contact->GetFixtureB()->GetUserData();
-    }
-
-    Vector2f GetNormal() {
-        contact->GetWorldManifold(&world_manifold);
-        return Vector2f(world_manifold.normal.x, world_manifold.normal.y);
-    }
-
-    int GetPointCount() {
-        return contact->GetManifold()->pointCount;
-    }
-
-    Vector2f GetPoint(int index) {
-        contact->GetWorldManifold(&world_manifold);
-        return Vector2f(world_manifold.points[index].x, world_manifold.points[index].y) *= Physics::world_scale_inverted;
-    }
-
-    bool IsEnabled() {
-        return enabled;
-    }
-
-    bool IsTouching() {
-        return contact->IsTouching();
-    }
-
-    void SetEnabled(bool enabled) {
-        this->enabled = enabled;
-    }
+    intrusive_ptr<PhysicsCollider> GetColliderA();
+    intrusive_ptr<PhysicsCollider> GetColliderB();
+    Vector2f GetNormal();
+    int GetPointCount();
+    Vector2f GetPoint(int index);
+    bool IsEnabled();
+    bool IsTouching();
+    void SetEnabled(bool enabled);
 };
 
 } //namespace a2d
