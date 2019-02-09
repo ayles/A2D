@@ -8,19 +8,11 @@
 namespace a2d {
 
 
-Text::Text() : text(), bitmap_font(nullptr), shader(Resources::Get<Shader>("default")), text_width(0), color(1) {}
+Text::Text() : text(), bitmap_font(nullptr), text_width(0), color(1) {}
 
 void Text::SetText(const std::string &text) {
     ASSERT_MAIN_THREAD
-    // TODO fix Visual Studio bug
-    // std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> convert;
-    // SetText(convert.from_bytes(text));
-    std::u32string s;
-    s.reserve(text.length());
-    for (int i = 0; i < (int)text.length(); ++i) {
-        s[i] = text[i];
-    }
-    SetText(s);
+    SetText(std::u32string(text.begin(), text.end()));
 }
 
 void Text::SetText(const std::u32string &text) {
@@ -45,15 +37,7 @@ const std::u32string &Text::GetUTF32Text() const {
 
 std::string Text::GetText() const {
     ASSERT_MAIN_THREAD
-    // TODO fix bug
-    // std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> convert;
-    // return convert.to_bytes(text);
-    std::string s;
-    s.reserve(text.length());
-    for (int i = 0; i < (int)text.length(); ++i) {
-        s[i] = (char)text[i];
-    }
-    return s;
+    return std::string(text.begin(), text.end());
 }
 
 pBitmapFont &Text::GetFont() {

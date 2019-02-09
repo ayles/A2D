@@ -12,18 +12,25 @@
 namespace a2d {
 
 class CircleCollider : public PhysicsCollider {
-private:
-    float radius = 0.0f;
-
 #ifndef NDEBUG
     intrusive_ptr<Line> line;
 #endif
+
+    float radius;
+    b2CircleShape shape;
 
 public:
     void SetRadius(float radius) {
         this->radius = radius;
         Reattach();
+    }
 
+    float GetRadius() {
+        return radius;
+    }
+
+protected:
+    b2Shape *CalculateShape(b2Body *body) override {
 #ifndef NDEBUG
         if (!line) line = GetObject2D()->AddComponent<Line>();
         line->vertices.clear();
@@ -33,23 +40,17 @@ public:
             line->vertices.emplace_back(Vector2f(std::cos(angle) * radius, std::sin(angle) * radius),
                                         Vector4f(0, 1, 0, 1));
         }
-        line->vertices.push_back(line->vertices[0]);
+        line->vertices.emplace_back(line->vertices[0]);
         line->vertices.emplace_back(Vector2f(), Vector4f(0, 1, 0, 1));
         line->Load();
 #endif
-    }
-
-    float GetRadius() {
-        return radius;
-    }
-
-protected:
-    std::shared_ptr<b2Shape> CalculateShape(const Vector2f &position, float rotation) override {
-        auto circle_shape = new b2CircleShape;
+        float r = (GetObject2D()->LocalToWorldPoint(Vector2f(radius, 0)) - GetObject2D()->GetPosition()).Length();
+        auto position = GetObject2D()->GetRelativePosition(((Rigidbody *)body->GetUserData())->GetObject2D());
+        // TODO scale
         float s = Physics::GetWorldScale();
-        circle_shape->m_radius = radius * s;
-        circle_shape->m_p = b2Vec2(position.x * s, position.y * s);
-        return std::shared_ptr<b2Shape>(circle_shape);
+        shape.m_radius = r * s;
+        shape.m_p = b2Vec2(position.x, position.y);
+        return &shape;
     };
 };
 

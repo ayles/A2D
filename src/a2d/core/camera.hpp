@@ -26,6 +26,7 @@ public:
     Vector2f ScreenToWorld(const Vector2f &screen);
 
     virtual const Matrix4f &GetMatrix();
+    virtual const Matrix4f &GetTransformedMatrix();
 
 protected:
     float height = 5.0f;

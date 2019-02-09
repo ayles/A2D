@@ -31,6 +31,7 @@ public:
         if (r_ptr) r_ptr->add_ref();
     }
 
+    // TODO add inheritance check
     template<class U>
     intrusive_ptr(const intrusive_ptr<U> &other) : ptr(dynamic_cast<T *>(other.get())) {
         if (r_ptr) r_ptr->add_ref();

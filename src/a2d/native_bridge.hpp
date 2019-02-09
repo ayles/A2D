@@ -84,14 +84,19 @@ public:
 
 extern "C" {
 
+JNIEnv *current_env = nullptr;
+jclass a2d_bridge = nullptr;
+
 JNIEXPORT jboolean JNICALL
 Java_com_selya_a2d_A2DBridge_onSurfaceCreated(JNIEnv *env, jclass type) {
+    current_env = env;
+    a2d_bridge = type;
     if (!a2d::NativeBridge::Initialize()) return JNI_FALSE;
+    a2d_bridge = nullptr;
+    current_env = nullptr;
     return JNI_TRUE;
 }
 
-JNIEnv *current_env = nullptr;
-jclass a2d_bridge = nullptr;
 JNIEXPORT jboolean JNICALL
 Java_com_selya_a2d_A2DBridge_onDrawFrame(JNIEnv *env, jclass type) {
     current_env = env;

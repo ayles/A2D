@@ -37,7 +37,12 @@ const Matrix4f &Camera::GetMatrix() {
             -half_height * ratio, half_height * ratio,
             -half_height, half_height
     );
-    camera_transformed_matrix = camera_matrix * Matrix4f(GetObject2D()->GetTransformMatrix()).Inverse();
+    return camera_matrix;
+}
+
+const Matrix4f &Camera::GetTransformedMatrix() {
+    ASSERT_MAIN_THREAD
+    camera_transformed_matrix = GetMatrix() * Matrix4f(GetObject2D()->GetTransformMatrix()).Inverse();
     return camera_transformed_matrix;
 }
 

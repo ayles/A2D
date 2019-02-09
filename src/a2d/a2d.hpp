@@ -49,6 +49,7 @@
 #include <a2d/physics/rigidbody.hpp>
 #include <a2d/physics/physics_collider.hpp>
 #include <a2d/physics/circle_collider.hpp>
-#include <a2d/physics/box_collider.hpp>
+#include <a2d/physics/polygon_collider.hpp>
+#include <a2d/physics/chain_collider.h>
 
 #endif //A2D_A2D_H

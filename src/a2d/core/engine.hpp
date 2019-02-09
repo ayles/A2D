@@ -33,6 +33,7 @@ class Engine {
     static unsigned long long frame_index;
     static float delta_time;
     static intrusive_ptr<Object2D> root;
+    static intrusive_ptr<Object2D> gui_root;
     static intrusive_ptr<Camera> camera;
     static std::thread::id main_thread_id;
     static bool playing;
@@ -49,6 +50,7 @@ public:
     static unsigned long long GetFrameIndex();
     static float GetDeltaTime();
     static intrusive_ptr<Object2D> GetRoot();
+    static intrusive_ptr<Object2D> GetGUIRoot();
     static intrusive_ptr<Camera> GetCamera();
     static std::thread::id &GetMainThreadID();
     static bool IsPlaying();

@@ -15,11 +15,7 @@ Animation::Frame::Frame(const a2d::pTextureRegion &texture_region, float duratio
 }
 
 
-Animation::Animation(const std::vector<Frame> &frames) : Animation(std::vector<Frame>(frames)) {
-    ASSERT_MAIN_THREAD
-}
-
-Animation::Animation(std::vector<Frame> &&frames) : frames(std::move(frames)), play_mode(PlayMode::NORMAL) {
+Animation::Animation(const std::vector<Frame> &frames) : frames(frames) {
     ASSERT_MAIN_THREAD
     float time = 0.0f;
     for (auto &frame : frames) {
@@ -46,7 +42,7 @@ const Animation::Frame *Animation::GetFrameByTime(float animation_time) {
         case PlayMode::NORMAL: break;
     }
 
-    return &(--frames_start_time.lower_bound(animation_time))->second;
+    return &(--frames_start_time.upper_bound(animation_time))->second;
 }
 
 const Animation::Frame *Animation::GetFrame(int frame_index) {
@@ -73,10 +69,6 @@ void Animation::SetPlayMode(Animation::PlayMode play_mode) {
 
 pAnimation Animation::Create(const std::vector<Animation::Frame> &frames) {
     return new Animation(frames);
-}
-
-pAnimation Animation::Create(std::vector<Animation::Frame> &&frames) {
-    return new Animation(std::move(frames));
 }
 
 } //namespace a2d

@@ -25,7 +25,7 @@ bool Object2D::compare_objects::operator()(const pObject2D &lhs, const pObject2D
     return lhs < rhs;
 }
 
-Object2D::Object2D() : parent(nullptr), layer(0),  local_position(), local_scale(1), local_rotation(0), world_rotation(0) {
+Object2D::Object2D() : parent(nullptr), layer(0),  local_position(), local_scale(1), local_rotation(0) {
     ASSERT_MAIN_THREAD
 }
 
@@ -78,6 +78,7 @@ void Object2D::Destroy() {
     for (auto &c : children) c->Destroy();
     DestroyAllComponents();
     Engine::AddCommand([this]() {
+        Logger::Info("2");
         if (parent) parent->children.erase(this);
     });
 }
@@ -154,7 +155,7 @@ Vector2f Object2D::GetPosition() const {
 
 float Object2D::GetRotation() const {
     ASSERT_MAIN_THREAD
-    return world_rotation;
+    return transform_matrix.GetRotationZ();
 }
 
 Vector2f Object2D::GetRelativePosition(const pObject2D &origin) {
@@ -169,7 +170,11 @@ Vector2f Object2D::GetRelativePosition(const pObject2D &origin) {
 
 float Object2D::GetRelativeRotation(const pObject2D &origin) {
     ASSERT_MAIN_THREAD
-    return world_rotation - origin->world_rotation;
+    if (!origin) {
+        LOG_TRACE("Origin object is null");
+        return 0;
+    }
+    return (Matrix4f(origin->transform_matrix).Inverse() * transform_matrix).GetRotationZ();
 }
 
 const Vector2f &Object2D::GetLocalPosition() const {
@@ -208,7 +213,7 @@ void Object2D::SetPosition(const Vector2f &position) {
 void Object2D::SetRotation(float rotation) {
     ASSERT_MAIN_THREAD
     if (parent) {
-        local_rotation = rotation - parent->world_rotation;
+        local_rotation = rotation - parent->GetRotation();
     } else {
         local_rotation = rotation;
     }
@@ -229,7 +234,7 @@ void Object2D::SetLocalPosition(const Vector2f &position) {
 void Object2D::SetLocalScale(float x, float y) {
     ASSERT_MAIN_THREAD
     local_scale.Set(x, y);
-    OnTransform(this);
+    OnTransform(this, true, true);
 }
 
 void Object2D::SetLocalScale(const Vector2f &scale) {
@@ -243,18 +248,17 @@ void Object2D::SetLocalRotation(float rotation) {
     OnTransform(this);
 }
 
-void Object2D::OnTransform(const pObject2D &object) {
+void Object2D::OnTransform(const pObject2D &object, bool apply_local, bool scaling) {
     ASSERT_MAIN_THREAD
-    transform_matrix.Identity();
-    transform_matrix.Translate(local_position.x, local_position.y, 0.0f);
-    transform_matrix.Rotate(local_rotation, 0.0f, 0.0f, 1.0f);
-    transform_matrix.Scale(local_scale.x, local_scale.y, 1.0f);
+    if (apply_local) {
+        transform_matrix.Identity();
+        transform_matrix.Translate(local_position.x, local_position.y, 0.0f);
+        transform_matrix.Rotate(local_rotation, 0.0f, 0.0f, 1.0f);
+        transform_matrix.Scale(local_scale.x, local_scale.y, 1.0f);
+    }
 
     if (parent) {
         transform_matrix = parent->transform_matrix * transform_matrix;
-        world_rotation = local_rotation + parent->world_rotation;
-    } else {
-        world_rotation = local_rotation;
     }
 
     for (auto &c : children) {
@@ -268,9 +272,21 @@ void Object2D::OnTransform(const pObject2D &object) {
 
     // TODO optimize
     auto collider = GetComponent<PhysicsCollider>(true);
-    // TODO additionally check for parent-parent transformations and discard
-    if (collider && object.get() != this) {
-        collider->Reattach();
+    if (collider) {
+        // Reattach always on scaling
+        if (scaling) collider->Reattach();
+        else {
+            auto o = this;
+            auto r = collider->GetRigidbody()->GetObject2D().get();
+            while (o) {
+                if (o == r) break;
+                if (o == object.get()) {
+                    collider->Reattach();
+                    break;
+                }
+                o = o->GetParent().get();
+            }
+        }
     }
 }
 

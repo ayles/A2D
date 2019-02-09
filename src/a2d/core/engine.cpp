@@ -10,6 +10,7 @@
 unsigned long long a2d::Engine::frame_index = 0;
 float a2d::Engine::delta_time = 0.0f;
 a2d::pObject2D a2d::Engine::root = nullptr;
+a2d::pObject2D a2d::Engine::gui_root = nullptr;
 a2d::pCamera a2d::Engine::camera = nullptr;
 std::thread::id a2d::Engine::main_thread_id;
 bool a2d::Engine::playing = false;
@@ -36,6 +37,11 @@ a2d::pObject2D a2d::Engine::GetRoot() {
     return root;
 }
 
+a2d::pObject2D a2d::Engine::GetGUIRoot() {
+    ASSERT_MAIN_THREAD
+    return gui_root;
+}
+
 a2d::pCamera a2d::Engine::GetCamera() {
     ASSERT_MAIN_THREAD
     return camera;
@@ -53,6 +59,7 @@ bool a2d::Engine::IsPlaying() {
 bool a2d::Engine::Initialize() {
     main_thread_id = std::this_thread::get_id();
     root = new Object2D;
+    gui_root = new Object2D;
 
     Resume();
 

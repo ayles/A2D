@@ -420,8 +420,8 @@ public:
         return v;
     }
 
-    Vector<4, T> &Transform(Vector<4, T> &v) const {
-        return Transform(v.x, v.y, v.z, v.w, v);
+    Vector<4, T> Transform(const Vector<4, T> &v) const {
+        return Transform(v.x, v.y, v.z, v.w);
     }
 
     Vector<4, T> &Transform(const Vector<4, T> &v, Vector<4, T> &dest) const {
@@ -485,6 +485,11 @@ public:
 
     Vector<3, T> GetTranslation() const {
         return Vector<3, T>(data[12], data[13], data[14]);
+    }
+
+    float GetRotationZ() const {
+        Vector4f rot = Transform(1, 0, 0, 0);
+        return std::atan2(rot.y, rot.x);
     }
 };
 

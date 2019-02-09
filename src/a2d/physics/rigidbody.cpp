@@ -172,8 +172,9 @@ void Rigidbody::Initialize() {
 void Rigidbody::OnDestroy() {
     auto f = body->GetFixtureList();
     while (f) {
+        auto next = f->GetNext();
         ((PhysicsCollider *)f->GetUserData())->DetachFromRigidbody();
-        f = f->GetNext();
+        f = next;
     }
     Physics::GetWorld().DestroyBody(body);
 }

@@ -74,7 +74,7 @@ set(A2D_HEADERS
         src/a2d/core/command.hpp
         src/a2d/core/commands/lambda_command.hpp
         src/a2d/core/log.hpp
-        src/a2d/physics/box_collider.hpp)
+        src/a2d/physics/polygon_collider.hpp src/a2d/physics/chain_collider.h src/a2d/ui/gui_root.h)
 
 # A2D library target
 add_library(a2d_engine_library STATIC ${A2D_SOURCES} ${A2D_HEADERS})
@@ -119,13 +119,14 @@ elseif (WIN32 OR APPLE OR UNIX)
     target_compile_definitions(a2d_engine_library PUBLIC TARGET_DESKTOP)
 endif ()
 
-if (WIN32)
+if (WIN32 OR ANDROID_ON_WINDOWS)
     set(TOOLS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/tools/win32")
-elseif (APPLE)
+elseif (APPLE OR ANDROID_ON_MACOS)
     set(TOOLS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/tools/macos")
-elseif (UNIX)
+elseif (UNIX OR ANDROID_ON_LINUX)
     set(TOOLS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/tools/linux")
 endif ()
+message(STATUS ${TOOLS_PATH})
 
 set(SOLOUD_STATIC TRUE)
 

@@ -2,13 +2,15 @@
 // Created by selya on 26.10.2018.
 //
 
-#ifndef A2D_RENDER_H
-#define A2D_RENDER_H
+#ifndef A2D_RENDERER_H
+#define A2D_RENDERER_H
 
 #include <a2d/core/macro.hpp>
 #include <a2d/math/vector.hpp>
 #include <a2d/graphics/sprite_batch.hpp>
 #include <a2d/graphics/gl.hpp>
+
+#include <set>
 
 namespace a2d {
 
@@ -92,4 +94,4 @@ private:
 
 } //namespace a2d
 
-#endif //A2D_RENDER_H
+#endif //A2D_RENDERER_H

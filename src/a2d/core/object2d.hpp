@@ -19,6 +19,8 @@
 #include <typeindex>
 #include <type_traits>
 #include <vector>
+#include <a2d/graphics/sprite.hpp>
+
 
 namespace a2d {
 
@@ -30,6 +32,7 @@ class Object2D final : public ref_counter {
     friend class Physics;
     friend class Drawable;
     friend class Component;
+    friend class GUIRoot;
 
     struct compare_objects {
         bool operator()(const pObject2D &lhs, const pObject2D &rhs) const;
@@ -44,7 +47,6 @@ class Object2D final : public ref_counter {
     Vector2f local_position;
     Vector2f local_scale;
     float local_rotation;
-    float world_rotation;
 
 public:
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Object2D)
@@ -101,7 +103,7 @@ private:
 
     void OnAttach();
     void OnDetach();
-    void OnTransform(const pObject2D &object);
+    void OnTransform(const pObject2D &object, bool apply_local = true, bool scaling = false);
 };
 
 

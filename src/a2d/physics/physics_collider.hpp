@@ -53,18 +53,16 @@ protected:
     float restitution = 0.0f;
     b2Fixture *fixture = nullptr;
 
-    virtual std::shared_ptr<b2Shape> CalculateShape(const Vector2f &position, float rotation) = 0;
+    virtual b2Shape *CalculateShape(b2Body *body) = 0;
 
     virtual void AttachToRigidbody(b2Body *body) {
         if (fixture || !body) return;
         b2FixtureDef fixture_def;
-        fixture_def.density = density;
+        fixture_def.density = density * 0.01f * Physics::world_scale_inverted * Physics::world_scale_inverted;
         fixture_def.friction = friction;
         fixture_def.restitution = restitution;
-        auto o = ((Rigidbody *)body->GetUserData())->GetObject2D();
-        auto shape = CalculateShape(
-                GetObject2D()->GetRelativePosition(o), GetObject2D()->GetRelativeRotation(o));
-        fixture_def.shape = shape.get();
+        fixture_def.shape = CalculateShape(body);
+        if (!fixture_def.shape) return;
         fixture_def.userData = this;
         fixture = body->CreateFixture(&fixture_def);
     }
@@ -78,7 +76,9 @@ protected:
     }
 
     virtual void Reattach() {
-        AttachToRigidbody(DetachFromRigidbody());
+        auto body = DetachFromRigidbody();
+        if (!body) FindAndAttach();
+        else AttachToRigidbody(body);
     }
 
     void FindAndAttach() {

@@ -105,8 +105,12 @@ void Physics::SetWorldScale(float world_scale) {
         LOG_TRACE("Can't change physics world scale when there is bodies");
         return;
     }
+    b2Vec2 gravity = GetWorld().GetGravity();
+    gravity *= world_scale_inverted;
     Physics::world_scale = world_scale;
     Physics::world_scale_inverted = 1 / world_scale;
+    gravity *= world_scale;
+    GetWorld().SetGravity(gravity);
 }
 
 Vector2f Physics::GetGravity() {

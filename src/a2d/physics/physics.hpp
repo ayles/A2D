@@ -23,6 +23,7 @@ class Physics {
     friend class NativeBridge;
     friend class ContactListener;
     friend class CollisionContact;
+    friend class PhysicsCollider;
 
     static float world_scale;
     static float world_scale_inverted;

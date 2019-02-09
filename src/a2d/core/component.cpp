@@ -21,10 +21,10 @@ void Component::Destroy() {
     Engine::AddCommand([this]() {
         auto iter = object_2d->components.find(typeid(*this));
         if (iter == object_2d->components.end() || iter->second.empty()) return;
-        iter->second.erase(this);
         if (Engine::IsPlaying()) this->OnPause();
         this->OnDetach();
         this->OnDestroy();
+        iter->second.erase(this);
         Engine::components.erase(this);
     });
 }

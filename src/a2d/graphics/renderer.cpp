@@ -112,7 +112,7 @@ bool Renderer::Initialize() {
     glDisable(GL_DEPTH_TEST);
 
 #ifdef RENDERER_GL
-    glEnable(GL_MULTISAMPLE);
+    //glEnable(GL_MULTISAMPLE);
 #endif
 
     SetSpriteBatch(new SpriteBatch);
@@ -140,10 +140,16 @@ bool Renderer::Draw() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     if (Engine::camera) {
-        sprite_batch->SetCameraMatrix(Engine::camera->GetMatrix());
+        sprite_batch->SetCameraMatrix(Engine::camera->GetTransformedMatrix());
         Engine::GetRoot()->Draw(*sprite_batch);
         sprite_batch->Flush();
     }
+
+    static Matrix4f gui_camera_matrix;
+    gui_camera_matrix.SetOrtho2D(0, Renderer::GetWidth(), 0, Renderer::GetHeight());
+    sprite_batch->SetCameraMatrix(gui_camera_matrix);
+    Engine::GetGUIRoot()->Draw(*sprite_batch);
+    sprite_batch->Flush();
 
 #if TARGET_DESKTOP
     glfwSwapBuffers(window);

@@ -56,7 +56,7 @@ public:
             glVertexAttribPointer(color->location, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)sizeof(Vector2f));
             glEnableVertexAttribArray(color->location);
         }
-        shader->SetUniform("camera_matrix", Engine::GetCamera()->GetMatrix());
+        shader->SetUniform("camera_matrix", Engine::GetCamera()->GetTransformedMatrix());
         shader->SetUniform("transform_matrix", GetObject2D()->GetTransformMatrix());
         glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
         if (p) glDisableVertexAttribArray(p->location);

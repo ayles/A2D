@@ -17,7 +17,7 @@ public:
     float GetScaleFactor();
 
     void Update() override;
-    const Matrix4f &GetMatrix() override;
+    const Matrix4f &GetTransformedMatrix() override;
 
 private:
     float scale_factor;

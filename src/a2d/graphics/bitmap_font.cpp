@@ -34,7 +34,7 @@ int BitmapFont::GetLineHeight() const {
     return line_height;
 }
 
-BitmapFont::BitmapFont(const std::vector<unsigned char> &ttf, int size) {
+BitmapFont::BitmapFont(const std::vector<unsigned char> &ttf, int size, Texture::Filtering filtering) {
     ASSERT_MAIN_THREAD
     FT_Face face;
     FT_New_Memory_Face(GetFreeTypeLibrary(), &ttf[0], ttf.size(), 0, &face);
@@ -106,7 +106,7 @@ BitmapFont::BitmapFont(const std::vector<unsigned char> &ttf, int size) {
                         texture,
                         current_x, current_y,
                         g->bitmap.width, g->bitmap.rows,
-                        Texture::Filtering::LINEAR
+                        filtering
                 ),
                 g->bitmap_left,
                 g->bitmap_top - g->bitmap.rows,
@@ -137,9 +137,9 @@ FT_Library BitmapFont::GetFreeTypeLibrary() {
     return ft_library;
 }
 
-pBitmapFont BitmapFont::Create(const std::vector<unsigned char> &ttf, int size) {
+pBitmapFont BitmapFont::Create(const std::vector<unsigned char> &ttf, int size, Texture::Filtering filtering) {
     ASSERT_MAIN_THREAD
-    return new BitmapFont(ttf, size);
+    return new BitmapFont(ttf, size, filtering);
 }
 
 } //namespace a2d

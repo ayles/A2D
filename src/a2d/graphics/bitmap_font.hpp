@@ -42,10 +42,10 @@ public:
 
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(BitmapFont)
 
-    static pBitmapFont Create(const std::vector<unsigned char> &ttf, int size);
+    static pBitmapFont Create(const std::vector<unsigned char> &ttf, int size, Texture::Filtering filtering = Texture::Filtering::NEAREST);
 
 private:
-    BitmapFont(const std::vector<unsigned char> &ttf, int size);
+    BitmapFont(const std::vector<unsigned char> &ttf, int size, Texture::Filtering filtering = Texture::Filtering::LINEAR);
     ~BitmapFont() override;
 
     static FT_Library GetFreeTypeLibrary();

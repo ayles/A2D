@@ -28,6 +28,9 @@ public:
     void PauseAnimation();
     void StopAnimation();
 
+    void SetTime(float time);
+    float GetTime();
+
 private:
     float time;
     bool playing;

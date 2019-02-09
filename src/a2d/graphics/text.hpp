@@ -21,7 +21,6 @@ class Text : public Drawable {
 protected:
     std::u32string text;
     pBitmapFont bitmap_font;
-    pShader shader;
     float text_width;
 
 public:

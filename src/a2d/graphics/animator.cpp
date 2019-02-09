@@ -4,6 +4,8 @@
 
 #include <a2d/graphics/animator.hpp>
 #include <a2d/core/object2d.hpp>
+#include "animator.hpp"
+
 
 namespace a2d {
 
@@ -29,16 +31,29 @@ void Animator::PauseAnimation() {
     playing = false;
 }
 
+void Animator::StopAnimation() {
+    PauseAnimation();
+    time = 0.0f;
+}
+
 void Animator::Update() {
     if (!current_animation) return;
     auto sprite = GetObject2D()->GetComponent<Sprite>();
     if (!sprite) return;
-    auto frame = current_animation->GetFrame(time);
+    auto frame = current_animation->GetFrameByTime(time);
     if (!frame) return;
     sprite->SetTextureRegion(frame->texture_region);
     if (playing) time += a2d::Engine::GetDeltaTime();
 }
 
 Animator::~Animator() {}
+
+void Animator::SetTime(float time) {
+    this->time = time;
+}
+
+float Animator::GetTime() {
+    return time;
+}
 
 } //namespace a2d

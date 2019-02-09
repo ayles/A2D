@@ -13,6 +13,7 @@ void Sprite::SetTextureRegion(const pTextureRegion &texture_region) {
     Drawable::SetTextureRegion(texture_region);
     if (!texture_region) SetSize(0.0f);
     this->texture_region = texture_region;
+    SetSize(texture_region->GetWidth(), texture_region->GetHeight());
 }
 
 void Sprite::Draw(SpriteBatch &sprite_batch) {

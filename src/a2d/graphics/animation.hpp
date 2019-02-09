@@ -49,11 +49,9 @@ public:
     void SetPlayMode(PlayMode play_mode);
 
     static pAnimation Create(const std::vector<Frame> &frames);
-    static pAnimation Create(std::vector<Frame> &&frames);
 
 private:
     Animation(const std::vector<Frame> &frames);
-    Animation(std::vector<Frame> &&frames);
 };
 
 } //namespace a2d

@@ -24,7 +24,7 @@ void a2d::PixelCamera::Update() {
     Component::Update();
 }
 
-const a2d::Matrix4f &a2d::PixelCamera::GetMatrix() {
+const a2d::Matrix4f &a2d::PixelCamera::GetTransformedMatrix() {
     ASSERT_MAIN_THREAD
     float half_height = GetHeight() * 0.5f * scale_factor;
     float half_width = GetAspectRatio() * half_height;
