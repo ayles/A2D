@@ -40,7 +40,6 @@ public:
     float GetLinearDamping();
     float GetAngularDamping();
     bool IsFixedRotation();
-    bool IsActive();
     bool IsAwake();
     bool IsBullet();
     bool IsSleepingAllowed();
@@ -55,7 +54,6 @@ public:
     void SetLinearDamping(float damping);
     void SetAngularDamping(float damping);
     void SetFixedRotation(bool rotation_fixed);
-    void SetActive(bool active);
     void SetAwake(bool awake);
     void SetBullet(bool bullet);
     void SetSleepingAllowed(bool sleeping_allowed);
@@ -69,6 +67,8 @@ public:
 
 private:
     void Initialize() override;
+    void OnEnable() override;
+    void OnDisable() override;
     void OnDestroy() override;
 
     bool internal_transform = false;

@@ -56,7 +56,7 @@ protected:
     virtual b2Shape *CalculateShape(b2Body *body) = 0;
 
     virtual void AttachToRigidbody(b2Body *body) {
-        if (fixture || !body) return;
+        if (fixture || !body || !IsActiveTransitive()) return;
         b2FixtureDef fixture_def;
         fixture_def.density = density * 0.01f * Physics::world_scale_inverted * Physics::world_scale_inverted;
         fixture_def.friction = friction;
@@ -91,6 +91,14 @@ protected:
             }
             o = o->GetParent();
         }
+    }
+
+    void OnEnable() override {
+        FindAndAttach();
+    }
+
+    void OnDisable() override {
+        DetachFromRigidbody();
     }
 
     void OnAttach() override {

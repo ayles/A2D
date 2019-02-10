@@ -47,6 +47,8 @@ class Object2D final : public ref_counter {
     Vector2f local_position;
     Vector2f local_scale;
     float local_rotation;
+    bool active;
+    bool active_transitive;
 
 public:
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Object2D)
@@ -61,6 +63,8 @@ public:
     const Vector2f &GetLocalPosition() const;
     const Vector2f &GetLocalScale() const;
     float GetLocalRotation() const;
+    bool IsActive() const;
+    bool IsActiveTransitive() const;
 
     void SetLayer(int layer);
     void SetLocalPosition(float x, float y);
@@ -71,6 +75,7 @@ public:
     void SetPosition(float x, float y);
     void SetPosition(const Vector2f &position);
     void SetRotation(float rotation);
+    void SetActive(bool active);
 
     void Attach(const pObject2D &parent);
 
@@ -124,6 +129,7 @@ Object2D::AddComponent() {
     component->Initialize();
     component->initialized = true;
     component->OnAttach();
+    component->SetActive(true);
     if (Engine::IsPlaying()) component->OnResume();
     Engine::components.emplace(component);
     //});

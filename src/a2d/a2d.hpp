@@ -43,7 +43,6 @@
 #include <a2d/graphics/sprite.hpp>
 #include <a2d/graphics/text.hpp>
 #include <a2d/graphics/animator.hpp>
-#include <a2d/core/pixel_camera.hpp>
 #include <a2d/physics/rigidbody.hpp>
 #include <a2d/graphics/line.hpp>
 #include <a2d/physics/rigidbody.hpp>

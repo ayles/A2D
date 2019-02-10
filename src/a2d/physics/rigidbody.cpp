@@ -4,6 +4,7 @@
 
 #include <a2d/physics/rigidbody.hpp>
 #include <a2d/physics/physics_collider.hpp>
+#include "rigidbody.hpp"
 
 
 namespace a2d {
@@ -50,10 +51,6 @@ float Rigidbody::GetAngularDamping() {
 
 bool Rigidbody::IsFixedRotation() {
     return body->IsFixedRotation();
-}
-
-bool Rigidbody::IsActive() {
-    return body->IsActive();
 }
 
 bool Rigidbody::IsAwake() {
@@ -117,10 +114,6 @@ void Rigidbody::SetFixedRotation(bool rotation_fixed) {
     body->SetFixedRotation(rotation_fixed);
 }
 
-void Rigidbody::SetActive(bool active) {
-    body->SetActive(active);
-}
-
 void Rigidbody::SetAwake(bool awake) {
     body->SetAwake(awake);
 }
@@ -167,6 +160,14 @@ void Rigidbody::Initialize() {
     body_def.angle = GetObject2D()->GetRotation();
     body = Physics::GetWorld().CreateBody(&body_def);
     body->SetUserData(this);
+}
+
+void Rigidbody::OnEnable() {
+    body->SetActive(true);
+}
+
+void Rigidbody::OnDisable() {
+    body->SetActive(false);
 }
 
 void Rigidbody::OnDestroy() {

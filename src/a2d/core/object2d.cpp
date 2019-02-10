@@ -6,6 +6,7 @@
 #include <a2d/core/log.hpp>
 #include <a2d/physics/rigidbody.hpp>
 #include <a2d/physics/physics_collider.hpp>
+#include "object2d.hpp"
 
 
 namespace a2d {
@@ -25,7 +26,9 @@ bool Object2D::compare_objects::operator()(const pObject2D &lhs, const pObject2D
     return lhs < rhs;
 }
 
-Object2D::Object2D() : parent(nullptr), layer(0),  local_position(), local_scale(1), local_rotation(0) {
+Object2D::Object2D() : parent(nullptr), layer(0),  local_position(), local_scale(1), local_rotation(0),
+active(true), active_transitive(true)
+{
     ASSERT_MAIN_THREAD
 }
 
@@ -69,6 +72,9 @@ void Object2D::Attach(const pObject2D &parent) {
         }
         this->parent = parent;
         parent->children.emplace(this);
+        // Retrigger activation recursion
+        SetActive(IsActive());
+        OnTransform(this, true, true);
         OnAttach();
     }
 }
@@ -78,7 +84,6 @@ void Object2D::Destroy() {
     for (auto &c : children) c->Destroy();
     DestroyAllComponents();
     Engine::AddCommand([this]() {
-        Logger::Info("2");
         if (parent) parent->children.erase(this);
     });
 }
@@ -86,9 +91,11 @@ void Object2D::Destroy() {
 void Object2D::Draw(SpriteBatch &sprite_batch) {
     ASSERT_MAIN_THREAD
     for (auto &drawable : drawables) {
+        if (!drawable->IsActiveTransitive()) continue;
         drawable->Draw(sprite_batch);
     }
     for (const pObject2D &c : children) {
+        if (!c->IsActiveTransitive()) continue;
         c->Draw(sprite_batch);
     }
 }
@@ -192,6 +199,13 @@ float Object2D::GetLocalRotation() const {
     return local_rotation;
 }
 
+bool Object2D::IsActive() const {
+    return active;
+}
+
+bool Object2D::IsActiveTransitive() const {
+    return active_transitive;
+}
 
 void Object2D::SetPosition(float x, float y) {
     ASSERT_MAIN_THREAD
@@ -248,6 +262,22 @@ void Object2D::SetLocalRotation(float rotation) {
     OnTransform(this);
 }
 
+void Object2D::SetActive(bool active) {
+    this->active = active;
+    bool old_active_transitive = this->active_transitive;
+    this->active_transitive = (parent ? parent->active_transitive : true) && active;
+    if (old_active_transitive != this->active_transitive) {
+        for (auto &o : components) {
+            for (auto &c : o.second) {
+                c->SetActive(c->IsActive());
+            }
+        }
+        for (auto &c : children) {
+            c->SetActive(c->IsActive());
+        }
+    }
+}
+
 void Object2D::OnTransform(const pObject2D &object, bool apply_local, bool scaling) {
     ASSERT_MAIN_THREAD
     if (apply_local) {
@@ -277,14 +307,16 @@ void Object2D::OnTransform(const pObject2D &object, bool apply_local, bool scali
         if (scaling) collider->Reattach();
         else {
             auto o = this;
-            auto r = collider->GetRigidbody()->GetObject2D().get();
-            while (o) {
-                if (o == r) break;
-                if (o == object.get()) {
-                    collider->Reattach();
-                    break;
+            if (collider->GetRigidbody()) {
+                auto r = collider->GetRigidbody()->GetObject2D().get();
+                while (o) {
+                    if (o == r) break;
+                    if (o == object.get()) {
+                        collider->Reattach();
+                        break;
+                    }
+                    o = o->GetParent().get();
                 }
-                o = o->GetParent().get();
             }
         }
     }

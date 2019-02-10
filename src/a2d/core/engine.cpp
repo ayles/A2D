@@ -81,14 +81,20 @@ bool a2d::Engine::Update() {
     glfwPollEvents();
 #endif
 
-    for (auto &component : components) component->Update();
+    for (auto &component : components) {
+        if (!component->IsActiveTransitive()) continue;
+        component->Update();
+    }
     ExecuteCommands();
 
     return true;
 }
 
 bool a2d::Engine::PostUpdate() {
-    for (auto &component : components) component->PostUpdate();
+    for (auto &component : components) {
+        if (!component->IsActiveTransitive()) continue;
+        component->PostUpdate();
+    }
     ExecuteCommands();
     return true;
 }

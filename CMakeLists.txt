@@ -14,7 +14,6 @@ set(A2D_SOURCES
         src/a2d/core/component.cpp
         src/a2d/graphics/sprite.cpp
         src/a2d/core/camera.cpp
-        src/a2d/core/pixel_camera.cpp
         src/a2d/graphics/bitmap_font.cpp
         src/a2d/graphics/drawable.cpp
         src/a2d/audio/audio_clip.cpp
@@ -49,7 +48,6 @@ set(A2D_HEADERS
         src/a2d/graphics/sprite.hpp
         src/a2d/core/camera.hpp
         src/a2d/graphics/animator.hpp
-        src/a2d/core/pixel_camera.hpp
         src/a2d/audio/audio.hpp
         src/a2d/graphics/drawable.hpp
         src/a2d/graphics/text.hpp
