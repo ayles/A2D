@@ -2,10 +2,10 @@
 // Created by selya on 19.11.2018.
 //
 
-#ifndef A2D_INPUT_H
-#define A2D_INPUT_H
+#ifndef A2D_INPUT_HPP
+#define A2D_INPUT_HPP
 
-#include <a2d/graphics/gl.hpp>
+#include <a2d/renderer/gl.hpp>
 #include <a2d/math/vector.hpp>
 
 namespace a2d {
@@ -275,7 +275,7 @@ private:
     static bool Initialize();
     static void Uninitialize();
 
-#ifdef TARGET_DESKTOP
+#if TARGET_DESKTOP
     static void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
     static void MousePositionCallback(GLFWwindow *window, double x_position, double y_position);
     static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);

@@ -13,7 +13,7 @@ namespace a2d {
 class FileSystem {
     friend class NativeBridge;
 
-#ifdef TARGET_ANDROID
+#if TARGET_ANDROID
     static void Initialize(void *asset_manager);
 #endif
 

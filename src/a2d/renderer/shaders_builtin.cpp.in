@@ -1,0 +1,10 @@
+#include <a2d/renderer/shader.hpp>
+#include <a2d/core/resources.hpp>
+
+#define SHADER_LOAD_MACRO(name, vertex, fragment) Resources::Put<Shader>(#name, new Shader(vertex, fragment));
+
+void a2d::Shader::CreateDefaultShaders() {
+
+${SHADERS_INIT_CODE}
+
+}

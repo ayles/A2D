@@ -5,14 +5,14 @@
 #ifndef A2D_LOG_H
 #define A2D_LOG_H
 
-#ifdef NDEBUG
+#if NDEBUG
 #define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_INFO
 #else
 #define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
 #endif
 
 #include <spdlog/spdlog.h>
-#ifdef TARGET_ANDROID
+#if TARGET_ANDROID
 #include <spdlog/sinks/android_sink.h>
 #else
 #include <spdlog/sinks/stdout_sinks.h>
@@ -33,14 +33,14 @@ class Logger {
 private:
     static std::shared_ptr<spdlog::logger> CreateLogger() {
         std::shared_ptr<spdlog::logger> logger;
-#ifdef TARGET_ANDROID
+#if TARGET_ANDROID
         logger = spdlog::android_logger_mt("logger", "a2d_log");
 #else
         logger = spdlog::stdout_logger_mt("logger");
 #endif
         logger->set_level(spdlog::level::info);
         logger->set_pattern("%+");
-#ifdef NDEBUG
+#if NDEBUG
         logger->set_level(spdlog::level::level_enum::info);
 #else
         logger->set_level(spdlog::level::level_enum::trace);

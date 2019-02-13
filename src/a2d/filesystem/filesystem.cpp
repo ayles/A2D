@@ -6,7 +6,7 @@
 #include <a2d/core/engine.hpp>
 #include <a2d/core/log.hpp>
 
-#ifdef TARGET_ANDROID
+#if TARGET_ANDROID
 #include <android/asset_manager.h>
 #include <android/asset_manager_jni.h>
 #elif TARGET_IOS
@@ -18,7 +18,7 @@
 
 namespace a2d {
 
-#ifdef TARGET_ANDROID
+#if TARGET_ANDROID
 AAssetManager *asset_manager = nullptr;
 
 void FileSystem::Initialize(void *asset_manager) {
@@ -28,7 +28,7 @@ void FileSystem::Initialize(void *asset_manager) {
 
 std::vector<unsigned char> FileSystem::LoadRaw(const std::string &path) {
     ASSERT_MAIN_THREAD
-#ifdef TARGET_ANDROID
+#if TARGET_ANDROID
     auto asset = AAssetManager_open(asset_manager, path.c_str(), AASSET_MODE_UNKNOWN);
     if (asset == nullptr) { LOG_TRACE("Can't load file"); }
     auto size = AAsset_getLength(asset);
@@ -60,7 +60,7 @@ std::vector<unsigned char> FileSystem::LoadRaw(const std::string &path) {
 #elif TARGET_DESKTOP
     std::ifstream file("resources/" + path, std::ios::binary);
     if (file.fail()) {
-        LOG_TRACE("Can't load file");
+        LOG_TRACE("Can't load file " + path);
         std::vector<unsigned char> a;
         return a;
     }

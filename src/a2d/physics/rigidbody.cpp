@@ -163,11 +163,11 @@ void Rigidbody::Initialize() {
 }
 
 void Rigidbody::OnEnable() {
-    body->SetActive(true);
+    //body->SetActive(true);
 }
 
 void Rigidbody::OnDisable() {
-    body->SetActive(false);
+    //body->SetActive(false);
 }
 
 void Rigidbody::OnDestroy() {

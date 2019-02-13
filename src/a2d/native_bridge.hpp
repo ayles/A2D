@@ -8,7 +8,7 @@
 #include <a2d/a2d.hpp>
 #include <root_component.hpp>
 
-#ifdef TARGET_ANDROID
+#if TARGET_ANDROID
 #include <jni.h>
 #include <android/input.h>
 #include <android/asset_manager.h>
@@ -53,7 +53,7 @@ public:
         Audio::Uninitialize();
     }
 
-#ifdef TARGET_MOBILE
+#if TARGET_MOBILE
     static void ResolutionChanged(int width, int height, int framebuffer_width = -1, int framebuffer_height = -1) {
         Renderer::ResolutionChanged(width, height, framebuffer_width, framebuffer_height);
     }
@@ -71,7 +71,7 @@ public:
     }
 #endif
 
-#ifdef TARGET_ANDROID
+#if TARGET_ANDROID
     static void InitializeFS(void *asset_manager) {
         FileSystem::Initialize(asset_manager);
     }
@@ -80,7 +80,7 @@ public:
 
 }
 
-#ifdef TARGET_ANDROID
+#if TARGET_ANDROID
 
 extern "C" {
 
@@ -178,7 +178,7 @@ int Android_getOrientation() {
 
 #endif
 
-#ifdef TARGET_IOS
+#if TARGET_IOS
 
 enum TouchPhase {
     BEGAN = 0,

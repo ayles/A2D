@@ -3,9 +3,9 @@
 //
 
 #include <a2d/core/resources.hpp>
-#include <a2d/graphics/shader.hpp>
+#include <a2d/renderer/shader.hpp>
 #include <a2d/filesystem/filesystem.hpp>
-#include <a2d/graphics/texture.hpp>
+#include <a2d/renderer/texture.hpp>
 
 #include <lodepng.h>
 
@@ -28,8 +28,8 @@ intrusive_ptr<Texture> Resources::Load(const std::string &name) {
     std::vector<unsigned char> image;
     lodepng::decode(image, width, height, raw_data);
 
-    auto texture = Texture::Create(width, height, image.data());
-    texture->buffer.FlipVertically();
+    auto texture = Texture::Create(width, height, image);
+    texture->GetBuffer().FlipVertically();
 
     return texture;
 }

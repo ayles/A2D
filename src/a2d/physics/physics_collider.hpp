@@ -94,11 +94,11 @@ protected:
     }
 
     void OnEnable() override {
-        FindAndAttach();
+        //if (fixture) fixture->SetSensor(false);
     }
 
     void OnDisable() override {
-        DetachFromRigidbody();
+        //if (fixture) fixture->SetSensor(true);
     }
 
     void OnAttach() override {

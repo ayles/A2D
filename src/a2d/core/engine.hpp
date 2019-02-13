@@ -2,13 +2,12 @@
 // Created by selya on 26.10.2018.
 //
 
-#ifndef A2D_ENGINE_H
-#define A2D_ENGINE_H
+#ifndef A2D_ENGINE_HPP
+#define A2D_ENGINE_HPP
 
 #include <a2d/core/macro.hpp>
 #include <a2d/core/command.hpp>
 #include <a2d/core/commands/lambda_command.hpp>
-#include <a2d/core/component.hpp>
 
 #include <thread>
 #include <queue>
@@ -20,11 +19,10 @@
 namespace a2d {
 
 class Object2D;
-class Camera;
+class Component;
 
 class Engine {
     friend class Renderer;
-    friend class NativeRenderer;
     friend class NativeBridge;
     friend class Component;
     friend class Object2D;
@@ -33,26 +31,20 @@ class Engine {
     static unsigned long long frame_index;
     static float delta_time;
     static intrusive_ptr<Object2D> root;
-    static intrusive_ptr<Object2D> gui_root;
-    static intrusive_ptr<Camera> camera;
     static std::thread::id main_thread_id;
     static bool playing;
     static std::queue<pCommand> commands;
-    static std::set<pComponent> components;
+    static std::set<intrusive_ptr<Component>> components;
 
 public:
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(Engine)
     Engine() = delete;
     ~Engine() = delete;
 
-    static void SetCamera(const intrusive_ptr<Camera> &camera);
-
     static unsigned long long GetFrameIndex();
     static float GetDeltaTime();
     static intrusive_ptr<Object2D> GetRoot();
-    static intrusive_ptr<Object2D> GetGUIRoot();
-    static intrusive_ptr<Camera> GetCamera();
-    static std::thread::id &GetMainThreadID();
+    static const std::thread::id &GetMainThreadID();
     static bool IsPlaying();
 
 private:
@@ -70,4 +62,4 @@ private:
 
 } //namespace a2d
 
-#endif //A2D_ENGINE_H
+#endif //A2D_ENGINE_HPP

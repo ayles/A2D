@@ -11,7 +11,7 @@
 #include <a2d/core/macro.hpp>
 #include <a2d/core/engine.hpp>
 #include <a2d/core/component.hpp>
-#include <a2d/graphics/drawable.hpp>
+#include <a2d/renderer/drawable.hpp>
 #include <a2d/core/log.hpp>
 
 #include <set>
@@ -19,7 +19,7 @@
 #include <typeindex>
 #include <type_traits>
 #include <vector>
-#include <a2d/graphics/sprite.hpp>
+#include <a2d/renderer/sprite.hpp>
 
 
 namespace a2d {
@@ -29,6 +29,7 @@ DECLARE_SMART_POINTER(Object2D)
 class Object2D final : public ref_counter {
     friend class Engine;
     friend class Renderer;
+    friend class Camera;
     friend class Physics;
     friend class Drawable;
     friend class Component;

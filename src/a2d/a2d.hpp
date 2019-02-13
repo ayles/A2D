@@ -21,16 +21,17 @@
 // Filesystem
 #include <a2d/filesystem/filesystem.hpp>
 
-// Graphics
-#include <a2d/graphics/bitmap_font.hpp>
-#include <a2d/graphics/drawable.hpp>
-#include <a2d/graphics/gl.hpp>
-#include <a2d/graphics/renderer.hpp>
-#include <a2d/graphics/shader.hpp>
-#include <a2d/graphics/sprite_batch.hpp>
-#include <a2d/graphics/texture.hpp>
-#include <a2d/graphics/texture_buffer.hpp>
-#include <a2d/graphics/texture_region.hpp>
+// Renderer
+#include <a2d/renderer/bitmap_font.hpp>
+#include <a2d/renderer/drawable.hpp>
+#include <a2d/renderer/gl.hpp>
+#include <a2d/renderer/renderer.hpp>
+#include <a2d/renderer/shader.hpp>
+#include <a2d/renderer/sprite_batch.hpp>
+#include <a2d/renderer/texture.hpp>
+#include <a2d/renderer/texture_buffer.hpp>
+#include <a2d/renderer/texture_region.hpp>
+#include <a2d/renderer/material.hpp>
 
 // Input
 #include <a2d/input/input.hpp>
@@ -40,15 +41,15 @@
 
 // Components
 #include <a2d/core/camera.hpp>
-#include <a2d/graphics/sprite.hpp>
-#include <a2d/graphics/text.hpp>
-#include <a2d/graphics/animator.hpp>
+#include <a2d/renderer/sprite.hpp>
+#include <a2d/renderer/text.hpp>
+#include <a2d/renderer/animator.hpp>
 #include <a2d/physics/rigidbody.hpp>
-#include <a2d/graphics/line.hpp>
+#include <a2d/renderer/line.hpp>
 #include <a2d/physics/rigidbody.hpp>
 #include <a2d/physics/physics_collider.hpp>
 #include <a2d/physics/circle_collider.hpp>
 #include <a2d/physics/polygon_collider.hpp>
-#include <a2d/physics/chain_collider.h>
+#include <a2d/physics/chain_collider.hpp>
 
 #endif //A2D_A2D_H

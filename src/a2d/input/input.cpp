@@ -3,7 +3,9 @@
 //
 #include <a2d/input/input.hpp>
 #include <a2d/core/engine.hpp>
-#include <a2d/graphics/renderer.hpp>
+#include <a2d/renderer/renderer.hpp>
+
+#include <map>
 
 namespace a2d {
 
@@ -79,7 +81,7 @@ Input::Touch Input::GetTouch(int touch_index) {
 }
 
 bool Input::Initialize() {
-#ifdef TARGET_DESKTOP
+#if TARGET_DESKTOP
     glfwSetKeyCallback(Renderer::window, KeyCallback);
     glfwSetCursorPosCallback(Renderer::window, MousePositionCallback);
     glfwSetMouseButtonCallback(Renderer::window, MouseButtonCallback);
@@ -89,7 +91,7 @@ bool Input::Initialize() {
 }
 
 void Input::Uninitialize() {
-#ifdef TARGET_DESKTOP
+#if TARGET_DESKTOP
     glfwSetKeyCallback(Renderer::window, nullptr);
     glfwSetCursorPosCallback(Renderer::window, nullptr);
     glfwSetMouseButtonCallback(Renderer::window, nullptr);
@@ -97,7 +99,7 @@ void Input::Uninitialize() {
 #endif
 }
 
-#ifdef TARGET_DESKTOP
+#if TARGET_DESKTOP
 void Input::KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
     auto &key_internal_state = GetKeyInternalState((KeyCode)key);
 

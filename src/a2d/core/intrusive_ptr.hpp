@@ -53,10 +53,16 @@ public:
     }
 
     T &operator*() const {
+#ifndef NDEBUG
+        if (!ptr) LOG_TRACE("Null pointer dereference");
+#endif
         return *ptr;
     }
 
     T *operator->() const {
+#ifndef NDEBUG
+        if (!ptr) LOG_TRACE("Null pointer dereference");
+#endif
         return ptr;
     }
 

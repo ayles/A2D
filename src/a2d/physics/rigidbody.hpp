@@ -8,7 +8,7 @@
 #include <a2d/core/component.hpp>
 #include <a2d/physics/physics.hpp>
 #include <a2d/core/object2d.hpp>
-#include <a2d/graphics/line.hpp>
+#include <a2d/renderer/line.hpp>
 
 namespace a2d {
 
