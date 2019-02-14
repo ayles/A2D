@@ -91,7 +91,9 @@ void Texture::FetchBuffer() {
     ASSERT_MAIN_THREAD
     if (!IsLoaded()) return;
     GetBuffer().Allocate();
+#if RENDERER_GL
     glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer.GetBuffer().data());
+#endif
 }
 
 void Texture::Reload() {

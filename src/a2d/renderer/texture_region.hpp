@@ -54,6 +54,8 @@ public:
     int GetWidth() const;
     int GetHeight() const;
     float GetRatio() const;
+    const Vector2f &GetUVLower() const;
+    const Vector2f &GetUVUpper() const;
     bool IsFlippedHorizontally() const;
     bool IsFlippedVertically() const;
 

@@ -45,9 +45,9 @@ public:
         }
         glGenFramebuffers(1, &framebuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture->GetHandle(), 0);
-        GLenum draw_buffers[1] = { GL_COLOR_ATTACHMENT0 };
-        glDrawBuffers(1, draw_buffers);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture->GetHandle(), 0);
+        //GLenum draw_buffers[1] = { GL_COLOR_ATTACHMENT0 };
+        //glDrawBuffers(1, draw_buffers);
         glBindFramebuffer(GL_FRAMEBUFFER, GetBoundFramebuffer());
 
     }

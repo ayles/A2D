@@ -19,6 +19,10 @@ texture_region(texture_region), x(x), y(y), advance_x(advance_x), advance_y(adva
     ASSERT_MAIN_THREAD
 }
 
+pTexture BitmapFont::GetTexture() const {
+    return texture;
+}
+
 const BitmapFont::Character *BitmapFont::GetCharacter(unsigned long char_code) const {
     ASSERT_MAIN_THREAD
     auto i = characters.find(char_code);
@@ -72,7 +76,7 @@ BitmapFont::BitmapFont(const std::vector<unsigned char> &ttf, int size, Texture:
     texture_width = (int)std::pow(2, std::ceil(std::log2(texture_width)));
     texture_height = (int)std::pow(2, std::ceil(std::log2(texture_height)));
 
-    auto texture = Texture::Create(texture_width, texture_height);
+    texture = Texture::Create(texture_width, texture_height);
     texture->SetFiltering(filtering);
     TextureBuffer &tb = texture->GetBuffer();
 

@@ -9,6 +9,7 @@
 #include <a2d/core/log.hpp>
 
 #include <string>
+#include <functional>
 
 namespace a2d {
 
@@ -114,5 +115,16 @@ public:
 };
 
 } //namespace a2d
+
+namespace std {
+
+template<class K>
+struct hash<a2d::intrusive_ptr<K>> {
+    size_t operator()(const a2d::intrusive_ptr<K> &ptr) const {
+        return std::hash<K *>(ptr.get());
+    }
+};
+
+}
 
 #endif //A2D_INTRUSIVE_PTR_H

@@ -10,8 +10,7 @@ namespace a2d {
 
 const int SpriteBatch::max_sprites = 2048;
 
-SpriteBatch::SpriteBatch() : camera_matrix(), current_texture(nullptr),
-current_material(nullptr) {
+SpriteBatch::SpriteBatch() : camera_matrix(), current_material(nullptr) {
     ASSERT_MAIN_THREAD
     buffer.reserve(max_sprites * 32);
 
@@ -52,25 +51,16 @@ const Matrix4f &SpriteBatch::GetCameraMatrix() const {
     return camera_matrix;
 }
 
-void SpriteBatch::Draw(const pTextureRegion &texture_region, const pMaterial &material,
+void SpriteBatch::Draw(const pMaterial &material,
+        const Vector2f &uv_lower, const Vector2f &uv_upper,
         const Vector2f &p1, const Vector2f &p2, const Vector2f &p3, const Vector2f &p4,
         const Matrix4f &matrix, const Vector4f &color) {
     ASSERT_MAIN_THREAD
 
-    if (!material || !material->GetShader()) return;
-    if (buffer.size() >= max_sprites || (texture_region && current_texture != texture_region->texture)
-        || current_material != material) {
+    if (!material) return;
+    if (buffer.size() >= max_sprites || !current_material || current_material->GetHash() != material->GetHash()) {
         Flush();
-        if (texture_region) {
-            current_texture = texture_region->texture;
-        }
         current_material = material;
-    }
-
-    Vector2f uv_lower, uv_upper;
-    if (texture_region) {
-        uv_lower = texture_region->uv_lower;
-        uv_upper = texture_region->uv_upper;
     }
 
     matrix.Transform(p1.x, p1.y, 0, 1, v);
@@ -117,7 +107,7 @@ void SpriteBatch::Draw(const pTextureRegion &texture_region, const pMaterial &ma
 void SpriteBatch::Flush() {
     ASSERT_MAIN_THREAD
     if (buffer.empty()) return;
-    if (!current_material || !current_material->GetShader()) {
+    if (!current_material) {
         buffer.clear();
         return;
     }

@@ -35,8 +35,10 @@ public:
 private:
     std::map<unsigned long, Character> characters;
     int line_height;
+    pTexture texture;
 
 public:
+    pTexture GetTexture() const;
     const Character *GetCharacter(unsigned long char_code) const;
     int GetLineHeight() const;
 

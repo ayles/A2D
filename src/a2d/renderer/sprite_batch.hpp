@@ -24,7 +24,6 @@ class SpriteBatch : public ref_counter {
     Matrix4f camera_matrix;
     GLuint vbo;
     GLuint indices;
-    pTexture current_texture;
     pMaterial current_material;
     std::vector<float> buffer;
     Vector4f v;
@@ -40,7 +39,8 @@ public:
 
     const Matrix4f &GetCameraMatrix() const;
 
-    void Draw(const pTextureRegion &texture_region, const pMaterial &material,
+    void Draw(const pMaterial &material,
+            const Vector2f &uv_lower, const Vector2f &uv_upper,
             const Vector2f &p1, const Vector2f &p2, const Vector2f &p3, const Vector2f &p4,
             const Matrix4f &matrix, const Vector4f &color);
 

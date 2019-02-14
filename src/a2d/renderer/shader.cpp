@@ -88,9 +88,11 @@ static Shader::ValueType GLTypeToValueType(GLenum type) {
         case GL_INT_VEC2: return Shader::ValueType::VECTOR_2_INT;
         case GL_INT_VEC3: return Shader::ValueType::VECTOR_3_INT;
         case GL_INT_VEC4: return Shader::ValueType::VECTOR_4_INT;
+#if RENDERER_GL
         case GL_UNSIGNED_INT_VEC2: return Shader::ValueType::VECTOR_2_UNSIGNED_INT;
         case GL_UNSIGNED_INT_VEC3: return Shader::ValueType::VECTOR_3_UNSIGNED_INT;
         case GL_UNSIGNED_INT_VEC4: return Shader::ValueType::VECTOR_4_UNSIGNED_INT;
+#endif
         case GL_SAMPLER_2D: return Shader::ValueType::TEXTURE_UNIT;
         default: return Shader::ValueType::UNSUPPORTED;
     }

@@ -4,6 +4,8 @@
 
 #include <a2d/renderer/texture_region.hpp>
 #include <a2d/core/engine.hpp>
+#include "texture_region.hpp"
+
 
 namespace a2d {
 
@@ -145,6 +147,14 @@ pTextureRegion
 TextureRegion::Create(pTexture texture, int x, int y, int width, int height) {
     ASSERT_MAIN_THREAD
     return new TextureRegion(texture, x, y, width, height);
+}
+
+const Vector2f &TextureRegion::GetUVLower() const {
+    return uv_lower;
+}
+
+const Vector2f &TextureRegion::GetUVUpper() const {
+    return uv_upper;
 }
 
 } //namespace a2d

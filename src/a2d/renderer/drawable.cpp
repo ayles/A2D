@@ -7,6 +7,7 @@
 #include <a2d/core/object2d.hpp>
 #include <a2d/core/engine.hpp>
 
+
 namespace a2d {
 
 Drawable::Drawable() : material(Material::Create(Resources::Get<Shader>("default"))) {};
@@ -66,16 +67,8 @@ void Drawable::SetOrigin(const Vector2f &origin) {
 
 bool Drawable::operator<(const Drawable &other) const {
     ASSERT_MAIN_THREAD
-    if (material && other.material && material->GetShader() != other.material->GetShader())
-        return material->GetShader() < other.material->GetShader();
-    const TextureRegion *t1, *t2;
-    t1 = texture_region.get();
-    t2 = other.texture_region.get();
-    if (t1 && t2) {
-        if (t1->GetTexture() != t2->GetTexture()) {
-            return t1->GetTexture() < t2->GetTexture();
-        }
-    }
+    if (material && other.material && material->GetHash() != other.material->GetHash())
+        return material->GetHash() < other.material->GetHash();
     // TODO rework comparison
     if (material != other.material) return material < other.material;
     return this < &other;

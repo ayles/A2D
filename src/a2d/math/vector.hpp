@@ -2,10 +2,11 @@
 // Created by selya on 26.10.2018.
 //
 
-#ifndef A2D_VECTOR_H
-#define A2D_VECTOR_H
+#ifndef A2D_VECTOR_HPP
+#define A2D_VECTOR_HPP
 
 #include <a2d/math/math_defines.hpp>
+#include <a2d/utils/utils.hpp>
 
 namespace a2d {
 
@@ -266,8 +267,8 @@ public:
     template<class U>
     A2D_MATH_INLINE
     Vector<2, T> &Set(const Vector<2, U> &other) {
-        x = other.x;
-        y = other.y;
+        x = (T)other.x;
+        y = (T)other.y;
         return *this;
     }
 
@@ -365,9 +366,9 @@ public:
     Vector(T scalar) : x(scalar), y(scalar), z(scalar) {}
     Vector(T x, T y, T z) : x(x), y(y), z(z) {}
     template<class U>
-    Vector(const Vector<3, U> &other) : x(other.x), y(other.y), z(other.z) {}
+    Vector(const Vector<3, U> &other) : x((T)other.x), y((T)other.y), z((T)other.z) {}
     template<class U>
-    Vector(const Vector<2, U> &v2, T z) : x(v2.x), y(v2.y), z(z) {}
+    Vector(const Vector<2, U> &v2, T z) : x((T)v2.x), y((T)v2.y), z(z) {}
 
     //
     // Const member functions
@@ -685,11 +686,11 @@ public:
     Vector(T scalar) : x(scalar), y(scalar), z(scalar), w(scalar) {}
     Vector(T x, T y, T z, T w) : x(x), y(y), z(z), w(w) {}
     template<class U>
-    Vector(const Vector<4, U> &other) : x(other.x), y(other.y), z(other.z), w(other.w) {}
+    Vector(const Vector<4, U> &other) : x((T)other.x), y((T)other.y), z((T)other.z), w((T)other.w) {}
     template<class U>
-    Vector(const Vector<3, U> &v3, T w) : x(v3.x), y(v3.y), z(v3.z), w(w) {}
+    Vector(const Vector<3, U> &v3, T w) : x((T)v3.x), y((T)v3.y), z((T)v3.z), w(w) {}
     template<class U>
-    Vector(const Vector<2, U> &v2, T z, T w) : x(v2.x), y(v2.y), z(z), w(w) {}
+    Vector(const Vector<2, U> &v2, T z, T w) : x((T)v2.x), y((T)v2.y), z(z), w(w) {}
 
 //
 // Const member functions
@@ -1020,4 +1021,41 @@ public:
 
 } //namespace a2d
 
-#endif //A2D_VECTOR_H
+namespace std {
+
+template<class K>
+struct hash<a2d::Vector<2, K>> {
+    size_t operator()(const a2d::Vector<2, K> &v) const {
+        std::hash<K> hasher;
+        size_t hash_ = hasher(v.x);
+        a2d::utils::hash_combine(hash_, v.y);
+        return hash_;
+    }
+};
+
+template<class K>
+struct hash<a2d::Vector<3, K>> {
+    size_t operator()(const a2d::Vector<3, K> &v) const {
+        std::hash<K> hasher;
+        size_t hash_ = hasher(v.x);
+        a2d::utils::hash_combine(hash_, v.y);
+        a2d::utils::hash_combine(hash_, v.z);
+        return hash_;
+    }
+};
+
+template<class K>
+struct hash<a2d::Vector<4, K>> {
+    size_t operator()(const a2d::Vector<4, K> &v) const {
+        std::hash<K> hasher;
+        size_t hash_ = hasher(v.x);
+        a2d::utils::hash_combine(hash_, v.y);
+        a2d::utils::hash_combine(hash_, v.z);
+        a2d::utils::hash_combine(hash_, v.w);
+        return hash_;
+    }
+};
+
+}
+
+#endif //A2D_VECTOR_HPP

@@ -75,7 +75,7 @@ set(A2D_HEADERS
         src/a2d/core/commands/lambda_command.hpp
         src/a2d/core/log.hpp
         src/a2d/physics/polygon_collider.hpp
-        src/a2d/physics/chain_collider.hpp src/a2d/renderer/framebuffer.hpp src/a2d/renderer/material.hpp)
+        src/a2d/physics/chain_collider.hpp src/a2d/renderer/framebuffer.hpp src/a2d/renderer/material.hpp src/a2d/utils/utils.hpp)
 
 # A2D library target
 add_library(a2d_engine_library STATIC ${A2D_SOURCES} ${A2D_HEADERS})
@@ -119,6 +119,8 @@ elseif (WIN32 OR APPLE OR UNIX)
     set(SHADERS_TARGET_PROFILE 330)
     target_compile_definitions(a2d_engine_library PUBLIC TARGET_DESKTOP=1 RENDERER_GL=1)
 endif ()
+
+target_compile_definitions(a2d_engine_library PUBLIC SIZEOF_VOID_P=${CMAKE_SIZEOF_VOID_P})
 
 if (WIN32 OR ANDROID_ON_WINDOWS)
     set(TOOLS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/tools/win32")

@@ -8,7 +8,9 @@
 namespace a2d {
 
 
-Text::Text() : text(), bitmap_font(nullptr), text_width(0), color(1) {}
+Text::Text() : text(), bitmap_font(nullptr), text_width(0), color(1) {
+    if (material) material->SetShader(Resources::Get<Shader>("outline"));
+}
 
 void Text::SetText(const std::string &text) {
     ASSERT_MAIN_THREAD
@@ -28,6 +30,12 @@ void Text::SetText(const std::u32string &text) {
 void Text::SetFont(const pBitmapFont &bitmap_font) {
     ASSERT_MAIN_THREAD
     this->bitmap_font = bitmap_font;
+    if (this->material) {
+        this->material->SetTexture("main_texture", bitmap_font->GetTexture());
+        this->material->SetVector2i("resolution", Vector2f(
+                bitmap_font->GetTexture()->GetWidth(),
+                bitmap_font->GetTexture()->GetHeight()));
+    }
 }
 
 const std::u32string &Text::GetUTF32Text() const {
@@ -60,7 +68,9 @@ void Text::Draw(SpriteBatch &sprite_batch) {
         p3.Set(x + t->texture_region->GetWidth(), y + t->texture_region->GetHeight()
         );
         p4.Set(x, y + t->texture_region->GetHeight());
-        sprite_batch.Draw(t->texture_region, material->GetShader(), p1, p2, p3, p4, GetObject2D()->GetTransformMatrix(), color);
+        sprite_batch.Draw(material,
+                t->texture_region->GetUVLower(), t->texture_region->GetUVUpper(),
+                p1, p2, p3, p4, GetObject2D()->GetTransformMatrix(), color);
         current_x += t->advance_x;
     }
 }
