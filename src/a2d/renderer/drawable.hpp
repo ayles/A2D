@@ -72,7 +72,7 @@ public:
     /**
      * Compares drawables for minimizing shader/texture switches.
      */
-    virtual bool operator<(const Drawable &other) const final;
+    virtual bool IsLess(const Drawable &other) const final;
 
 protected:
     Vector2f size;

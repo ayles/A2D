@@ -24,29 +24,41 @@ def main():
 
     args = parser.parse_args()
 
+    app_identifier = input("Input application identifier in format 'domain.company.app':\n")
+
     path = args.dest
     name = args.name
 
+    engine_path = os.path.dirname(os.path.abspath(__file__)) + '/..'
     folder = path + '/' + name
 
-    if os.path.exists(folder):
+    if os.path.exists(folder + '/CMakeLists.txt'):
         print('Project', name, 'exists. Overwriting projects files...')
         shutil.rmtree(folder + '/projects')
-        shutil.copytree('template/projects', folder + '/projects')
+        shutil.copytree(engine_path + '/tools/template/projects', folder + '/projects')
     else:
         print('Generating project ' + name + '...')
-        shutil.copytree('template', folder)
+        shutil.copytree(engine_path + '/tools/template', folder)
 
     m_vars = {
         'A2D_PROJECT_NAME': name,
-        'A2D_ENGINE_PATH': os.path.relpath('../', folder).replace('\\', '/')
+        'A2D_ENGINE_PATH': os.path.relpath(engine_path, folder).replace('\\', '/'),
+        'A2D_APP_IDENTIFIER': app_identifier
     }
+
+    files_whitelist = [
+        'CMakeLists.txt',
+        'build.gradle',
+        'settings.gradle',
+        'AndroidManifest.xml'
+    ]
 
     print('Substituting vars...')
 
     for root, dirs, files in os.walk(folder):
         for file in files:
-            if file == "CMakeLists.txt":
+            if file in files_whitelist:
+                print('Preprocessing ' + file)
                 preprocess_file(os.path.join(root, file), m_vars)
 
     print('Done.')

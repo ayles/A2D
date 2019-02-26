@@ -8,18 +8,30 @@ Small cross-platform 2D game engine.
 
 # Getting started (Build & Run)
 
-For simple demonstration clone this repo and use `tools/generator.py` to
-generate project:
+To start simple project follow these steps:
+ 
+1. Clone repo
+ 
+       git clone https://github.com/ayles/A2D.git
+        
+2. Use `generate.py` to generate project files:
 
-    python3 generator.py <project name> [-d destination]
+       python3 A2D/tools/generate.py MySimpleProject -d .
+        
+3. Optionally edit `MySimpleProject/src/root_component.hpp`
 
-Entry point of game is `a2d::RootComponent` component located in
-`root_component.hpp`.
+4. Build desktop project:
 
-It will be created on the `a2d::Engine::root` after game launch.
+       cd MySimpleProject/projects/proj.desktop
+       mkdir build
+       cd build
+       cmake ..
+       cmake --build .
+       
+5. Run:
 
-Then you can build one of projects located in `<project folder>/projects/`.
-
+       ./MySimpleProject
+ 
 # Supported platforms
 
 - **Windows** (MSVC)
@@ -30,11 +42,6 @@ Then you can build one of projects located in `<project folder>/projects/`.
 
 # Sample
 
-For starting your own project create `a2d::RootComponent` class
-and store it in the `root_component.hpp`.
-
-**Sample code:**
-
 ```cpp
 // root_component.hpp
 
@@ -44,20 +51,20 @@ class RootComponent : public Component {
 public:
     pObject2D text;
 
-    // Initialize called on component creation
     void Initialize() override {
         auto camera = Object2D::Create();
-        Engine::SetCamera(camera->AddComponent<PixelCamera>());
+        Renderer::SetMainCamera(camera->AddComponent<Camera>());
 
         text = Object2D::Create();
-        text->AddComponent<Text>()->SetFont(BitmapFont::Create(FileSystem::LoadRaw("fonts/impact.ttf"), 48));
+        text->AddComponent<Text>()->SetFont(Resources::Get<BitmapFont>("impact"));
         text->GetComponent<Text>()->SetOrigin(0.5f, 0.0f);
+        text->GetComponent<Text>()->SetFontSize(24);
         text->GetComponent<Text>()->SetText(U"Hello, A2D!");
     }
 
-    // Update called each frame
     void Update() override {
         text->SetRotation(text->GetRotation() + Engine::GetDeltaTime());
+        camera->SetHeight(Renderer::GetHeight());
     }
 };
 

@@ -65,12 +65,10 @@ void Drawable::SetOrigin(const Vector2f &origin) {
     this->origin.Set(origin);
 }
 
-bool Drawable::operator<(const Drawable &other) const {
+bool Drawable::IsLess(const Drawable &other) const {
     ASSERT_MAIN_THREAD
     if (material && other.material && material->GetHash() != other.material->GetHash())
         return material->GetHash() < other.material->GetHash();
-    // TODO rework comparison
-    if (material != other.material) return material < other.material;
     return this < &other;
 }
 
@@ -88,11 +86,9 @@ void Drawable::SetMaterial(const pMaterial &material) {
     ASSERT_MAIN_THREAD
     pObject2D o = GetObject2D();
     if (o) {
-        if (o->parent) o->parent->children.erase(o);
         this->material = material;
         if (texture_region && texture_region->GetTexture() && material)
             material->SetTexture("main_texture", texture_region->GetTexture());
-        if (o->parent) o->parent->children.emplace(o);
     } else this->material = material;
 }
 
@@ -100,28 +96,20 @@ void Drawable::SetTextureRegion(const pTextureRegion &texture_region) {
     ASSERT_MAIN_THREAD
     pObject2D o = GetObject2D();
     if (o) {
-        if (o->parent) o->parent->children.erase(o);
         this->texture_region = texture_region;
         if (texture_region && texture_region->GetTexture() && material)
             material->SetTexture("main_texture", texture_region->GetTexture());
-        if (o->parent) o->parent->children.emplace(o);
     } else this->texture_region = texture_region;
 }
 
 void Drawable::Draw(SpriteBatch &sprite_batch) {}
 
 void Drawable::Initialize() {
-    pObject2D o = object_2d;
-    if (object_2d->parent) object_2d->parent->children.erase(o);
     object_2d->drawables.emplace(this);
-    if (object_2d->parent) object_2d->parent->children.emplace(o);
 }
 
 void Drawable::OnDestroy() {
-    pObject2D o = object_2d;
-    if (object_2d->parent) object_2d->parent->children.erase(o);
     object_2d->drawables.erase(this);
-    if (object_2d->parent) object_2d->parent->children.emplace(o);
 }
 
 } //namespace a2d

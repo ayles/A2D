@@ -1,9 +1,20 @@
 apply plugin: 'com.android.application'
 
+def getOsDefinitions() {
+    if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+        return '-DANDROID_ON_WINDOWS=TRUE'
+    } else if (org.gradle.internal.os.OperatingSystem.current().isMacOsX()) {
+        return '-DANDROID_ON_MACOS=TRUE'
+    } else if (org.gradle.internal.os.OperatingSystem.current().isLinux()) {
+        return '-DANDROID_ON_LINUX=TRUE'
+    }
+    return ''
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.selya.a2d"
+        applicationId "%A2D_APP_IDENTIFIER%"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
@@ -13,7 +24,7 @@ android {
         }
         externalNativeBuild {
             cmake {
-                arguments '-DANDROID_STL=c++_static'
+                arguments '-DANDROID_STL=c++_static', getOsDefinitions()
                 cppFlags ""
             }
         }
@@ -37,7 +48,7 @@ android {
 
 task copyAssets(type: Copy) {
     description = 'Copy resources to assets folder'
-    from '../../../project_core/resources'
+    from '../../../resources'
     into 'src/main/assets'
 }
 

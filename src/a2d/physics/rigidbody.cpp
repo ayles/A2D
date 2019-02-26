@@ -175,8 +175,10 @@ void Rigidbody::OnDestroy() {
     while (f) {
         auto next = f->GetNext();
         ((PhysicsCollider *)f->GetUserData())->DetachFromRigidbody();
+        f->SetUserData(nullptr);
         f = next;
     }
+    body->SetUserData(nullptr);
     Physics::GetWorld().DestroyBody(body);
 }
 
@@ -187,9 +189,11 @@ void Rigidbody::Transform(const Vector2f &position, float rotation) {
 
 void Rigidbody::PhysicsStep() {
     internal_transform = true;
-    GetObject2D()->SetPosition(body->GetPosition().x * Physics::world_scale_inverted,
-            body->GetPosition().y * Physics::world_scale_inverted);
-    GetObject2D()->SetRotation(body->GetAngle());
+    if (GetObject2D()) {
+        GetObject2D()->SetPosition(body->GetPosition().x * Physics::world_scale_inverted,
+                                   body->GetPosition().y * Physics::world_scale_inverted);
+        GetObject2D()->SetRotation(body->GetAngle());
+    }
     internal_transform = false;
 }
 

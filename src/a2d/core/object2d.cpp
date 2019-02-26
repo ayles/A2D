@@ -6,7 +6,7 @@
 #include <a2d/core/log.hpp>
 #include <a2d/physics/rigidbody.hpp>
 #include <a2d/physics/physics_collider.hpp>
-#include "object2d.hpp"
+#include <a2d/utils/utils.hpp>
 
 
 namespace a2d {
@@ -16,12 +16,8 @@ bool Object2D::compare_objects::operator()(const pObject2D &lhs, const pObject2D
     if (lhs->layer != rhs->layer) return lhs->layer < rhs->layer;
     pDrawable left = lhs->drawables.empty() ? nullptr : *(lhs->drawables.begin());
     pDrawable right = rhs->drawables.empty() ? nullptr : *(rhs->drawables.begin());
-    if (left != right) {
-        if (left && right) {
-            return *(left) < *(right);
-        } else {
-            return left < right;
-        }
+    if (left && right) {
+        return left->IsLess(*right);
     }
     return lhs < rhs;
 }
@@ -53,10 +49,10 @@ const Matrix4f &Object2D::GetTransformMatrix() const {
 
 void Object2D::SetLayer(int layer) {
     ASSERT_MAIN_THREAD
-    pObject2D o = this; // prevent this object destruction
-    if (parent) parent->children.erase(o);
+    //pObject2D o = this; // prevent this object destruction
+    //if (parent) parent->children.erase(o);
     this->layer = layer;
-    if (parent) parent->children.emplace(o);
+    //if (parent) parent->children.emplace(o);
 }
 
 void Object2D::Attach(const pObject2D &parent) {
@@ -66,12 +62,15 @@ void Object2D::Attach(const pObject2D &parent) {
         return;
     }
     if (parent != this->parent) {
-        if (this->parent) {
+        pObject2D o = this;
+        if (o->parent) {
             OnDetach();
-            this->parent->children.erase(this);
+            o->parent->children.erase(iter_in_parent);
+            //this->parent->children.erase(this);
         }
-        this->parent = parent;
-        parent->children.emplace(this);
+        o->parent = parent;
+        iter_in_parent = o->parent->children.insert(o->parent->children.end(), this);
+        //parent->children.emplace(this);
         // Retrigger activation recursion
         SetActive(IsActive());
         OnTransform(this, true, true);
@@ -83,8 +82,11 @@ void Object2D::Destroy() {
     ASSERT_MAIN_THREAD
     for (auto &c : children) c->Destroy();
     DestroyAllComponents();
-    Engine::AddCommand([this]() {
-        if (parent) parent->children.erase(this);
+    pObject2D o = this;
+    Engine::AddCommand([o]() {
+        if (!o->parent) return;
+        o->parent->children.erase(o->iter_in_parent);
+        o->parent = nullptr;
     });
 }
 
@@ -94,6 +96,8 @@ void Object2D::Draw(SpriteBatch &sprite_batch) {
         if (!drawable->IsActiveTransitive()) continue;
         drawable->Draw(sprite_batch);
     }
+    // TODO will timsort sort faster?
+    children.sort(compare_objects());
     for (const pObject2D &c : children) {
         if (!c->IsActiveTransitive()) continue;
         c->Draw(sprite_batch);

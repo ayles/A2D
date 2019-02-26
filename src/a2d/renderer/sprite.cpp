@@ -9,10 +9,23 @@ namespace a2d {
 
 Sprite::Sprite() : color(1) {}
 
+
+void a2d::Sprite::SetColor(const Vector4f &color) {
+    SetColor(color.x, color.y, color.z, color.w);
+}
+
+void Sprite::SetColor(float r, float g, float b, float a) {
+    color.Set(r, g, b, a);
+}
+
 void Sprite::SetTextureRegion(const pTextureRegion &texture_region) {
     Drawable::SetTextureRegion(texture_region);
     if (!texture_region) SetSize(0.0f);
     else SetSize(texture_region->GetWidth(), texture_region->GetHeight());
+}
+
+const Vector4f &Sprite::GetColor() {
+    return color;
 }
 
 void Sprite::Draw(SpriteBatch &sprite_batch) {

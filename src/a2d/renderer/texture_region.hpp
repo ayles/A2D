@@ -59,8 +59,6 @@ public:
     bool IsFlippedHorizontally() const;
     bool IsFlippedVertically() const;
 
-    int Bind();
-
     static pTextureRegion Create();
     static pTextureRegion Create(pTexture texture);
     static pTextureRegion Create(pTexture texture, int x, int y, int width, int height);

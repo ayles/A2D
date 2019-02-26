@@ -70,6 +70,7 @@ protected:
     virtual b2Body *DetachFromRigidbody() {
         if (!fixture) return nullptr;
         auto body = fixture->GetBody();
+        if (!body) return body;
         fixture->GetBody()->DestroyFixture(fixture);
         fixture = nullptr;
         return body;

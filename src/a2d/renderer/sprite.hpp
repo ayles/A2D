@@ -17,10 +17,13 @@ DECLARE_SMART_POINTER(Sprite)
 class Sprite : public Drawable {
     friend class Object2D;
 
-public:
     Vector4f color;
-
+public:
+    void SetColor(const Vector4f &color);
+    void SetColor(float r, float g, float b, float a);
     void SetTextureRegion(const pTextureRegion &texture_region) override;
+
+    const Vector4f &GetColor();
 
 protected:
     Sprite();

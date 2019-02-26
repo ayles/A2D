@@ -19,8 +19,6 @@
 #include <typeindex>
 #include <type_traits>
 #include <vector>
-#include <a2d/renderer/sprite.hpp>
-
 
 namespace a2d {
 
@@ -33,7 +31,6 @@ class Object2D final : public ref_counter {
     friend class Physics;
     friend class Drawable;
     friend class Component;
-    friend class GUIRoot;
 
     struct compare_objects {
         bool operator()(const pObject2D &lhs, const pObject2D &rhs) const;
@@ -41,7 +38,8 @@ class Object2D final : public ref_counter {
 
     Matrix4f transform_matrix;
     pObject2D parent;
-    std::set<pObject2D, compare_objects> children;
+    std::list<pObject2D>::const_iterator iter_in_parent;
+    std::list<pObject2D> children;
     std::set<pDrawable> drawables;
     std::unordered_map<std::type_index, std::set<pComponent>> components;
     int layer;

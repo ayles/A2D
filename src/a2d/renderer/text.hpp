@@ -21,15 +21,28 @@ class Text : public Drawable {
 protected:
     std::u32string text;
     pBitmapFont bitmap_font;
-    float text_width;
+    pMaterial outline_material;
+    float font_size;
+    float outline_width;
+    Vector4f color;
+    Vector4f outline_color;
 
 public:
-    Vector4f color;
 
+    void SetColor(const Vector4f &color);
+    void SetColor(float r, float g, float b, float a);
+    void SetOutlineColor(const Vector4f &outline_color);
+    void SetOutlineColor(float r, float g, float b, float a);
+    void SetFontSize(float font_size);
+    void SetOutlineWidth(float outline_width);
     void SetText(const std::string &text);
     void SetText(const std::u32string &text);
-
     void SetFont(const pBitmapFont &bitmap_font);
+
+    Vector4f GetColor() const;
+    Vector4f GetOutlineColor() const;
+    float GetFontSize() const;
+    float GetOutlineWidth() const;
 
     const std::u32string &GetUTF32Text() const;
     std::string GetText() const;
@@ -41,6 +54,7 @@ protected:
     ~Text() override;
 
     void Draw(SpriteBatch &sprite_batch) override;
+    void InternalUpdate();
 };
 
 } //namespace a2d

@@ -19,6 +19,7 @@ pObject2D Component::GetObject2D() const {
 void Component::Destroy() {
     ASSERT_MAIN_THREAD
     Engine::AddCommand([this]() {
+        if (!object_2d) return;
         auto iter = object_2d->components.find(typeid(*this));
         if (iter == object_2d->components.end() || iter->second.empty()) return;
         if (Engine::IsPlaying()) this->OnPause();
@@ -27,6 +28,7 @@ void Component::Destroy() {
         this->OnDestroy();
         iter->second.erase(this);
         Engine::components.erase(this);
+        object_2d = nullptr;
     });
 }
 

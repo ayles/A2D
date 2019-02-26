@@ -6,6 +6,7 @@
 #include <a2d/renderer/shader.hpp>
 #include <a2d/filesystem/filesystem.hpp>
 #include <a2d/renderer/texture.hpp>
+#include <a2d/renderer/bitmap_font.hpp>
 
 #include <lodepng.h>
 
@@ -32,6 +33,12 @@ intrusive_ptr<Texture> Resources::Load(const std::string &name) {
     texture->GetBuffer().FlipVertically();
 
     return texture;
+}
+
+template<>
+intrusive_ptr<BitmapFont> Resources::Load(const std::string &name) {
+    ASSERT_MAIN_THREAD
+    return BitmapFont::Create(FileSystem::LoadRaw("fonts/" + name + ".ttf"));
 }
 
 } //namespace a2d

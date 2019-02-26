@@ -13,6 +13,7 @@
 #include <memory>
 #include <map>
 #include <type_traits>
+#include <list>
 
 namespace a2d {
 

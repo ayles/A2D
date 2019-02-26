@@ -73,6 +73,7 @@ bool Physics::Step() {
     for (auto &component : Engine::components) {
         component->PhysicsUpdate();
     }
+    Engine::ExecuteCommands();
     GetWorld().Step(Engine::GetDeltaTime(), 6, 2);
     auto b = GetWorld().GetBodyList();
     while (b) {
@@ -80,7 +81,6 @@ bool Physics::Step() {
         if (rigidbody->IsActiveTransitive()) rigidbody->PhysicsStep();
         b = b->GetNext();
     }
-    Engine::ExecuteCommands();
     return true;
 }
 

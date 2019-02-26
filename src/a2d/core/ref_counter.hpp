@@ -26,7 +26,8 @@ protected:
     }
 
     void release_ref() {
-        if (0 == --_ref_counter) delete this;
+        if (0 == --_ref_counter)
+            delete this;
     }
 };
 

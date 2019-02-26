@@ -12,6 +12,7 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include FT_STROKER_H
 
 #include <vector>
 
@@ -22,33 +23,64 @@ DECLARE_SMART_POINTER(BitmapFont)
 class BitmapFont : public ref_counter {
 public:
     class Character {
+        friend class BitmapFont;
+
     public:
         pTextureRegion texture_region;
-        int x, y;
-        int advance_x;
-        int advance_y;
+        const float x, y;
+        const float advance_x;
+        const float advance_y;
 
-        Character();
-        Character(const pTextureRegion &texture_region, int x, int y, int advance_x, int advance_y);
+    private:
+        Character(const pTextureRegion &texture_region, float x, float y, float advance_x, float advance_y);
+    };
+
+    class CharacterSet {
+        friend class BitmapFont;
+
+        std::map<char32_t, Character> characters;
+        float line_height;
+        pTexture texture;
+
+        CharacterSet();
+
+    public:
+        float GetLineHeight() const;
+        const Character *GetCharacter(char32_t char_code) const;
+        pTexture GetTexture() const;
+    };
+
+    class CharacterSetParams {
+        friend class BitmapFont;
+
+        const int size;
+        const int outline_size_64;
+
+        CharacterSetParams(int size, int outline_size_64);
+
+    public:
+        CharacterSetParams(const CharacterSetParams &other);
+
+        bool operator<(const CharacterSetParams &other) const;
     };
 
 private:
-    std::map<unsigned long, Character> characters;
-    int line_height;
-    pTexture texture;
+    std::map<CharacterSetParams, CharacterSet> characters_sets;
+    FT_Face face;
+    std::vector<unsigned char> data;
 
 public:
-    pTexture GetTexture() const;
-    const Character *GetCharacter(unsigned long char_code) const;
-    int GetLineHeight() const;
-
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(BitmapFont)
 
-    static pBitmapFont Create(const std::vector<unsigned char> &ttf, int size, Texture::Filtering filtering = Texture::Filtering::NEAREST);
+    CharacterSet &GetCharacterSet(float size, float outline_size = 0.0f);
+
+    static pBitmapFont Create(const std::vector<unsigned char> &ttf);
 
 private:
-    BitmapFont(const std::vector<unsigned char> &ttf, int size, Texture::Filtering filtering = Texture::Filtering::LINEAR);
+    BitmapFont(const std::vector<unsigned char> &ttf);
     ~BitmapFont() override;
+
+    CharacterSet &RenderAndStoreCharacterSet(const CharacterSetParams &params);
 
     static FT_Library GetFreeTypeLibrary();
 };

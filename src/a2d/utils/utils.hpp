@@ -6,6 +6,7 @@
 #define A2D_UTILS_HPP
 
 #include <functional>
+#include <algorithm>
 
 namespace a2d {
 namespace utils {
@@ -40,6 +41,20 @@ inline void hash_combine(std::size_t &seed, const T &v) {
 }
 
 #endif
+
+// Note that it will invalidate list iterators
+template<class Iter>
+void insertion_sort(Iter first, Iter last) {
+    for (Iter it = first; it != last; ++it)
+        std::rotate(std::upper_bound(first, it, *it), it, std::next(it));
+}
+
+// Note that it will invalidate list iterators
+template<class Iter, class Compare>
+void insertion_sort(Iter first, Iter last, Compare compare) {
+    for (Iter it = first; it != last; ++it)
+        std::rotate(std::upper_bound(first, it, *it, compare), it, std::next(it));
+}
 
 }
 }
