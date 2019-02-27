@@ -20,10 +20,7 @@ DECLARE_SMART_POINTER(Texture)
 
 class Texture : public ref_counter {
     friend class Renderer;
-
-    static std::vector<unsigned int> unit_to_handle;
-    static std::map<unsigned int, int> handle_to_unit;
-    static int current_unit;
+    friend class TextureBindManager;
 
 public:
     enum Filtering {
@@ -53,9 +50,8 @@ public:
     void Unload();
     void FetchBuffer();
     void Reload();
-    void Bind();
-    void Bind(int texture_unit);
-    int SmartBind();
+    void BindToActiveUnit();
+    int Bind();
 
     void SetFiltering(Filtering filtering);
     void SetWrapping(Wrapping wrapping);
@@ -71,11 +67,15 @@ private:
     Wrapping wrapping;
     TextureBuffer buffer;
     const bool mipmaps;
+    bool filtering_update_required;
+    bool wrapping_update_required;
 
     Texture(int width, int height, const std::vector<unsigned char> &data, bool mipmaps = false);
     Texture(const TextureBuffer &buffer, bool mipmaps = false);
     Texture(TextureBuffer &&buffer, bool mipmaps = false);
     ~Texture() override;
+
+    void BindToGL();
 };
 
 } //namespace a2d

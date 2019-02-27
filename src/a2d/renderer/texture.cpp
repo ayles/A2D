@@ -5,13 +5,10 @@
 #include <a2d/renderer/texture.hpp>
 #include <a2d/renderer/gl.hpp>
 #include <a2d/core/engine.hpp>
+#include <a2d/renderer/texture_bind_manager.hpp>
 
 
 namespace a2d {
-
-std::vector<unsigned int> Texture::unit_to_handle;
-std::map<unsigned int, int> Texture::handle_to_unit;
-int Texture::current_unit = 0;
 
 Texture::Texture(int width, int height, const std::vector<unsigned char> &data, bool mipmaps) :
 Texture(std::move(TextureBuffer(width, height, data)), mipmaps) {}
@@ -22,7 +19,8 @@ Texture::Texture(TextureBuffer &&buffer, bool mipmaps) : texture_handle(0), filt
 buffer(std::move(buffer)), mipmaps((
         (buffer.GetWidth() & (buffer.GetWidth() - 1)) ||
         (buffer.GetHeight() & (buffer.GetHeight() - 1))) &&
-        mipmaps) {
+        mipmaps),
+filtering_update_required(true), wrapping_update_required(true) {
     ASSERT_MAIN_THREAD
 }
 
@@ -67,12 +65,7 @@ void Texture::Load() {
     if (IsLoaded()) return;
 
     glGenTextures(1, &texture_handle);
-    glBindTexture(GL_TEXTURE_2D, texture_handle);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filtering);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filtering);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapping);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapping);
+    TextureBindManager::BindTexture(this);
 
     void *data = nullptr;
     if (!buffer.GetBuffer().empty()) data = buffer.GetBuffer().data();
@@ -83,6 +76,7 @@ void Texture::Load() {
 void Texture::Unload() {
     ASSERT_MAIN_THREAD
     if (!IsLoaded()) return;
+    TextureBindManager::UnbindTexture(texture_handle);
     glDeleteTextures(1, &texture_handle);
     texture_handle = 0;
 }
@@ -92,6 +86,7 @@ void Texture::FetchBuffer() {
     if (!IsLoaded()) return;
     GetBuffer().Allocate();
 #if RENDERER_GL
+    // TODO fix for GL ES
     glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer.GetBuffer().data());
 #endif
 }
@@ -101,51 +96,41 @@ void Texture::Reload() {
     Load();
 }
 
-void Texture::Bind() {
+void Texture::BindToGL() {
+    ASSERT_MAIN_THREAD
+    glBindTexture(GL_TEXTURE_2D, texture_handle);
+    if (filtering_update_required) {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filtering);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filtering);
+        filtering_update_required = false;
+    }
+    if (wrapping_update_required) {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapping);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapping);
+        wrapping_update_required = false;
+    }
+}
+
+void Texture::BindToActiveUnit() {
     ASSERT_MAIN_THREAD
     if (!IsLoaded()) Load();
-    else glBindTexture(GL_TEXTURE_2D, texture_handle);
+    TextureBindManager::BindTextureToCurrentUnit(this);
 }
 
-void Texture::Bind(int texture_unit) {
+int Texture::Bind() {
     ASSERT_MAIN_THREAD
-    glActiveTexture(GL_TEXTURE0 + texture_unit);
-    Bind();
-}
-
-int Texture::SmartBind() {
-    if (IsLoaded()) {
-        auto iter = handle_to_unit.find(texture_handle);
-        if (iter != handle_to_unit.end()) {
-            return iter->second;
-        }
-    }
-    int unit = current_unit;
-    Bind(unit);
-    if (++current_unit >= unit_to_handle.size()) {
-        current_unit = 0;
-    }
-    unsigned int handle_to_unbind = unit_to_handle[unit];
-    handle_to_unit.erase(handle_to_unbind);
-    handle_to_unit.emplace(texture_handle, unit);
-    unit_to_handle[unit] = texture_handle;
-    return unit;
+    if (!IsLoaded()) Load();
+    return TextureBindManager::BindTexture(this);
 }
 
 void Texture::SetFiltering(Texture::Filtering filtering) {
     this->filtering = filtering;
-    if (!IsLoaded()) return;
-    glActiveTexture(GL_TEXTURE0 + SmartBind());
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filtering);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filtering);
+    filtering_update_required = true;
 }
 
 void Texture::SetWrapping(Texture::Wrapping wrapping) {
     this->wrapping = wrapping;
-    if (!IsLoaded()) return;
-    glActiveTexture(GL_TEXTURE0 + SmartBind());
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapping);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapping);
+    wrapping_update_required = true;
 }
 
 pTexture Texture::Create(int width, int height, const std::vector<unsigned char> &data, bool mipmaps) {

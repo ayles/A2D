@@ -68,7 +68,7 @@ class Material : public ref_counter {
         pTexture value;
 
         void SetToUniform() override {
-            if (uniform) uniform->Set(value->SmartBind());
+            if (uniform) uniform->Set(value->Bind());
         }
 
         size_t GetHash() const override {

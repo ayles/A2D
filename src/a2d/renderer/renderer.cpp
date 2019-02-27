@@ -6,6 +6,7 @@
 #include <a2d/core/engine.hpp>
 #include <a2d/core/camera.hpp>
 #include <a2d/core/log.hpp>
+#include <a2d/renderer/texture_bind_manager.hpp>
 
 #if TARGET_ANDROID
 void Android_setOrientation(int orientation);
@@ -110,8 +111,8 @@ bool Renderer::Initialize() {
 #endif
 
     GLint max_texture_units;
-    glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &max_texture_units);
-    Texture::unit_to_handle.resize(max_texture_units);
+    glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &max_texture_units);
+    TextureBindManager::Initialize(max_texture_units);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

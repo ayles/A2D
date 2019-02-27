@@ -39,7 +39,7 @@ public:
         this->width = width;
         this->height = height;
         texture = Texture::Create(width, height);
-        texture->SmartBind();
+        texture->Load();
         if (framebuffer) {
             glDeleteFramebuffers(1, &framebuffer);
         }

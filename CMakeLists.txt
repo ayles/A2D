@@ -32,7 +32,7 @@ set(A2D_SOURCES
         src/a2d/renderer/animation.cpp
         src/a2d/physics/physics.cpp
         src/a2d/physics/rigidbody.cpp
-        ${SHADERS_GENERATED_FILE})
+        ${SHADERS_GENERATED_FILE} src/a2d/renderer/texture_bind_manager.cpp)
 
 set(A2D_HEADERS
         src/a2d/a2d.hpp
@@ -75,7 +75,7 @@ set(A2D_HEADERS
         src/a2d/core/commands/lambda_command.hpp
         src/a2d/core/log.hpp
         src/a2d/physics/polygon_collider.hpp
-        src/a2d/physics/chain_collider.hpp src/a2d/renderer/framebuffer.hpp src/a2d/renderer/material.hpp src/a2d/utils/utils.hpp)
+        src/a2d/physics/chain_collider.hpp src/a2d/renderer/framebuffer.hpp src/a2d/renderer/material.hpp src/a2d/utils/utils.hpp src/a2d/renderer/texture_bind_manager.hpp)
 
 # A2D library target
 add_library(a2d_engine_library STATIC ${A2D_SOURCES} ${A2D_HEADERS})
