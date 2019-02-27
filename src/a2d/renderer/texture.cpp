@@ -84,6 +84,7 @@ void Texture::Unload() {
 void Texture::FetchBuffer() {
     ASSERT_MAIN_THREAD
     if (!IsLoaded()) return;
+    Bind();
     GetBuffer().Allocate();
 #if RENDERER_GL
     // TODO fix for GL ES
@@ -113,13 +114,13 @@ void Texture::BindToGL() {
 
 void Texture::BindToActiveUnit() {
     ASSERT_MAIN_THREAD
-    if (!IsLoaded()) Load();
+    Load();
     TextureBindManager::BindTextureToCurrentUnit(this);
 }
 
 int Texture::Bind() {
     ASSERT_MAIN_THREAD
-    if (!IsLoaded()) Load();
+    Load();
     return TextureBindManager::BindTexture(this);
 }
 

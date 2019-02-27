@@ -6,6 +6,7 @@
 #include <a2d/core/engine.hpp>
 #include <a2d/renderer/material.hpp>
 
+
 namespace a2d {
 
 const int SpriteBatch::max_sprites = 2048;
@@ -140,6 +141,14 @@ void SpriteBatch::Flush() {
     if (color) glDisableVertexAttribArray(color->location);
 
     buffer.clear();
+}
+
+void SpriteBatch::Begin() {
+    current_material = nullptr;
+}
+
+void SpriteBatch::End() {
+    Flush();
 }
 
 } //namespace a2d

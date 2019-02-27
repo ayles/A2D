@@ -43,8 +43,8 @@ void TextureBindManager::BindTextureToUnit(Texture *texture, int unit_index) {
 int TextureBindManager::BindTextureToCurrentUnit(Texture *texture) {
     // Get unit
     auto &unit = units[active_unit];
-    // Maybe this texture already bound to this unit?
     auto texture_handle = texture->texture_handle;
+    // Maybe this texture already bound to this unit?
     if (unit.bound_texture_handle == texture_handle) return active_unit;
     // Unbind old texture
     if (unit.bound_texture_handle) UnbindTexture(unit.bound_texture_handle);
@@ -60,8 +60,12 @@ int TextureBindManager::BindTextureToCurrentUnit(Texture *texture) {
 }
 
 int TextureBindManager::BindTexture(Texture *texture) {
-    // Maybe it is already bound?
     auto texture_handle = texture->texture_handle;
+    if (!texture_handle) {
+        LOG_TRACE("Trying to bind 0 texture handle");
+        return -1;
+    }
+    // Maybe it is already bound?
     auto iter = handle_to_unit.find(texture_handle);
     if (iter != handle_to_unit.end()) {
         return iter->second->unit_index;

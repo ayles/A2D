@@ -39,6 +39,9 @@ public:
 
     const Matrix4f &GetCameraMatrix() const;
 
+    void Begin();
+    void End();
+
     void Draw(const pMaterial &material,
             const Vector2f &uv_lower, const Vector2f &uv_upper,
             const Vector2f &p1, const Vector2f &p2, const Vector2f &p3, const Vector2f &p4,

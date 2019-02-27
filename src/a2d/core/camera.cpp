@@ -102,8 +102,9 @@ void Camera::Render() {
     if (!sprite_batch) sprite_batch = new SpriteBatch;
 
     sprite_batch->SetCameraMatrix(GetTransformedMatrix());
+    sprite_batch->Begin();
     Engine::GetRoot()->Draw(*sprite_batch);
-    sprite_batch->Flush();
+    sprite_batch->End();
 
     /*static Matrix4f gui_camera_matrix;
     gui_camera_matrix.SetOrtho2D(0, Renderer::GetWidth(), 0, Renderer::GetHeight());

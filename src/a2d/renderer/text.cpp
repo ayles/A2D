@@ -95,7 +95,6 @@ void Text::InternalUpdate() {
     }
     size.Set(text_width, c_set.GetLineHeight());
     if (this->material) {
-        auto &c_set = bitmap_font->GetCharacterSet(font_size);
         auto &c_set2 = bitmap_font->GetCharacterSet(font_size, outline_width);
         this->material->SetTexture("main_texture", c_set.GetTexture());
         this->outline_material->SetTexture("main_texture", c_set2.GetTexture());
