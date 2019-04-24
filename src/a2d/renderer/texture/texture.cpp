@@ -20,27 +20,21 @@ buffer(std::move(buffer)), mipmaps((
         (buffer.GetWidth() & (buffer.GetWidth() - 1)) ||
         (buffer.GetHeight() & (buffer.GetHeight() - 1))) &&
         mipmaps),
-filtering_update_required(true), wrapping_update_required(true) {
-    ASSERT_MAIN_THREAD
-}
+filtering_update_required(true), wrapping_update_required(true) {}
 
 Texture::~Texture() {
-    ASSERT_MAIN_THREAD
     Unload();
 }
 
 int Texture::GetWidth() const {
-    ASSERT_MAIN_THREAD
     return buffer.GetWidth();
 }
 
 int Texture::GetHeight() const {
-    ASSERT_MAIN_THREAD
     return buffer.GetHeight();
 }
 
 bool Texture::HaveMipmaps() const {
-    ASSERT_MAIN_THREAD
     return mipmaps;
 }
 
@@ -113,13 +107,11 @@ void Texture::BindToGL() {
 }
 
 void Texture::BindToActiveUnit() {
-    ASSERT_MAIN_THREAD
     Load();
     TextureBindManager::BindTextureToCurrentUnit(this);
 }
 
 int Texture::Bind() {
-    ASSERT_MAIN_THREAD
     Load();
     return TextureBindManager::BindTexture(this);
 }
@@ -134,15 +126,15 @@ void Texture::SetWrapping(Texture::Wrapping wrapping) {
     wrapping_update_required = true;
 }
 
-pTexture Texture::Create(int width, int height, const std::vector<unsigned char> &data, bool mipmaps) {
+intrusive_ptr<Texture> Texture::Create(int width, int height, const std::vector<unsigned char> &data, bool mipmaps) {
     return new Texture(width, height, data, mipmaps);
 }
 
-pTexture Texture::Create(const TextureBuffer &buffer, bool mipmaps) {
+intrusive_ptr<Texture> Texture::Create(const TextureBuffer &buffer, bool mipmaps) {
     return new Texture(buffer, mipmaps);
 }
 
-pTexture Texture::Create(TextureBuffer &&buffer, bool mipmaps) {
+intrusive_ptr<Texture> Texture::Create(TextureBuffer &&buffer, bool mipmaps) {
     return new Texture(std::move(buffer), mipmaps);
 }
 

@@ -3,6 +3,7 @@
 //
 
 #include <a2d/renderer/texture/texture_bind_manager.hpp>
+#include <a2d/core/log.hpp>
 
 namespace a2d {
 

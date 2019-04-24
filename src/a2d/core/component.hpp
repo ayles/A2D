@@ -7,15 +7,13 @@
 
 #include <a2d/core/macro.hpp>
 #include <a2d/core/ref_counter.hpp>
-#include <a2d/physics/physics.hpp>
 
 #include <list>
 
 namespace a2d {
 
 class Object2D;
-
-DECLARE_SMART_POINTER(Component)
+class CollisionContact;
 
 class Component : public ref_counter {
     friend class Object2D;

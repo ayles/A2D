@@ -8,11 +8,10 @@
 #include <a2d/core/macro.hpp>
 #include <a2d/core/ref_counter.hpp>
 #include <a2d/math/vector.hpp>
-#include <a2d/renderer/texture/texture.hpp>
 
 namespace a2d {
 
-DECLARE_SMART_POINTER(TextureRegion)
+class Texture;
 
 class TextureRegion : public ref_counter {
     friend class Engine;
@@ -20,7 +19,7 @@ class TextureRegion : public ref_counter {
     friend class SpriteBatch;
     friend class Material;
 
-    pTexture texture;
+    intrusive_ptr<Texture> texture;
     Vector2i offset;
     Vector2i size;
     Vector2f uv_lower;
@@ -40,7 +39,7 @@ class TextureRegion : public ref_counter {
 public:
     DELETE_DEFAULT_CONSTRUCTORS_AND_OPERATORS(TextureRegion)
 
-    void SetTexture(const pTexture &texture);
+    void SetTexture(const intrusive_ptr<Texture> &texture);
     void SetX(int x);
     void SetY(int y);
     void SetWidth(int width);
@@ -48,7 +47,7 @@ public:
     void SetFlippedHorizontally(bool flip);
     void SetFlippedVertically(bool flip);
 
-    pTexture GetTexture() const;
+    intrusive_ptr<Texture> GetTexture() const;
     int GetX() const;
     int GetY() const;
     int GetWidth() const;
@@ -59,14 +58,14 @@ public:
     bool IsFlippedHorizontally() const;
     bool IsFlippedVertically() const;
 
-    static pTextureRegion Create();
-    static pTextureRegion Create(pTexture texture);
-    static pTextureRegion Create(pTexture texture, int x, int y, int width, int height);
+    static intrusive_ptr<TextureRegion> Create();
+    static intrusive_ptr<TextureRegion> Create(intrusive_ptr<Texture> texture);
+    static intrusive_ptr<TextureRegion> Create(intrusive_ptr<Texture> texture, int x, int y, int width, int height);
 
 private:
     TextureRegion();
-    TextureRegion(pTexture texture);
-    TextureRegion(pTexture texture, int x, int y, int width, int height);
+    TextureRegion(intrusive_ptr<Texture> texture);
+    TextureRegion(intrusive_ptr<Texture> texture, int x, int y, int width, int height);
     ~TextureRegion() override;
 
     void RecalculateUV();

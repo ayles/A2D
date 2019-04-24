@@ -8,7 +8,6 @@
 #include <a2d/renderer/drawable.hpp>
 #include <a2d/math/vector.hpp>
 #include <a2d/renderer/shader.hpp>
-#include <a2d/core/object2d.hpp>
 #include <a2d/core/resources.hpp>
 #include <a2d/core/camera.hpp>
 #include <a2d/renderer/renderer.hpp>
@@ -29,7 +28,7 @@ public:
     };
 
     std::vector<Vertex> vertices;
-    pShader shader;
+    intrusive_ptr<Shader> shader;
 
     Line() : shader(Resources::Get<Shader>("line")) {}
 

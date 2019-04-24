@@ -6,22 +6,22 @@
 #define A2D_TEXT_HPP
 
 #include <a2d/renderer/drawable.hpp>
-#include <string>
-#include <a2d/renderer/bitmap_font.hpp>
 #include <a2d/core/object2d.hpp>
-#include <a2d/core/resources.hpp>
 
+#include <string>
 #include <codecvt>
 
 namespace a2d {
+
+class BitmapFont;
 
 class Text : public Drawable {
     friend class Object2D;
 
 protected:
     std::u32string text;
-    pBitmapFont bitmap_font;
-    pMaterial outline_material;
+    intrusive_ptr<BitmapFont> bitmap_font;
+    intrusive_ptr<Material> outline_material;
     float font_size;
     float outline_width;
     Vector4f color;
@@ -37,7 +37,7 @@ public:
     void SetOutlineWidth(float outline_width);
     void SetText(const std::string &text);
     void SetText(const std::u32string &text);
-    void SetFont(const pBitmapFont &bitmap_font);
+    void SetFont(const intrusive_ptr<BitmapFont> &bitmap_font);
 
     Vector4f GetColor() const;
     Vector4f GetOutlineColor() const;
@@ -47,7 +47,7 @@ public:
     const std::u32string &GetUTF32Text() const;
     std::string GetText() const;
 
-    pBitmapFont &GetFont();
+    intrusive_ptr<BitmapFont> &GetFont();
 
 protected:
     Text();

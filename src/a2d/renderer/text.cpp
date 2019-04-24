@@ -2,8 +2,13 @@
 // Created by selya on 05.12.2018.
 //
 
-#include <a2d/renderer/text.hpp>
 #include <a2d/core/engine.hpp>
+#include <a2d/renderer/text.hpp>
+#include <a2d/renderer/material.hpp>
+#include <a2d/renderer/bitmap_font.hpp>
+#include <a2d/renderer/texture/texture_region.hpp>
+#include <a2d/renderer/sprite_batch.hpp>
+#include <a2d/core/resources.hpp>
 
 namespace a2d {
 
@@ -40,18 +45,15 @@ void Text::SetOutlineWidth(float outline_width) {
 }
 
 void Text::SetText(const std::string &text) {
-    ASSERT_MAIN_THREAD
     SetText(std::u32string(text.begin(), text.end()));
 }
 
 void Text::SetText(const std::u32string &text) {
-    ASSERT_MAIN_THREAD
     this->text = text;
     InternalUpdate();
 }
 
-void Text::SetFont(const pBitmapFont &bitmap_font) {
-    ASSERT_MAIN_THREAD
+void Text::SetFont(const intrusive_ptr<BitmapFont> &bitmap_font) {
     this->bitmap_font = bitmap_font;
     InternalUpdate();
 }
@@ -73,17 +75,14 @@ float Text::GetFontSize() const {
 }
 
 const std::u32string &Text::GetUTF32Text() const {
-    ASSERT_MAIN_THREAD
     return text;
 }
 
 std::string Text::GetText() const {
-    ASSERT_MAIN_THREAD
     return std::string(text.begin(), text.end());
 }
 
-pBitmapFont &Text::GetFont() {
-    ASSERT_MAIN_THREAD
+intrusive_ptr<BitmapFont> &Text::GetFont() {
     return bitmap_font;
 }
 

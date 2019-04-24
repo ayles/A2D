@@ -6,14 +6,10 @@
 #define A2D_PHYSICS_COLLIDER_HPP
 
 #include <a2d/core/component.hpp>
-#include <a2d/core/object2d.hpp>
-#include <a2d/physics/rigidbody.hpp>
 
 #include <memory>
 
 namespace a2d {
-
-DECLARE_SMART_POINTER(PhysicsCollider)
 
 class PhysicsCollider : public Component {
     friend class Rigidbody;
@@ -42,7 +38,7 @@ public:
     float GetFriction() { return friction; }
     float GetRestitution() { return restitution; }
 
-    pRigidbody GetRigidbody() {
+    intrusive_ptr<Rigidbody> GetRigidbody() {
         if (!fixture) return nullptr;
         return (Rigidbody *)fixture->GetBody()->GetUserData();
     }

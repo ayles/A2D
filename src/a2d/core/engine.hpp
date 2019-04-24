@@ -6,8 +6,6 @@
 #define A2D_ENGINE_HPP
 
 #include <a2d/core/macro.hpp>
-#include <a2d/core/command.hpp>
-#include <a2d/core/commands/lambda_command.hpp>
 
 #include <thread>
 #include <queue>
@@ -20,6 +18,7 @@ namespace a2d {
 
 class Object2D;
 class Component;
+class Command;
 
 class Engine {
     friend class Renderer;
@@ -33,7 +32,7 @@ class Engine {
     static intrusive_ptr<Object2D> root;
     static std::thread::id main_thread_id;
     static bool playing;
-    static std::queue<pCommand> commands;
+    static std::queue<intrusive_ptr<Command>> commands;
     static std::set<intrusive_ptr<Component>> components;
 
 public:
@@ -48,7 +47,7 @@ public:
     static bool IsPlaying();
 
 private:
-    static void AddCommand(const pCommand &command);
+    static void AddCommand(const intrusive_ptr<Command> &command);
     static void AddCommand(const std::function<void()> &lambda);
     static void ExecuteCommands();
 

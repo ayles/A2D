@@ -13,8 +13,6 @@
 
 namespace a2d {
 
-DECLARE_SMART_POINTER(AudioClip)
-
 class AudioClip : public ref_counter {
     friend class AudioSource;
     friend class Resources;

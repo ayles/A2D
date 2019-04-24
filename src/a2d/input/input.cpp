@@ -17,54 +17,44 @@ Input::Touch::Touch(int index, Vector2f position, Input::Touch::TouchState state
                     index(index), position(position), state(state) {}
 
 Input::KeyState Input::GetKeyState(Input::KeyCode key_code) {
-    ASSERT_MAIN_THREAD
     return GetKeyInternalState(key_code).state;
 }
 
 bool Input::IsKeyJustPressed(Input::KeyCode key_code) {
-    ASSERT_MAIN_THREAD
     return GetKeyInternalState(key_code).last_pressed == Engine::GetFrameIndex();
 }
 
 bool Input::IsKeyJustReleased(Input::KeyCode key_code) {
-    ASSERT_MAIN_THREAD
     return GetKeyInternalState(key_code).last_released == Engine::GetFrameIndex();
 }
 
 Vector2f Input::GetScrollDelta() {
-    ASSERT_MAIN_THREAD
     return GetInternalScrollDelta();
 }
 
 Vector2f Input::GetMousePosition() {
-    ASSERT_MAIN_THREAD
     Vector2f pos = GetInternalMousePosition();
     pos.y = Renderer::GetHeight() - pos.y;
     return pos;
 }
 
 Input::KeyState Input::GetMouseButtonState(Input::MouseButtonCode button_code) {
-    ASSERT_MAIN_THREAD
     return GetMouseButtonInternalState(button_code).state;
 }
 
 bool Input::IsMouseButtonJustPressed(Input::MouseButtonCode button_code) {
-    ASSERT_MAIN_THREAD
     return GetMouseButtonInternalState(button_code).last_pressed == Engine::GetFrameIndex();
 }
 
 bool Input::IsMouseButtonJustReleased(Input::MouseButtonCode button_code) {
-    ASSERT_MAIN_THREAD
     return GetMouseButtonInternalState(button_code).last_released == Engine::GetFrameIndex();
 }
 
 int Input::GetTouchesCount() {
-    ASSERT_MAIN_THREAD
     return GetInternalTouchesCount();
 }
 
 Input::Touch Input::GetTouch(int touch_index) {
-    ASSERT_MAIN_THREAD
     auto touch_internal_state = GetTouchInternalState(touch_index);
 
     Touch::TouchState state = Touch::TouchState::TOUCH_STATE_RELEASED;

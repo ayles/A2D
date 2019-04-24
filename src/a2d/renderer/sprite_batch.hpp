@@ -7,24 +7,19 @@
 
 #include <a2d/core/ref_counter.hpp>
 #include <a2d/core/macro.hpp>
-#include <a2d/renderer/texture/texture_region.hpp>
-#include <a2d/renderer/shader.hpp>
 #include <a2d/math/math.hpp>
-#include <a2d/renderer/gl.hpp>
-#include <a2d/renderer/material.hpp>
 
 #include <vector>
 
-
 namespace a2d {
 
-DECLARE_SMART_POINTER(SpriteBatch)
+class Material;
 
 class SpriteBatch : public ref_counter {
     Matrix4f camera_matrix;
-    GLuint vbo;
-    GLuint indices;
-    pMaterial current_material;
+    unsigned int vbo;
+    unsigned int indices;
+    intrusive_ptr<Material> current_material;
     std::vector<float> buffer;
     Vector4f v;
 
@@ -42,7 +37,7 @@ public:
     void Begin();
     void End();
 
-    void Draw(const pMaterial &material,
+    void Draw(const intrusive_ptr<Material> &material,
             const Vector2f &uv_lower, const Vector2f &uv_upper,
             const Vector2f &p1, const Vector2f &p2, const Vector2f &p3, const Vector2f &p4,
             const Matrix4f &matrix, const Vector4f &color);

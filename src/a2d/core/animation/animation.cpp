@@ -10,7 +10,7 @@
 
 namespace a2d {
 
-pObject2D Animation::GetObject2D() {
+intrusive_ptr<Object2D> Animation::GetObject2D() {
     return object_2d;
 }
 
@@ -34,7 +34,7 @@ void Animations::ColorTo::Step(float time) {
     GetObject2D()->SetColor(color_from.Lerp(color, time));
 }
 
-Animations::Frames::Frames(const std::vector<pTextureRegion> &frames) :
+Animations::Frames::Frames(const std::vector<intrusive_ptr<TextureRegion>> &frames) :
 frames(frames) {}
 
 void Animations::Frames::Start() {

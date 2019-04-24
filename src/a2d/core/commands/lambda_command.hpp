@@ -12,8 +12,6 @@
 
 namespace a2d {
 
-DECLARE_SMART_POINTER(LambdaCommand)
-
 class LambdaCommand : public Command {
     std::function<void()> lambda;
 

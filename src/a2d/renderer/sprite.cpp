@@ -2,8 +2,10 @@
 // Created by selya on 09.11.2018.
 //
 
-#include <a2d/renderer/sprite.hpp>
 #include <a2d/core/object2d.hpp>
+#include <a2d/renderer/sprite.hpp>
+#include <a2d/renderer/texture/texture_region.hpp>
+#include <a2d/renderer/sprite_batch.hpp>
 
 namespace a2d {
 
@@ -18,7 +20,7 @@ void Sprite::SetColor(float r, float g, float b, float a) {
     color.Set(r, g, b, a);
 }
 
-void Sprite::SetTextureRegion(const pTextureRegion &texture_region) {
+void Sprite::SetTextureRegion(const intrusive_ptr<TextureRegion> &texture_region) {
     Drawable::SetTextureRegion(texture_region);
     if (!texture_region) SetSize(0.0f);
     else SetSize(texture_region->GetWidth(), texture_region->GetHeight());

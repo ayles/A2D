@@ -27,7 +27,6 @@ void FileSystem::Initialize(void *asset_manager) {
 #endif
 
 std::vector<unsigned char> FileSystem::LoadRaw(const std::string &path) {
-    ASSERT_MAIN_THREAD
 #if TARGET_ANDROID
     auto asset = AAssetManager_open(asset_manager, path.c_str(), AASSET_MODE_UNKNOWN);
     if (asset == nullptr) { LOG_TRACE("Can't load file"); }
@@ -72,13 +71,11 @@ std::vector<unsigned char> FileSystem::LoadRaw(const std::string &path) {
 }
 
 std::string FileSystem::LoadText(const std::string &path) {
-    ASSERT_MAIN_THREAD
     auto v = LoadRaw(path);
     return std::string(v.begin(), v.end());
 }
 
 std::u32string FileSystem::LoadTextUTF8(const std::string &path) {
-    ASSERT_MAIN_THREAD
     // MSVC bug
     // https://stackoverflow.com/questions/32055357/visual-studio-c-2015-stdcodecvt-with-char16-t-or-char32-t
 #if _MSC_VER >= 1900

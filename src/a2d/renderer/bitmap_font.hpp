@@ -6,20 +6,16 @@
 #define A2D_BITMAP_FONT_H
 
 #include <a2d/core/macro.hpp>
-#include <a2d/renderer/texture/texture_region.hpp>
-#include <a2d/core/engine.hpp>
 #include <a2d/core/ref_counter.hpp>
-#include <a2d/renderer/texture/texture_atlas.hpp>
-
-#include <ft2build.h>
-#include FT_FREETYPE_H
-#include FT_STROKER_H
 
 #include <vector>
+#include <map>
 
 namespace a2d {
 
-DECLARE_SMART_POINTER(BitmapFont)
+class TextureAtlas;
+class TextureRegion;
+class Texture;
 
 class BitmapFont : public ref_counter {
 public:
@@ -27,13 +23,13 @@ public:
         friend class BitmapFont;
 
     public:
-        pTextureRegion texture_region;
+        intrusive_ptr<TextureRegion> texture_region;
         const float x, y;
         const float advance_x;
         const float advance_y;
 
     private:
-        Character(const pTextureRegion &texture_region, float x, float y, float advance_x, float advance_y);
+        Character(const intrusive_ptr<TextureRegion> &texture_region, float x, float y, float advance_x, float advance_y);
     };
 
     class CharacterSetParams {
@@ -55,7 +51,7 @@ public:
 
         std::map<char32_t, Character> characters;
         float line_height;
-        pTextureAtlas texture_atlas;
+        intrusive_ptr<TextureAtlas> texture_atlas;
         BitmapFont *bitmap_font;
         CharacterSetParams params;
 
@@ -65,12 +61,12 @@ public:
     public:
         float GetLineHeight() const;
         const Character *GetCharacter(char32_t char_code) const;
-        pTexture GetTexture() const;
+        intrusive_ptr<Texture> GetTexture() const;
     };
 
 private:
     std::map<CharacterSetParams, CharacterSet> characters_sets;
-    FT_Face face;
+    void *face;
     std::vector<unsigned char> data;
 
 public:
@@ -78,13 +74,13 @@ public:
 
     CharacterSet &GetCharacterSet(float size, float outline_size = 0.0f);
 
-    static pBitmapFont Create(const std::vector<unsigned char> &ttf);
+    static intrusive_ptr<BitmapFont> Create(const std::vector<unsigned char> &ttf);
 
 private:
     BitmapFont(const std::vector<unsigned char> &ttf);
     ~BitmapFont() override;
 
-    static FT_Library GetFreeTypeLibrary();
+    static void *GetFreeTypeLibrary();
 };
 
 } //namespace a2d

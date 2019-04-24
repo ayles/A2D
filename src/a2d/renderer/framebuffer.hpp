@@ -5,76 +5,37 @@
 #ifndef A2D_FRAMEBUFFER_H
 #define A2D_FRAMEBUFFER_H
 
-#include <a2d/renderer/texture/texture.hpp>
-#include <a2d/renderer/gl.hpp>
+#include <a2d/core/ref_counter.hpp>
+#include <a2d/core/intrusive_ptr.hpp>
 
 namespace a2d {
 
-DECLARE_SMART_POINTER(Framebuffer)
+class Texture;
 
 class Framebuffer : ref_counter {
     friend class Camera;
 
     int width;
     int height;
-    pTexture texture;
-    GLuint framebuffer;
+    intrusive_ptr<Texture> texture;
+    unsigned int framebuffer;
 
-    Framebuffer() : width(0), height(0), framebuffer(0) {}
+    Framebuffer();
 
 public:
-    int GetWidth() {
-        return width;
-    }
+    int GetWidth();
+    int GetHeight();
+    intrusive_ptr<Texture> GetTexture();
+    void SetSize(int width, int height);
 
-    int GetHeight() {
-        return height;
-    }
-
-    pTexture GetTexture() {
-        return texture;
-    }
-
-    void SetSize(int width, int height) {
-        this->width = width;
-        this->height = height;
-        texture = Texture::Create(width, height);
-        texture->Load();
-        if (framebuffer) {
-            glDeleteFramebuffers(1, &framebuffer);
-        }
-        glGenFramebuffers(1, &framebuffer);
-        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture->GetHandle(), 0);
-        //GLenum draw_buffers[1] = { GL_COLOR_ATTACHMENT0 };
-        //glDrawBuffers(1, draw_buffers);
-        glBindFramebuffer(GL_FRAMEBUFFER, GetBoundFramebuffer());
-
-    }
-
-    static pFramebuffer Create() {
-        return new Framebuffer;
-    }
+    static intrusive_ptr<Framebuffer> Create();
 
 private:
-    static GLuint &GetBoundFramebuffer() {
-        static GLuint framebuffer = 0;
-        return framebuffer;
-    }
+    static unsigned int &GetBoundFramebuffer();
 
-    void Bind() {
-        if (GetBoundFramebuffer() != framebuffer) {
-            glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-            GetBoundFramebuffer() = framebuffer;
-        }
-    }
+    void Bind();
 
-    static void Unbind() {
-        if (GetBoundFramebuffer()) {
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            GetBoundFramebuffer() = 0;
-        }
-    }
+    static void Unbind();
 };
 
 }

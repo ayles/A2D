@@ -6,33 +6,29 @@
 #include <a2d/core/object2d.hpp>
 #include <a2d/core/engine.hpp>
 #include <a2d/renderer/renderer.hpp>
-
+#include <a2d/renderer/framebuffer.hpp>
+#include <a2d/renderer/sprite_batch.hpp>
 
 namespace a2d {
 
 float Camera::GetHeight() {
-    ASSERT_MAIN_THREAD
     return height;
 }
 
 float Camera::GetWidth() {
-    ASSERT_MAIN_THREAD
     return height * GetAspectRatio();
 }
 
 float Camera::GetAspectRatio() {
-    ASSERT_MAIN_THREAD
     if (framebuffer) return (float)framebuffer->GetWidth() / framebuffer->GetHeight();
     return (float)Renderer::GetWidth() / Renderer::GetHeight();
 }
 
 void Camera::SetHeight(float height) {
-    ASSERT_MAIN_THREAD
     this->height = height;
 }
 
 const Matrix4f &Camera::GetMatrix() {
-    ASSERT_MAIN_THREAD
     float half_height = GetHeight() * 0.5f;
     float ratio = GetAspectRatio();
     SetOrtho2D(
@@ -43,7 +39,6 @@ const Matrix4f &Camera::GetMatrix() {
 }
 
 const Matrix4f &Camera::GetTransformedMatrix() {
-    ASSERT_MAIN_THREAD
     camera_transformed_matrix = GetMatrix() * Matrix4f(GetObject2D()->GetTransformMatrix()).Inverse();
     return camera_transformed_matrix;
 }
@@ -52,12 +47,11 @@ const Vector4f &Camera::GetClearColor() {
     return clear_color;
 }
 
-pFramebuffer Camera::GetFramebuffer() {
+intrusive_ptr<Framebuffer> Camera::GetFramebuffer() {
     return framebuffer;
 }
 
 void Camera::SetOrtho2D(float left, float right, float bottom, float top) {
-    ASSERT_MAIN_THREAD
     camera_matrix.SetOrtho2D(left, right, bottom, top);
 }
 
@@ -69,12 +63,11 @@ void Camera::SetClearColor(const Vector4f &color) {
     SetClearColor(color.x, color.y, color.z, color.w);
 }
 
-void Camera::SetFramebuffer(const pFramebuffer &framebuffer) {
+void Camera::SetFramebuffer(const intrusive_ptr<Framebuffer> &framebuffer) {
     this->framebuffer = framebuffer;
 }
 
 Vector2f Camera::ScreenToWorld(const Vector2f &screen) {
-    ASSERT_MAIN_THREAD
     float x = screen.x / Renderer::GetWidth() * 2.0f  - 1.0f;
     float y = screen.y / Renderer::GetHeight() * 2.0f  - 1.0f;
 
@@ -83,6 +76,7 @@ Vector2f Camera::ScreenToWorld(const Vector2f &screen) {
 }
 
 void Camera::Render() {
+    ASSERT_MAIN_THREAD
     if (framebuffer) {
         framebuffer->Bind();
         glViewport(0, 0, framebuffer->GetWidth(), framebuffer->GetHeight());

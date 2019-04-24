@@ -7,16 +7,14 @@
 
 #include <a2d/core/macro.hpp>
 #include <a2d/core/ref_counter.hpp>
-#include <a2d/renderer/texture/texture_buffer.hpp>
 #include <a2d/renderer/gl.hpp>
+#include <a2d/renderer/texture/texture_buffer.hpp>
 
 #include <string>
 #include <vector>
 #include <map>
 
 namespace a2d {
-
-DECLARE_SMART_POINTER(Texture)
 
 class Texture : public ref_counter {
     friend class Renderer;
@@ -56,10 +54,10 @@ public:
     void SetFiltering(Filtering filtering);
     void SetWrapping(Wrapping wrapping);
 
-    static pTexture Create(int width, int height,
+    static intrusive_ptr<Texture> Create(int width, int height,
             const std::vector<unsigned char> &data = std::vector<unsigned char>(), bool mipmaps = false);
-    static pTexture Create(const TextureBuffer &buffer, bool mipmaps = false);
-    static pTexture Create(TextureBuffer &&buffer, bool mipmaps = false);
+    static intrusive_ptr<Texture> Create(const TextureBuffer &buffer, bool mipmaps = false);
+    static intrusive_ptr<Texture> Create(TextureBuffer &&buffer, bool mipmaps = false);
 
 private:
     unsigned int texture_handle;

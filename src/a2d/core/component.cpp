@@ -7,17 +7,13 @@
 
 namespace a2d {
 
-Component::Component() : initialized(false), active(false), active_transitive(false) {
-    ASSERT_MAIN_THREAD
-};
+Component::Component() : initialized(false), active(false), active_transitive(false) {}
 
-pObject2D Component::GetObject2D() const {
-    ASSERT_MAIN_THREAD
+intrusive_ptr<Object2D> Component::GetObject2D() const {
     return object_2d;
 }
 
 void Component::Destroy() {
-    ASSERT_MAIN_THREAD
     Engine::AddCommand([this]() {
         if (!object_2d) return;
         auto iter = object_2d->components.find(typeid(*this));

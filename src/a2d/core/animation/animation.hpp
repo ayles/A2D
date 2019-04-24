@@ -11,6 +11,7 @@
 namespace a2d {
 
 class Object2D;
+class TextureRegion;
 
 class Animation {
     template<class Animation>
@@ -51,10 +52,10 @@ public:
     };
 
     class Frames : public Animation {
-        std::vector<pTextureRegion> frames;
+        std::vector<intrusive_ptr<TextureRegion>> frames;
 
     public:
-        Frames(const std::vector<pTextureRegion> &frames);
+        Frames(const std::vector<intrusive_ptr<TextureRegion>> &frames);
 
         void Start() override;
         void Step(float time) override;

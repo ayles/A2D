@@ -12,7 +12,7 @@
 
 namespace a2d {
 
-pShader Shader::bound_shader;
+intrusive_ptr<Shader> Shader::bound_shader;
 
 static GLuint CompileShader(const std::string &shader_text, const GLenum &shader_type) {
     ASSERT_MAIN_THREAD
@@ -177,24 +177,20 @@ SHADER_SET_UNIFORM_DEF(const Matrix4f &, Shader::ValueType::MATRIX_4_FLOAT)
 #undef SHADER_SET_UNIFORM_DEF
 
 const std::map<std::string, Shader::Uniform> &Shader::GetUniforms() const {
-    ASSERT_MAIN_THREAD
     return uniforms;
 }
 
 Shader::Uniform *Shader::GetUniform(const std::string &name) const {
-    ASSERT_MAIN_THREAD
     auto u = uniforms.find(name);
     if (u != uniforms.end()) return const_cast<Uniform *>(&u->second);
     return nullptr;
 }
 
 const std::map<std::string, Shader::Attribute> &Shader::GetAttributes() const {
-    ASSERT_MAIN_THREAD
     return attributes;
 }
 
 Shader::Attribute *Shader::GetAttribute(const std::string &name) const {
-    ASSERT_MAIN_THREAD
     auto u = attributes.find(name);
     if (u != attributes.end()) return const_cast<Attribute *>(&u->second);
     return nullptr;
@@ -294,8 +290,7 @@ void Shader::Unbind() {
     bound_shader = nullptr;
 }
 
-pShader Shader::Create(const std::string &vertex_shader_text, const std::string &fragment_shader_text) {
-    ASSERT_MAIN_THREAD
+intrusive_ptr<Shader> Shader::Create(const std::string &vertex_shader_text, const std::string &fragment_shader_text) {
     return new Shader(vertex_shader_text, fragment_shader_text);
 }
 

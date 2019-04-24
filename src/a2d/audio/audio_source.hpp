@@ -14,7 +14,7 @@
 namespace a2d {
 
 class AudioSource : public Component {
-    pAudioClip audio_clip;
+    intrusive_ptr<AudioClip> audio_clip;
     float volume;
     float pan;
 
@@ -24,11 +24,11 @@ class AudioSource : public Component {
 public:
     AudioSource();
 
-    void SetAudioClip(const pAudioClip &audio_clip);
+    void SetAudioClip(const intrusive_ptr<AudioClip> &audio_clip);
     void SetVolume(float volume);
     void SetPan(float pan);
 
-    const pAudioClip &GetAudioClip();
+    const intrusive_ptr<AudioClip> &GetAudioClip();
     float GetVolume();
     float GetPan();
 

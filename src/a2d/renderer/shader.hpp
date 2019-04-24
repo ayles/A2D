@@ -14,8 +14,6 @@
 
 namespace a2d {
 
-DECLARE_SMART_POINTER(Shader)
-
 class Shader final : public ref_counter {
 public:
     enum ValueType {
@@ -89,7 +87,7 @@ public:
 
     void Bind();
 
-    static pShader Create(const std::string &vertex_shader_text, const std::string &fragment_shader_text);
+    static intrusive_ptr<Shader> Create(const std::string &vertex_shader_text, const std::string &fragment_shader_text);
     static void Unbind();
     static void CreateDefaultShaders();
 
@@ -101,7 +99,7 @@ private:
     Shader(const std::string &vertex_shader_text, const std::string &fragment_shader_text);
     ~Shader() override;
 
-    static pShader bound_shader;
+    static intrusive_ptr<Shader> bound_shader;
 };
 
 } //namespace a2d

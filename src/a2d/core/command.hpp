@@ -10,8 +10,6 @@
 
 namespace a2d {
 
-DECLARE_SMART_POINTER(Command)
-
 class Command : public ref_counter {
 public:
     virtual void Execute() = 0;

@@ -11,20 +11,22 @@
 #include <a2d/core/macro.hpp>
 #include <a2d/core/engine.hpp>
 #include <a2d/core/component.hpp>
-#include <a2d/renderer/drawable.hpp>
 #include <a2d/core/log.hpp>
-#include <a2d/core/animation/animation.hpp>
-#include <a2d/core/animation/animator.hpp>
+#include <a2d/core/animation/animation_curve.hpp>
 
 #include <set>
 #include <unordered_map>
 #include <typeindex>
 #include <type_traits>
-#include <vector>
 
 namespace a2d {
 
-DECLARE_SMART_POINTER(Object2D)
+class Drawable;
+class Animation;
+class SpriteBatch;
+
+template<class A>
+class Animator;
 
 class Object2D final : public ref_counter {
     friend class Engine;
@@ -35,10 +37,10 @@ class Object2D final : public ref_counter {
     friend class Component;
 
     // Hierarchy
-    pObject2D parent;
-    std::list<pObject2D> children;
-    std::list<pObject2D>::const_iterator iter_in_parent;
-    std::unordered_map<std::type_index, std::set<pComponent>> components;
+    intrusive_ptr<Object2D> parent;
+    std::list<intrusive_ptr<Object2D>> children;
+    std::list<intrusive_ptr<Object2D>>::const_iterator iter_in_parent;
+    std::unordered_map<std::type_index, std::set<intrusive_ptr<Component>>> components;
 
     // Transform
     Matrix4f transform_matrix;
@@ -54,10 +56,10 @@ class Object2D final : public ref_counter {
     bool active;
     bool active_transitive;
     std::string tag;
-    pDrawable drawable;
+    intrusive_ptr<Drawable> drawable;
 
     struct compare_objects {
-        bool operator()(const pObject2D &lhs, const pObject2D &rhs) const;
+        bool operator()(const intrusive_ptr<Object2D> &lhs, const intrusive_ptr<Object2D> &rhs) const;
     };
 
 public:
@@ -65,8 +67,8 @@ public:
 
     // Getters
 
-    pObject2D GetParent() const;
-    const std::list<pObject2D> &GetChildren() const;
+    intrusive_ptr<Object2D> GetParent() const;
+    const std::list<intrusive_ptr<Object2D>> &GetChildren() const;
 
     const a2d::Matrix4f &GetTransformMatrix() const;
     const Vector2f &GetLocalPosition() const;
@@ -74,8 +76,8 @@ public:
     float GetLocalRotation() const;
     Vector2f GetPosition() const;
     float GetRotation() const;
-    Vector2f GetRelativePosition(const pObject2D &origin) const;
-    float GetRelativeRotation(const pObject2D &origin) const;
+    Vector2f GetRelativePosition(const intrusive_ptr<Object2D> &origin) const;
+    float GetRelativeRotation(const intrusive_ptr<Object2D> &origin) const;
     Vector2f WorldToLocalPoint(const Vector2f &world_point);
     Vector2f LocalToWorldPoint(const Vector2f &local_point);
 
@@ -85,7 +87,7 @@ public:
     bool IsActive() const;
     bool IsActiveTransitive() const;
     const std::string &GetTag() const;
-    pDrawable GetDrawable() const;
+    intrusive_ptr<Drawable> GetDrawable() const;
     template<class T>
     typename std::enable_if<std::is_base_of<Drawable, T>::value, intrusive_ptr<T>>::type
     GetDrawableAs() const;
@@ -110,7 +112,7 @@ public:
 
     // Manage
 
-    void Attach(const pObject2D &parent);
+    void Attach(const intrusive_ptr<Object2D> &parent);
     void Destroy();
     void DestroyAllComponents();
 
@@ -135,7 +137,7 @@ public:
     typename std::enable_if<std::is_base_of<Component, T>::value, std::set<intrusive_ptr<T>>>::type
     GetComponents(bool look_for_base = false) const;
 
-    static pObject2D Create();
+    static intrusive_ptr<Object2D> Create();
 
 private:
     Object2D();
@@ -147,7 +149,7 @@ private:
     // Events
     void OnAttach();
     void OnDetach();
-    void OnTransform(const pObject2D &object, bool apply_local = true, bool scaling = false);
+    void OnTransform(const intrusive_ptr<Object2D> &object, bool apply_local = true, bool scaling = false);
 };
 
 
@@ -170,7 +172,6 @@ Object2D::AddAnimation(const Anim &animation, float duration, int times, bool mi
 template<class T>
 typename std::enable_if<std::is_base_of<a2d::Component, T>::value, intrusive_ptr<T>>::type
 Object2D::AddComponent() {
-    ASSERT_MAIN_THREAD
     std::type_index t_index = typeid(T);
     intrusive_ptr<Component> component = new T;
     components[t_index].emplace(component);
@@ -192,7 +193,6 @@ Object2D::AddComponent() {
 template<class T, class ...Args>
 typename std::enable_if<std::is_base_of<a2d::Component, T>::value, intrusive_ptr<T>>::type
 Object2D::AddComponent(Args && ...args) {
-    ASSERT_MAIN_THREAD
     std::type_index t_index = typeid(T);
     intrusive_ptr<Component> component = new T(std::forward<Args>(args)...);
     components[t_index].emplace(component);
@@ -213,7 +213,6 @@ Object2D::AddComponent(Args && ...args) {
 template<class T>
 typename std::enable_if<std::is_base_of<a2d::Component, T>::value, intrusive_ptr<T>>::type
 Object2D::GetComponent(bool look_for_base) const {
-    ASSERT_MAIN_THREAD
     if (look_for_base) {
         for (auto &i1 : components) {
             for (auto &i2 : i1.second) {
@@ -242,7 +241,6 @@ Object2D::GetComponent(bool look_for_base) const {
 template<class T>
 typename std::enable_if<std::is_base_of<a2d::Component, T>::value, std::set<intrusive_ptr<T>>>::type
 Object2D::GetComponents(bool look_for_base) const {
-    ASSERT_MAIN_THREAD
     if (look_for_base) {
         std::set<intrusive_ptr<T>> s;
         for (auto &i1 : components) {

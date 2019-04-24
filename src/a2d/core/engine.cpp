@@ -4,47 +4,50 @@
 
 #include <a2d/core/engine.hpp>
 #include <a2d/core/object2d.hpp>
+#include <a2d/core/command.hpp>
 #include <a2d/core/component.hpp>
 #include <a2d/core/log.hpp>
+#include <a2d/core/commands/lambda_command.hpp>
 
-unsigned long long a2d::Engine::frame_index = 0;
-float a2d::Engine::delta_time = 0.0f;
-a2d::pObject2D a2d::Engine::root = nullptr;
-std::thread::id a2d::Engine::main_thread_id;
-bool a2d::Engine::playing = false;
-std::queue<a2d::pCommand> a2d::Engine::commands;
-std::set<a2d::pComponent> a2d::Engine::components;
+namespace a2d {
 
-unsigned long long a2d::Engine::GetFrameIndex() {
+unsigned long long Engine::frame_index = 0;
+float Engine::delta_time = 0.0f;
+intrusive_ptr<Object2D> Engine::root = nullptr;
+std::thread::id Engine::main_thread_id;
+bool Engine::playing = false;
+std::queue<intrusive_ptr<Command>> Engine::commands;
+std::set<intrusive_ptr<Component>> Engine::components;
+
+unsigned long long Engine::GetFrameIndex() {
     return frame_index;
 }
 
-float a2d::Engine::GetDeltaTime() {
+float Engine::GetDeltaTime() {
     return delta_time;
 }
 
-a2d::pObject2D a2d::Engine::GetRoot() {
-    ASSERT_MAIN_THREAD
+intrusive_ptr<Object2D> Engine::GetRoot() {
     return root;
 }
 
-const std::thread::id &a2d::Engine::GetMainThreadID() {
+const std::thread::id &Engine::GetMainThreadID() {
     return main_thread_id;
 }
 
-bool a2d::Engine::IsPlaying() {
+bool Engine::IsPlaying() {
     return playing;
 }
 
 
-bool a2d::Engine::Initialize() {
+bool Engine::Initialize() {
     main_thread_id = std::this_thread::get_id();
     root = new Object2D;
     Resume();
     return true;
 }
 
-bool a2d::Engine::Update() {
+bool Engine::Update() {
     static auto start = std::chrono::system_clock::now();
 
     delta_time = std::chrono::duration<float>(std::chrono::system_clock::now() - start).count();
@@ -59,7 +62,7 @@ bool a2d::Engine::Update() {
     return true;
 }
 
-bool a2d::Engine::PostUpdate() {
+bool Engine::PostUpdate() {
     for (auto &component : components) {
         if (!component->IsActiveTransitive()) continue;
         component->PostUpdate();
@@ -68,34 +71,36 @@ bool a2d::Engine::PostUpdate() {
     return true;
 }
 
-void a2d::Engine::Pause() {
+void Engine::Pause() {
     if (!playing) return;
     playing = false;
     for (auto &component : components) component->OnPause();
 }
 
-void a2d::Engine::Resume() {
+void Engine::Resume() {
     if (playing) return;
     playing = true;
     for (auto &component : components) component->OnResume();
 }
 
-void a2d::Engine::Uninitialize() {
+void Engine::Uninitialize() {
     Pause();
     root->Destroy();
 }
 
-void a2d::Engine::AddCommand(const a2d::pCommand &command) {
+void Engine::AddCommand(const intrusive_ptr<Command> &command) {
     commands.emplace(command);
 }
 
-void a2d::Engine::AddCommand(const std::function<void()> &lambda) {
+void Engine::AddCommand(const std::function<void()> &lambda) {
     commands.emplace(new LambdaCommand(lambda));
 }
 
-void a2d::Engine::ExecuteCommands() {
+void Engine::ExecuteCommands() {
     while (!commands.empty()) {
         commands.front()->Execute();
         commands.pop();
     }
+}
+
 }

@@ -33,7 +33,7 @@ set(A2D_SOURCES
         src/a2d/renderer/texture/texture_bind_manager.cpp
         src/a2d/core/animation/animation_curve.cpp
         src/a2d/core/animation/animation.cpp
-        ${SHADERS_GENERATED_FILE})
+        ${SHADERS_GENERATED_FILE} src/a2d/renderer/material.cpp src/a2d/renderer/framebuffer.cpp src/a2d/renderer/texture/texture_atlas.cpp)
 
 set(A2D_HEADERS
         src/a2d/a2d.hpp
@@ -87,6 +87,9 @@ set(A2D_HEADERS
 # A2D library target
 add_library(a2d_engine_library STATIC ${A2D_SOURCES} ${A2D_HEADERS})
 target_include_directories(a2d_engine_library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+include(src/cmake/precompiled_header.cmake)
+add_precompiled_header(a2d_engine_library src/a2d/a2d.hpp)
 
 # Prepare variables
 if (ANDROID OR IOS)

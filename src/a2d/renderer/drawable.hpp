@@ -7,15 +7,13 @@
 
 #include <a2d/core/component.hpp>
 #include <a2d/core/macro.hpp>
-#include <a2d/renderer/sprite_batch.hpp>
 #include <a2d/math/vector.hpp>
-#include <a2d/renderer/shader.hpp>
-#include <a2d/renderer/texture/texture_region.hpp>
-#include <a2d/renderer/material.hpp>
 
 namespace a2d {
 
-DECLARE_SMART_POINTER(Drawable)
+class TextureRegion;
+class Material;
+class SpriteBatch;
 
 class Drawable : public Component {
     friend class Object2D;
@@ -56,8 +54,8 @@ public:
      */
     virtual Vector2f GetOrigin() const final;
 
-    virtual const pTextureRegion GetTextureRegion() const final;
-    virtual const pMaterial GetMaterial() const final;
+    virtual const intrusive_ptr<TextureRegion> GetTextureRegion() const final;
+    virtual const intrusive_ptr<Material> GetMaterial() const final;
 
     virtual void SetWidth(float width);
     virtual void SetHeight(float height);
@@ -65,8 +63,8 @@ public:
     virtual void SetSize(const Vector2f &size);
     virtual void SetOrigin(float x, float y);
     virtual void SetOrigin(const Vector2f &origin);
-    virtual void SetTextureRegion(const pTextureRegion &texture_region);
-    virtual void SetMaterial(const pMaterial &material);
+    virtual void SetTextureRegion(const intrusive_ptr<TextureRegion> &texture_region);
+    virtual void SetMaterial(const intrusive_ptr<Material> &material);
 
 
     /**
@@ -77,8 +75,8 @@ public:
 protected:
     Vector2f size;
     Vector2f origin;
-    pTextureRegion texture_region;
-    pMaterial material;
+    intrusive_ptr<TextureRegion> texture_region;
+    intrusive_ptr<Material> material;
 
     virtual void Draw(SpriteBatch &sprite_batch, const Vector4f &color);
 

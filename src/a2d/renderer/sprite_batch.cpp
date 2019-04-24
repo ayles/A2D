@@ -2,10 +2,10 @@
 // Created by selya on 25.11.2018.
 //
 
-#include <a2d/renderer/sprite_batch.hpp>
 #include <a2d/core/engine.hpp>
 #include <a2d/renderer/material.hpp>
-
+#include <a2d/renderer/gl.hpp>
+#include <a2d/renderer/sprite_batch.hpp>
 
 namespace a2d {
 
@@ -43,21 +43,17 @@ SpriteBatch::~SpriteBatch() {
 }
 
 void SpriteBatch::SetCameraMatrix(const Matrix4f &camera_matrix) {
-    ASSERT_MAIN_THREAD
     this->camera_matrix = camera_matrix;
 }
 
 const Matrix4f &SpriteBatch::GetCameraMatrix() const {
-    ASSERT_MAIN_THREAD
     return camera_matrix;
 }
 
-void SpriteBatch::Draw(const pMaterial &material,
+void SpriteBatch::Draw(const intrusive_ptr<Material> &material,
         const Vector2f &uv_lower, const Vector2f &uv_upper,
         const Vector2f &p1, const Vector2f &p2, const Vector2f &p3, const Vector2f &p4,
         const Matrix4f &matrix, const Vector4f &color) {
-    ASSERT_MAIN_THREAD
-
     if (!material) return;
     if (buffer.size() >= max_sprites || !current_material || current_material->GetHash() != material->GetHash()) {
         Flush();
@@ -106,7 +102,6 @@ void SpriteBatch::Draw(const pMaterial &material,
 }
 
 void SpriteBatch::Flush() {
-    ASSERT_MAIN_THREAD
     if (buffer.empty()) return;
     if (!current_material) {
         buffer.clear();

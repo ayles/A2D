@@ -12,8 +12,6 @@
 
 namespace a2d {
 
-DECLARE_SMART_POINTER(Rigidbody)
-
 class Rigidbody : public Component {
     friend class PhysicsCollider;
     friend class CircleCollider;

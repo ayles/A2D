@@ -10,40 +10,33 @@ namespace a2d {
 
 AudioSource::AudioSource() : audio_clip(nullptr), volume(1), pan(0), handle(0), paused(true) {}
 
-void AudioSource::SetAudioClip(const pAudioClip &audio_clip) {
-    ASSERT_MAIN_THREAD
+void AudioSource::SetAudioClip(const intrusive_ptr<AudioClip> &audio_clip) {
     this->audio_clip = audio_clip;
 }
 
 void AudioSource::SetVolume(float volume) {
-    ASSERT_MAIN_THREAD
     this->volume = volume;
     Audio::audio_engine.setVolume(handle, volume);
 }
 
 void AudioSource::SetPan(float pan) {
-    ASSERT_MAIN_THREAD
     this->pan = pan;
     Audio::audio_engine.setPan(handle, pan);
 }
 
-const pAudioClip &AudioSource::GetAudioClip() {
-    ASSERT_MAIN_THREAD
+const intrusive_ptr<AudioClip> &AudioSource::GetAudioClip() {
     return audio_clip;
 }
 
 float AudioSource::GetVolume() {
-    ASSERT_MAIN_THREAD
     return volume;
 }
 
 float AudioSource::GetPan() {
-    ASSERT_MAIN_THREAD
     return pan;
 }
 
 void AudioSource::Play() {
-    ASSERT_MAIN_THREAD
     if (!paused) return;
     paused = false;
     if (handle) {
@@ -54,14 +47,12 @@ void AudioSource::Play() {
 }
 
 void AudioSource::Pause() {
-    ASSERT_MAIN_THREAD
     if (paused) return;
     paused = true;
     Audio::audio_engine.setPause(handle, true);
 }
 
 void AudioSource::Stop() {
-    ASSERT_MAIN_THREAD
     Audio::audio_engine.stop(handle);
     paused = true;
     handle = 0;

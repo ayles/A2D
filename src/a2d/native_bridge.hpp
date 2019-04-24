@@ -173,14 +173,12 @@ Java_com_selya_a2d_A2DBridge_onTouchEvent(JNIEnv *env, jclass type, jobject moti
 }
 
 void Android_setOrientation(int orientation) {
-    ASSERT_MAIN_THREAD
     if (!current_env) { LOG_TRACE("No env"); }
     static auto set_orientation = current_env->GetStaticMethodID(a2d_bridge, "setOrientation", "(I)V");
     current_env->CallStaticVoidMethod(a2d_bridge, set_orientation, (jint)orientation);
 }
 
 int Android_getOrientation() {
-    ASSERT_MAIN_THREAD
     if (!current_env) { LOG_TRACE("No env"); }
     static auto get_orientation = current_env->GetStaticMethodID(a2d_bridge, "getOrientation", "()I");
     return current_env->CallStaticIntMethod(a2d_bridge, get_orientation);

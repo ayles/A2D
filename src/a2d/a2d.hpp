@@ -33,6 +33,7 @@
 #include <a2d/renderer/texture/texture_buffer.hpp>
 #include <a2d/renderer/texture/texture_region.hpp>
 #include <a2d/renderer/material.hpp>
+#include <a2d/renderer/sprite.hpp>
 
 // Input
 #include <a2d/input/input.hpp>
@@ -53,5 +54,12 @@
 #include <a2d/physics/chain_collider.hpp>
 #include <a2d/core/animation/animator.hpp>
 #include <a2d/core/animation/animation.hpp>
+
+namespace a2d {
+
+DECLARE_SMART_POINTER(Object2D)
+DECLARE_SMART_POINTER(TextureRegion)
+
+}
 
 #endif //A2D_A2D_H

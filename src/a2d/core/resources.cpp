@@ -15,7 +15,6 @@ namespace a2d {
 
 template<>
 intrusive_ptr<Shader> Resources::Load(const std::string &name) {
-    ASSERT_MAIN_THREAD
     return Shader::Create(
             FileSystem::LoadText("shaders/" + name + "/vertex.glsl"),
             FileSystem::LoadText("shaders/" + name + "/fragment.glsl")
@@ -24,7 +23,6 @@ intrusive_ptr<Shader> Resources::Load(const std::string &name) {
 
 template<>
 intrusive_ptr<Texture> Resources::Load(const std::string &name) {
-    ASSERT_MAIN_THREAD
     std::vector<unsigned char> raw_data = FileSystem::LoadRaw("textures/" + name + ".png");
     unsigned int width, height;
     std::vector<unsigned char> image;
@@ -38,13 +36,11 @@ intrusive_ptr<Texture> Resources::Load(const std::string &name) {
 
 template<>
 intrusive_ptr<BitmapFont> Resources::Load(const std::string &name) {
-    ASSERT_MAIN_THREAD
     return BitmapFont::Create(FileSystem::LoadRaw("fonts/" + name + ".ttf"));
 }
 
 template<>
 intrusive_ptr<AudioClip> Resources::Load(const std::string &name) {
-    ASSERT_MAIN_THREAD
     return new AudioClip(FileSystem::LoadRaw("audio/" + name + ".mp3"));
 }
 

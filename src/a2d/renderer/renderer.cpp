@@ -7,6 +7,7 @@
 #include <a2d/core/camera.hpp>
 #include <a2d/core/log.hpp>
 #include <a2d/renderer/texture/texture_bind_manager.hpp>
+#include <a2d/renderer/shader.hpp>
 
 #if TARGET_ANDROID
 void Android_setOrientation(int orientation);
@@ -24,12 +25,10 @@ GLFWwindow *Renderer::window = nullptr;
 #endif
 
 int Renderer::GetWidth() {
-    ASSERT_MAIN_THREAD
     return width;
 }
 
 int Renderer::GetHeight() {
-    ASSERT_MAIN_THREAD
     return height;
 }
 

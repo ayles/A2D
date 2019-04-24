@@ -6,9 +6,7 @@
 #define A2D_INTRUSIVE_PTR_HPP
 
 #include <a2d/core/ref_counter.hpp>
-#include <a2d/core/log.hpp>
 
-#include <string>
 #include <functional>
 
 namespace a2d {
@@ -54,16 +52,10 @@ public:
     }
 
     T &operator*() const {
-#ifndef NDEBUG
-        if (!ptr) LOG_TRACE("Null pointer dereference");
-#endif
         return *ptr;
     }
 
     T *operator->() const {
-#ifndef NDEBUG
-        if (!ptr) LOG_TRACE("Null pointer dereference");
-#endif
         return ptr;
     }
 
