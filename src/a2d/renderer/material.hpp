@@ -7,7 +7,7 @@
 
 #include <a2d/core/ref_counter.hpp>
 #include <a2d/renderer/shader.hpp>
-#include <a2d/renderer/texture.hpp>
+#include <a2d/renderer/texture/texture.hpp>
 #include <a2d/utils/utils.hpp>
 
 #include <memory>

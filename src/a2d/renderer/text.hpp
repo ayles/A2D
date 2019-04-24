@@ -2,8 +2,8 @@
 // Created by selya on 25.11.2018.
 //
 
-#ifndef A2D_TEXT_H
-#define A2D_TEXT_H
+#ifndef A2D_TEXT_HPP
+#define A2D_TEXT_HPP
 
 #include <a2d/renderer/drawable.hpp>
 #include <string>
@@ -53,10 +53,10 @@ protected:
     Text();
     ~Text() override;
 
-    void Draw(SpriteBatch &sprite_batch) override;
+    void Draw(SpriteBatch &sprite_batch, const Vector4f &color) override;
     void InternalUpdate();
 };
 
 } //namespace a2d
 
-#endif //A2D_TEXT_H
+#endif //A2D_TEXT_HPP

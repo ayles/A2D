@@ -2,8 +2,8 @@
 // Created by selya on 26.10.2018.
 //
 
-#ifndef A2D_REF_COUNTER_H
-#define A2D_REF_COUNTER_H
+#ifndef A2D_REF_COUNTER_HPP
+#define A2D_REF_COUNTER_HPP
 
 namespace a2d {
 
@@ -33,4 +33,4 @@ protected:
 
 } //namespace a2d
 
-#endif //A2D_REF_COUNTER_H
+#endif //A2D_REF_COUNTER_HPP

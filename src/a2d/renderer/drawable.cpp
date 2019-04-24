@@ -102,14 +102,18 @@ void Drawable::SetTextureRegion(const pTextureRegion &texture_region) {
     } else this->texture_region = texture_region;
 }
 
-void Drawable::Draw(SpriteBatch &sprite_batch) {}
+void Drawable::Draw(SpriteBatch &sprite_batch, const Vector4f &color) {}
 
 void Drawable::Initialize() {
-    object_2d->drawables.emplace(this);
+    if (!object_2d->drawable)
+        object_2d->drawable = this;
+    else
+        LOG_TRACE("Added second drawable");
 }
 
 void Drawable::OnDestroy() {
-    object_2d->drawables.erase(this);
+    if (object_2d->drawable == this)
+        object_2d->drawable = nullptr;
 }
 
 } //namespace a2d

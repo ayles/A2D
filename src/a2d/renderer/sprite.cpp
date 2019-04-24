@@ -28,18 +28,23 @@ const Vector4f &Sprite::GetColor() {
     return color;
 }
 
-void Sprite::Draw(SpriteBatch &sprite_batch) {
+void Sprite::Draw(SpriteBatch &sprite_batch, const Vector4f &color) {
     static Vector2f p1, p2, p3, p4;
-    if (!texture_region) return;
 
     p1.Set(-size.x * origin.x, -size.y * origin.y);
     p2.Set(size.x * (1 - origin.x), p1.y);
     p3.Set(p2.x, size.y * (1 - origin.y));
     p4.Set(p1.x, p3.y);
 
-    sprite_batch.Draw(material,
-            texture_region->GetUVLower(), texture_region->GetUVUpper(),
-            p1, p2, p3, p4, GetObject2D()->GetTransformMatrix(), color);
+    if (texture_region) {
+        sprite_batch.Draw(material,
+                          texture_region->GetUVLower(), texture_region->GetUVUpper(),
+                          p1, p2, p3, p4, GetObject2D()->GetTransformMatrix(), this->color * color);
+    } else {
+        sprite_batch.Draw(material,
+                          Vector2f(0), Vector2f(1),
+                          p1, p2, p3, p4, GetObject2D()->GetTransformMatrix(), this->color * color);
+    }
 }
 
 Sprite::~Sprite() {

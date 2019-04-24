@@ -2,8 +2,8 @@
 // Created by selya on 20.12.2018.
 //
 
-#ifndef A2D_LINE_H
-#define A2D_LINE_H
+#ifndef A2D_LINE_HPP
+#define A2D_LINE_HPP
 
 #include <a2d/renderer/drawable.hpp>
 #include <a2d/math/vector.hpp>
@@ -44,7 +44,7 @@ public:
         glGenBuffers(1, &vbo);
     }
 
-    void Draw(SpriteBatch &batch) override {
+    void Draw(SpriteBatch &batch, const Vector4f &color_unused) override {
         if (!vertices.size()) return;
         shader->Bind();
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -72,4 +72,4 @@ public:
 
 } //namespace a2d
 
-#endif //A2D_LINE_H
+#endif //A2D_LINE_HPP

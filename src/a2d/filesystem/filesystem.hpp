@@ -2,8 +2,8 @@
 // Created by selya on 27.12.2018.
 //
 
-#ifndef A2D_FILESYSTEM_H
-#define A2D_FILESYSTEM_H
+#ifndef A2D_FILESYSTEM_HPP
+#define A2D_FILESYSTEM_HPP
 
 #include <string>
 #include <vector>
@@ -25,4 +25,4 @@ public:
 
 } //namespace a2d
 
-#endif //A2D_FILESYSTEM_H
+#endif //A2D_FILESYSTEM_HPP

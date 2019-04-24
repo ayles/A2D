@@ -16,6 +16,11 @@
 #endif
 
 
+#if TARGET_DESKTOP
+#include <a2d/renderer/gl.hpp>
+#endif
+
+
 #if defined(TARGET_WINDOWS) && defined(FORCE_DISCRETE_GPU)
 // Enable NVIDIA or AMD discrete gpu on windows
 extern "C" {
@@ -39,7 +44,12 @@ public:
     }
 
     static bool Step() {
-        return Physics::Step() &&
+        Engine::frame_index++;
+        // reserve 0 frame index
+        if (Engine::frame_index == 0) Engine::frame_index++;
+
+        return Input::Step() &&
+               Physics::Step() &&
                Engine::Update() &&
                Engine::PostUpdate() &&
                Renderer::Draw();

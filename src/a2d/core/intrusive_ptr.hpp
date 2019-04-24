@@ -2,8 +2,8 @@
 // Created by selya on 26.10.2018.
 //
 
-#ifndef A2D_INTRUSIVE_PTR_H
-#define A2D_INTRUSIVE_PTR_H
+#ifndef A2D_INTRUSIVE_PTR_HPP
+#define A2D_INTRUSIVE_PTR_HPP
 
 #include <a2d/core/ref_counter.hpp>
 #include <a2d/core/log.hpp>
@@ -127,4 +127,4 @@ struct hash<a2d::intrusive_ptr<K>> {
 
 }
 
-#endif //A2D_INTRUSIVE_PTR_H
+#endif //A2D_INTRUSIVE_PTR_HPP

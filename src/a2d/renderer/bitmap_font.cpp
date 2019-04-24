@@ -5,6 +5,7 @@
 #include <a2d/renderer/bitmap_font.hpp>
 #include <a2d/renderer/gl.hpp>
 #include <a2d/core/log.hpp>
+#include <a2d/renderer/texture/texture_atlas.hpp>
 
 
 namespace a2d {
@@ -32,10 +33,59 @@ const BitmapFont::Character *BitmapFont::CharacterSet::GetCharacter(char32_t cha
 
 pTexture BitmapFont::CharacterSet::GetTexture() const {
     ASSERT_MAIN_THREAD
-    return texture;
+    return texture_atlas->GetTexture();
 }
 
-BitmapFont::CharacterSet::CharacterSet() : line_height(0) {}
+BitmapFont::CharacterSet::CharacterSet(BitmapFont *bitmap_font, const CharacterSetParams &params) :
+line_height(0), bitmap_font(bitmap_font), params(params) {
+    int max_texture_size;
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max_texture_size);
+    texture_atlas = TextureAtlas::Create(max_texture_size);
+    for (char32_t c = 32; c < 128; ++c) {
+        RenderAndStoreCharacter(c);
+    }
+}
+
+const BitmapFont::Character *BitmapFont::CharacterSet::RenderAndStoreCharacter(char32_t char_code) {
+    FT_Set_Pixel_Sizes(bitmap_font->face, 0, (FT_UInt)params.size);
+    line_height = (float)bitmap_font->face->size->metrics.height / 64;
+
+    if (FT_Load_Char(bitmap_font->face, (FT_ULong)char_code, FT_LOAD_DEFAULT)) nullptr;
+
+    FT_Stroker stroker;
+    FT_Stroker_New(GetFreeTypeLibrary(), &stroker);
+    FT_Stroker_Set(stroker, params.outline_size_64, FT_STROKER_LINECAP_ROUND, FT_STROKER_LINEJOIN_ROUND, 0);
+
+    FT_Glyph glyph;
+    FT_Get_Glyph(bitmap_font->face->glyph, &glyph);
+    FT_Glyph_StrokeBorder(&glyph, stroker, false, true);
+    FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, nullptr, true);
+    auto bitmap_glyph = (FT_BitmapGlyph)glyph;
+    auto &bitmap = bitmap_glyph->bitmap;
+
+    TextureBuffer tb(bitmap.width + 2, bitmap.rows + 2);
+
+    for (int x = 0; x < (int)bitmap.width; ++x) {
+        for (int y = 0; y < (int)bitmap.rows; ++y) {
+            unsigned char value = bitmap.buffer[(bitmap.rows - y - 1) * bitmap.width + x];
+            tb.SetPixel(x + 1, y + 1, 255, 255, 255, value);
+        }
+    }
+
+    auto texture_region = texture_atlas->InsertTextureBuffer(tb);
+
+    auto iter = characters.emplace(char_code, Character(
+            texture_region,
+            bitmap_font->face->glyph->bitmap_left - (float)params.outline_size_64 / 64,
+            bitmap_font->face->glyph->bitmap_top - int(bitmap_font->face->glyph->bitmap.rows) - (float)params.outline_size_64 / 64,
+            (float)bitmap_font->face->glyph->advance.x / 64,
+            (float)bitmap_font->face->glyph->advance.y / 64
+    )).first;
+
+    FT_Stroker_Done(stroker);
+
+    return &iter->second;
+}
 
 BitmapFont::CharacterSetParams::CharacterSetParams(int size, int outline_size_64) :
 size(size), outline_size_64(outline_size_64) {}
@@ -52,113 +102,7 @@ BitmapFont::CharacterSet &BitmapFont::GetCharacterSet(float size, float outline_
     CharacterSetParams params(int(size), int(outline_size * 64));
     auto iter = characters_sets.find(params);
     if (iter != characters_sets.end()) return iter->second;
-    return RenderAndStoreCharacterSet(params);
-}
-
-BitmapFont::CharacterSet &BitmapFont::RenderAndStoreCharacterSet(const CharacterSetParams &params) {
-    FT_Set_Pixel_Sizes(face, 0, (FT_UInt)params.size);
-
-    auto &c_set = characters_sets.emplace(params, CharacterSet()).first->second;
-
-    c_set.line_height = (float)face->size->metrics.height / 64;
-
-    int max_texture_size;
-    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max_texture_size);
-
-    int texture_width = 0;
-    int texture_height = 0;
-
-    int current_x = 0;
-    int max_height = 0;
-
-    FT_Stroker stroker;
-    FT_Stroker_New(GetFreeTypeLibrary(), &stroker);
-    FT_Stroker_Set(stroker, params.outline_size_64, FT_STROKER_LINECAP_ROUND, FT_STROKER_LINEJOIN_ROUND, 0);
-
-    // Calculate texture size
-    unsigned int glyph_index;
-    auto char_code = FT_Get_First_Char(face, &glyph_index);
-    FT_GlyphSlot g = face->glyph;
-    while (glyph_index) {
-        FT_Load_Glyph(face, glyph_index, FT_LOAD_DEFAULT);
-
-        FT_Glyph glyph;
-        FT_Get_Glyph(g, &glyph);
-        FT_Glyph_StrokeBorder(&glyph, stroker, false, true);
-        FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, nullptr, true);
-        auto bitmap_glyph = (FT_BitmapGlyph)glyph;
-        auto &bitmap = bitmap_glyph->bitmap;
-
-        max_height = max_height > bitmap.rows ? max_height : bitmap.rows;
-        if (current_x + bitmap.width > max_texture_size) {
-            texture_height += max_height;
-            current_x = 0;
-            max_height = 0;
-        }
-        current_x += bitmap.width;
-        texture_width = texture_width > current_x ? texture_width : current_x;
-        char_code = FT_Get_Next_Char(face, char_code, &glyph_index);
-    }
-    texture_height += max_height;
-
-    texture_width = (int)std::pow(2, std::ceil(std::log2(texture_width)));
-    texture_height = (int)std::pow(2, std::ceil(std::log2(texture_height)));
-
-    c_set.texture = Texture::Create(texture_width, texture_height);
-    TextureBuffer &tb = c_set.texture->GetBuffer();
-
-    max_height = 0;
-    current_x = 0;
-    int current_y = 0;
-
-    char_code = FT_Get_First_Char(face, &glyph_index);
-    while (glyph_index) {
-        FT_Load_Glyph(face, glyph_index, FT_LOAD_DEFAULT);
-        //FT_Render_Glyph(g, FT_RENDER_MODE_NORMAL);
-
-        FT_Glyph glyph;
-        FT_Get_Glyph(g, &glyph);
-        FT_Glyph_StrokeBorder(&glyph, stroker, false, true);
-        FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, nullptr, true);
-        auto bitmap_glyph = (FT_BitmapGlyph)glyph;
-        auto &bitmap = bitmap_glyph->bitmap;
-        //auto &bitmap = g->bitmap;
-
-        max_height = max_height > bitmap.rows ? max_height : bitmap.rows;
-        if (current_x + bitmap.width > max_texture_size) {
-            current_y += max_height;
-            current_x = 0;
-            max_height = 0;
-        }
-
-        for (int x = 0; x < (int)bitmap.width; ++x) {
-            for (int y = 0; y < (int)bitmap.rows; ++y) {
-                unsigned char value = bitmap.buffer[(bitmap.rows - y - 1) * bitmap.width + x];
-                tb.SetPixel(
-                        current_x + x, current_y + y,
-                        255, 255, 255, value
-                );
-            }
-        }
-
-        c_set.characters.emplace(char_code, Character(
-                TextureRegion::Create(
-                        c_set.texture,
-                        current_x, current_y,
-                        bitmap.width, bitmap.rows
-                ),
-                g->bitmap_left - (float)params.outline_size_64 / 64,
-                g->bitmap_top - g->bitmap.rows - (float)params.outline_size_64 / 64,
-                (float)g->advance.x / 64,
-                (float)g->advance.y / 64
-        ));
-
-        current_x += bitmap.width;
-
-        char_code = FT_Get_Next_Char(face, char_code, &glyph_index);
-    }
-
-    return c_set;
+    return characters_sets.emplace(params, CharacterSet(this, params)).first->second;
 }
 
 BitmapFont::BitmapFont(const std::vector<unsigned char> &ttf) : data(ttf) {

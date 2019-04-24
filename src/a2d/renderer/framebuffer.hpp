@@ -5,7 +5,7 @@
 #ifndef A2D_FRAMEBUFFER_H
 #define A2D_FRAMEBUFFER_H
 
-#include <a2d/renderer/texture.hpp>
+#include <a2d/renderer/texture/texture.hpp>
 #include <a2d/renderer/gl.hpp>
 
 namespace a2d {

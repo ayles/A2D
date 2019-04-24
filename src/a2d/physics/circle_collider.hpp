@@ -2,8 +2,8 @@
 // Created by selya on 25.12.2018.
 //
 
-#ifndef A2D_CIRCLE_COLLIDER_H
-#define A2D_CIRCLE_COLLIDER_H
+#ifndef A2D_CIRCLE_COLLIDER_HPP
+#define A2D_CIRCLE_COLLIDER_HPP
 
 #include <a2d/physics/physics_collider.hpp>
 #include "rigidbody.hpp"
@@ -32,7 +32,11 @@ public:
 protected:
     b2Shape *CalculateShape(b2Body *body) override {
 #ifndef NDEBUG
-        if (!line) line = GetObject2D()->AddComponent<Line>();
+        if (!line) {
+            auto o = Object2D::Create();
+            o->Attach(GetObject2D());
+            line = o->AddComponent<Line>();
+        }
         line->vertices.clear();
         int v = 16;
         for (int i = 0; i < v; ++i) {
@@ -56,4 +60,4 @@ protected:
 
 } //namespace a2d
 
-#endif //A2D_CIRCLE_COLLIDER_H
+#endif //A2D_CIRCLE_COLLIDER_HPP

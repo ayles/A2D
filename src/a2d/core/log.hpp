@@ -2,8 +2,8 @@
 // Created by selya on 23.01.2019.
 //
 
-#ifndef A2D_LOG_H
-#define A2D_LOG_H
+#ifndef A2D_LOG_HPP
+#define A2D_LOG_HPP
 
 #if NDEBUG
 #define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_INFO
@@ -88,4 +88,4 @@ public:
 
 }
 
-#endif //A2D_LOG_H
+#endif //A2D_LOG_HPP

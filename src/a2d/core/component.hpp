@@ -2,8 +2,8 @@
 // Created by selya on 26.10.2018.
 //
 
-#ifndef A2D_COMPONENT_H
-#define A2D_COMPONENT_H
+#ifndef A2D_COMPONENT_HPP
+#define A2D_COMPONENT_HPP
 
 #include <a2d/core/macro.hpp>
 #include <a2d/core/ref_counter.hpp>
@@ -59,4 +59,4 @@ protected:
 
 } // namespace a2d
 
-#endif //A2D_COMPONENT_H
+#endif //A2D_COMPONENT_HPP

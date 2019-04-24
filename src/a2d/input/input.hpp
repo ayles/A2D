@@ -8,6 +8,8 @@
 #include <a2d/renderer/gl.hpp>
 #include <a2d/math/vector.hpp>
 
+#include <queue>
+
 namespace a2d {
 
 class Input {
@@ -273,6 +275,7 @@ public:
 
 private:
     static bool Initialize();
+    static bool Step();
     static void Uninitialize();
 
 #if TARGET_DESKTOP
@@ -303,8 +306,10 @@ private:
     static TouchInternalState &GetTouchInternalState(int touch_index);
     static Vector2f &GetInternalMousePosition();
     static Vector2f &GetInternalScrollDelta();
+    static std::queue<std::pair<int, TouchInternalState>> &GetInternalDelayedTouchesPool();
+    static int &GetInternalDelayedTouchesCount();
 };
 
 } //namespace a2d
 
-#endif //A2D_INPUT_H
+#endif //A2D_INPUT_HPP

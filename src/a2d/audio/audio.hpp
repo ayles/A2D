@@ -2,8 +2,8 @@
 // Created by selya on 23.11.2018.
 //
 
-#ifndef A2D_AUDIO_H
-#define A2D_AUDIO_H
+#ifndef A2D_AUDIO_HPP
+#define A2D_AUDIO_HPP
 
 #include <soloud.h>
 
@@ -23,4 +23,4 @@ private:
 
 } //namespace a2d
 
-#endif //A2D_AUDIO_H
+#endif //A2D_AUDIO_HPP

@@ -90,13 +90,14 @@ void Camera::Render() {
         glViewport(0, 0, Renderer::GetWidth(), Renderer::GetHeight());
     }
 
-    glClearColor(
-            clear_color.x,
-            clear_color.y,
-            clear_color.z,
-            clear_color.w
-    );
+    Vector4f c = clear_color;
+    auto o = GetObject2D();
+    while (o) {
+        c *= o->GetColor();
+        o = o->GetParent();
+    }
 
+    glClearColor(c.x, c.y, c.z, c.w);
     glClear(GL_COLOR_BUFFER_BIT);
 
     if (!sprite_batch) sprite_batch = new SpriteBatch;

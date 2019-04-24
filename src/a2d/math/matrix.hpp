@@ -2,8 +2,8 @@
 // Created by selya on 26.10.2018.
 //
 
-#ifndef A2D_MATRIX_H
-#define A2D_MATRIX_H
+#ifndef A2D_MATRIX_HPP
+#define A2D_MATRIX_HPP
 
 #include <a2d/math/math_defines.hpp>
 #include <a2d/math/vector.hpp>
@@ -495,4 +495,4 @@ public:
 
 } //namespace a2d
 
-#endif //A2D_MATRIX_H
+#endif //A2D_MATRIX_HPP

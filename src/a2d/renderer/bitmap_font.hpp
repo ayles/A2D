@@ -6,9 +6,10 @@
 #define A2D_BITMAP_FONT_H
 
 #include <a2d/core/macro.hpp>
-#include <a2d/renderer/texture_region.hpp>
+#include <a2d/renderer/texture/texture_region.hpp>
 #include <a2d/core/engine.hpp>
 #include <a2d/core/ref_counter.hpp>
+#include <a2d/renderer/texture/texture_atlas.hpp>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -35,21 +36,6 @@ public:
         Character(const pTextureRegion &texture_region, float x, float y, float advance_x, float advance_y);
     };
 
-    class CharacterSet {
-        friend class BitmapFont;
-
-        std::map<char32_t, Character> characters;
-        float line_height;
-        pTexture texture;
-
-        CharacterSet();
-
-    public:
-        float GetLineHeight() const;
-        const Character *GetCharacter(char32_t char_code) const;
-        pTexture GetTexture() const;
-    };
-
     class CharacterSetParams {
         friend class BitmapFont;
 
@@ -62,6 +48,24 @@ public:
         CharacterSetParams(const CharacterSetParams &other);
 
         bool operator<(const CharacterSetParams &other) const;
+    };
+
+    class CharacterSet {
+        friend class BitmapFont;
+
+        std::map<char32_t, Character> characters;
+        float line_height;
+        pTextureAtlas texture_atlas;
+        BitmapFont *bitmap_font;
+        CharacterSetParams params;
+
+        CharacterSet(BitmapFont *bitmap_font, const CharacterSetParams &params);
+        const Character *RenderAndStoreCharacter(char32_t char_code);
+
+    public:
+        float GetLineHeight() const;
+        const Character *GetCharacter(char32_t char_code) const;
+        pTexture GetTexture() const;
     };
 
 private:
@@ -79,8 +83,6 @@ public:
 private:
     BitmapFont(const std::vector<unsigned char> &ttf);
     ~BitmapFont() override;
-
-    CharacterSet &RenderAndStoreCharacterSet(const CharacterSetParams &params);
 
     static FT_Library GetFreeTypeLibrary();
 };

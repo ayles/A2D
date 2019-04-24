@@ -2,8 +2,8 @@
 // Created by selya on 19.12.2018.
 //
 
-#ifndef A2D_RIGIDBODY_H
-#define A2D_RIGIDBODY_H
+#ifndef A2D_RIGIDBODY_HPP
+#define A2D_RIGIDBODY_HPP
 
 #include <a2d/core/component.hpp>
 #include <a2d/physics/physics.hpp>
@@ -79,4 +79,4 @@ private:
 
 } //namespace a2d
 
-#endif //A2D_RIGIDBODY_H
+#endif //A2D_RIGIDBODY_HPP

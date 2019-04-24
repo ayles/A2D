@@ -2,8 +2,8 @@
 // Created by selya on 08.01.2019.
 //
 
-#ifndef A2D_RESOURCES_H
-#define A2D_RESOURCES_H
+#ifndef A2D_RESOURCES_HPP
+#define A2D_RESOURCES_HPP
 
 #include <a2d/core/macro.hpp>
 #include <a2d/core/engine.hpp>
@@ -60,4 +60,4 @@ public:
 
 } //namespace a2d
 
-#endif //A2D_RESOURCES_H
+#endif //A2D_RESOURCES_HPP

@@ -5,8 +5,9 @@
 #include <a2d/core/resources.hpp>
 #include <a2d/renderer/shader.hpp>
 #include <a2d/filesystem/filesystem.hpp>
-#include <a2d/renderer/texture.hpp>
+#include <a2d/renderer/texture/texture.hpp>
 #include <a2d/renderer/bitmap_font.hpp>
+#include <a2d/audio/audio_clip.hpp>
 
 #include <lodepng.h>
 
@@ -39,6 +40,12 @@ template<>
 intrusive_ptr<BitmapFont> Resources::Load(const std::string &name) {
     ASSERT_MAIN_THREAD
     return BitmapFont::Create(FileSystem::LoadRaw("fonts/" + name + ".ttf"));
+}
+
+template<>
+intrusive_ptr<AudioClip> Resources::Load(const std::string &name) {
+    ASSERT_MAIN_THREAD
+    return new AudioClip(FileSystem::LoadRaw("audio/" + name + ".mp3"));
 }
 
 } //namespace a2d

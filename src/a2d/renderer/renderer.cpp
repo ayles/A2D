@@ -6,7 +6,7 @@
 #include <a2d/core/engine.hpp>
 #include <a2d/core/camera.hpp>
 #include <a2d/core/log.hpp>
-#include <a2d/renderer/texture_bind_manager.hpp>
+#include <a2d/renderer/texture/texture_bind_manager.hpp>
 
 #if TARGET_ANDROID
 void Android_setOrientation(int orientation);

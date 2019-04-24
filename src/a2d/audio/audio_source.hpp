@@ -2,8 +2,8 @@
 // Created by selya on 30.11.2018.
 //
 
-#ifndef A2D_AUDIO_SOURCE_H
-#define A2D_AUDIO_SOURCE_H
+#ifndef A2D_AUDIO_SOURCE_HPP
+#define A2D_AUDIO_SOURCE_HPP
 
 #include <a2d/core/component.hpp>
 #include <a2d/audio/audio_clip.hpp>
@@ -39,4 +39,4 @@ public:
 
 } //namespace a2d
 
-#endif //A2D_AUDIO_SOURCE_H
+#endif //A2D_AUDIO_SOURCE_HPP

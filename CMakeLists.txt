@@ -20,19 +20,20 @@ set(A2D_SOURCES
         src/a2d/audio/audio.cpp
         src/a2d/audio/audio_source.cpp
         src/a2d/renderer/text.cpp
-        src/a2d/renderer/animator.cpp
         src/a2d/filesystem/filesystem.cpp
         src/a2d/renderer/shader.cpp
         src/a2d/renderer/renderer.cpp
-        src/a2d/renderer/texture_region.cpp
-        src/a2d/renderer/texture_buffer.cpp
-        src/a2d/renderer/texture.cpp
+        src/a2d/renderer/texture/texture_region.cpp
+        src/a2d/renderer/texture/texture_buffer.cpp
+        src/a2d/renderer/texture/texture.cpp
         src/a2d/renderer/sprite_batch.cpp
         src/a2d/core/resources.cpp
-        src/a2d/renderer/animation.cpp
         src/a2d/physics/physics.cpp
         src/a2d/physics/rigidbody.cpp
-        ${SHADERS_GENERATED_FILE} src/a2d/renderer/texture_bind_manager.cpp)
+        src/a2d/renderer/texture/texture_bind_manager.cpp
+        src/a2d/core/animation/animation_curve.cpp
+        src/a2d/core/animation/animation.cpp
+        ${SHADERS_GENERATED_FILE})
 
 set(A2D_HEADERS
         src/a2d/a2d.hpp
@@ -49,7 +50,6 @@ set(A2D_HEADERS
         src/a2d/core/macro.hpp
         src/a2d/renderer/sprite.hpp
         src/a2d/core/camera.hpp
-        src/a2d/renderer/animator.hpp
         src/a2d/audio/audio.hpp
         src/a2d/renderer/drawable.hpp
         src/a2d/renderer/text.hpp
@@ -64,18 +64,25 @@ set(A2D_HEADERS
         src/a2d/filesystem/filesystem.hpp
         src/a2d/renderer/gl.hpp
         src/a2d/renderer/sprite_batch.hpp
-        src/a2d/renderer/texture_region.hpp
+        src/a2d/renderer/texture/texture_region.hpp
         src/a2d/renderer/shader.hpp
-        src/a2d/renderer/texture_buffer.hpp
-        src/a2d/renderer/texture.hpp
+        src/a2d/renderer/texture/texture_buffer.hpp
+        src/a2d/renderer/texture/texture.hpp
         src/a2d/renderer/renderer.hpp
         src/a2d/core/resources.hpp
-        src/a2d/renderer/animation.hpp
         src/a2d/core/command.hpp
         src/a2d/core/commands/lambda_command.hpp
         src/a2d/core/log.hpp
         src/a2d/physics/polygon_collider.hpp
-        src/a2d/physics/chain_collider.hpp src/a2d/renderer/framebuffer.hpp src/a2d/renderer/material.hpp src/a2d/utils/utils.hpp src/a2d/renderer/texture_bind_manager.hpp)
+        src/a2d/physics/chain_collider.hpp
+        src/a2d/renderer/framebuffer.hpp
+        src/a2d/renderer/material.hpp
+        src/a2d/utils/utils.hpp
+        src/a2d/renderer/texture/texture_bind_manager.hpp
+        src/a2d/renderer/texture/texture_atlas.hpp
+        src/a2d/core/animation/animation.hpp
+        src/a2d/core/animation/animation_curve.hpp
+        src/a2d/core/animation/animator.hpp)
 
 # A2D library target
 add_library(a2d_engine_library STATIC ${A2D_SOURCES} ${A2D_HEADERS})

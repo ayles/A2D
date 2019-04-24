@@ -6,6 +6,8 @@
 #include <a2d/renderer/renderer.hpp>
 
 #include <map>
+#include "input.hpp"
+
 
 namespace a2d {
 
@@ -90,6 +92,45 @@ bool Input::Initialize() {
     return true;
 }
 
+bool Input::Step() {
+#if TARGET_DESKTOP
+    // For fast input handling
+    glfwPollEvents();
+#elif TARGET_MOBILE
+    while (!GetInternalDelayedTouchesPool().empty()) {
+        auto &s = GetInternalDelayedTouchesPool().front();
+        auto &touch_internal_state = GetTouchInternalState(s.first);
+        auto &button_internal_state = GetMouseButtonInternalState(
+                MouseButtonCode::MOUSE_BUTTON_LEFT);
+
+        if (s.second.last_pressed) touch_internal_state.last_pressed = Engine::GetFrameIndex();
+        if (s.second.last_released) touch_internal_state.last_released = Engine::GetFrameIndex();
+        touch_internal_state.state = s.second.state;
+        touch_internal_state.position = s.second.position;
+
+        if (s.first == 0) {
+            if (s.second.last_pressed) button_internal_state.last_pressed = touch_internal_state.last_pressed;
+            if (s.second.last_released) button_internal_state.last_released = touch_internal_state.last_released;
+            switch (s.second.state) {
+                case Touch::TouchState::TOUCH_STATE_JUST_PRESSED:
+                case Touch::TouchState::TOUCH_STATE_PRESSED:
+                    button_internal_state.state = KeyState::KEY_STATE_PRESSED;
+                    break;
+
+                case Touch::TouchState::TOUCH_STATE_JUST_RELEASED:
+                case Touch::TouchState::TOUCH_STATE_RELEASED:
+                    button_internal_state.state = KeyState::KEY_STATE_RELEASED;
+                    break;
+            }
+            GetInternalMousePosition().Set(s.second.position);
+        }
+
+        GetInternalDelayedTouchesPool().pop();
+    }
+#endif
+    return true;
+}
+
 void Input::Uninitialize() {
 #if TARGET_DESKTOP
     glfwSetKeyCallback(Renderer::window, nullptr);
@@ -157,37 +198,24 @@ void Input::ScrollCallback(GLFWwindow *window, double x_offset, double y_offset)
 #elif TARGET_MOBILE
 
 void Input::TouchCallback(int touches_count, int touch_index, TouchEvent touch_event, float touch_x, float touch_y) {
-    auto &touch_internal_state = GetTouchInternalState(touch_index);
-    auto &button_internal_state = GetMouseButtonInternalState(MouseButtonCode::MOUSE_BUTTON_LEFT);
+    TouchInternalState touch_state {};
 
     switch (touch_event) {
         case TouchEvent::TOUCH_BEGAN:
-            touch_internal_state.last_pressed = Engine::GetFrameIndex();
-            touch_internal_state.state = Touch::TouchState::TOUCH_STATE_PRESSED;
-            if (touch_index == 0) {
-                button_internal_state.last_pressed = Engine::GetFrameIndex();
-                button_internal_state.state = KeyState::KEY_STATE_PRESSED;
-            }
+            touch_state.last_pressed = Engine::GetFrameIndex();
+            touch_state.state = Touch::TouchState::TOUCH_STATE_PRESSED;
             break;
 
         case TouchEvent::TOUCH_ENDED:
-            touch_internal_state.last_released = Engine::GetFrameIndex();
-            touch_internal_state.state = Touch::TouchState::TOUCH_STATE_RELEASED;
-            if (touch_index == 0) {
-                button_internal_state.last_released = Engine::GetFrameIndex();
-                button_internal_state.state = KeyState::KEY_STATE_RELEASED;
-            }
+            touch_state.last_released = Engine::GetFrameIndex();
+            touch_state.state = Touch::TouchState::TOUCH_STATE_RELEASED;
             break;
 
         case TouchEvent::TOUCH_MOVED:
             // if we lost a DOWN event
-            if (touch_internal_state.state == Touch::TouchState::TOUCH_STATE_RELEASED) {
-                touch_internal_state.last_pressed = Engine::GetFrameIndex();
-                touch_internal_state.state = Touch::TouchState::TOUCH_STATE_PRESSED;
-                if (touch_index == 0) {
-                    button_internal_state.last_released = Engine::GetFrameIndex();
-                    button_internal_state.state = KeyState::KEY_STATE_PRESSED;
-                }
+            if (touch_state.state == Touch::TouchState::TOUCH_STATE_RELEASED) {
+                touch_state.last_pressed = Engine::GetFrameIndex();
+                touch_state.state = Touch::TouchState::TOUCH_STATE_PRESSED;
             }
             break;
 
@@ -195,12 +223,9 @@ void Input::TouchCallback(int touches_count, int touch_index, TouchEvent touch_e
             return;
     }
 
-    GetInternalTouchesCount() = touches_count;
-    touch_internal_state.position.Set(touch_x, touch_y);
-
-    if (touch_index == 0) {
-        GetInternalMousePosition().Set(touch_x, touch_y);
-    }
+    GetInternalDelayedTouchesCount() = touches_count;
+    touch_state.position.Set(touch_x, touch_y);
+    GetInternalDelayedTouchesPool().emplace(touch_index, touch_state);
 }
 
 #endif
@@ -233,6 +258,16 @@ Vector2f &Input::GetInternalMousePosition() {
 Vector2f &Input::GetInternalScrollDelta() {
     static Vector2f scroll_delta;
     return scroll_delta;
+}
+
+std::queue<std::pair<int, Input::TouchInternalState>> &Input::GetInternalDelayedTouchesPool() {
+    static std::queue<std::pair<int, TouchInternalState>> q;
+    return q;
+}
+
+int &Input::GetInternalDelayedTouchesCount() {
+    static int count = 0;
+    return count;
 }
 
 

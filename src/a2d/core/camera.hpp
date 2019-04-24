@@ -2,8 +2,8 @@
 // Created by selya on 06.11.2018.
 //
 
-#ifndef A2D_CAMERA_H
-#define A2D_CAMERA_H
+#ifndef A2D_CAMERA_HPP
+#define A2D_CAMERA_HPP
 
 #include <a2d/core/component.hpp>
 #include <a2d/math/math.hpp>
@@ -50,4 +50,4 @@ protected:
 
 } //namespace a2d
 
-#endif //A2D_CAMERA_H
+#endif //A2D_CAMERA_HPP

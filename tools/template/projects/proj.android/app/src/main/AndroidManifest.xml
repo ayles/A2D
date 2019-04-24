@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="%A2D_APP_IDENTIFIER%">
+    package="com.selya.justgame">
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="%A2D_PROJECT_NAME%"
+        android:label="JustGame"
         android:supportsRtl="true">
         <activity android:name="com.selya.a2d.MainActivity"
             android:theme="@style/NoActionBarTheme"

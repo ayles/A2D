@@ -2,12 +2,13 @@
 // Created by selya on 26.10.2018.
 //
 
-#ifndef A2D_A2D_H
-#define A2D_A2D_H
+#ifndef A2D_A2D_HPP
+#define A2D_A2D_HPP
 
 // Audio
 #include <a2d/audio/audio.hpp>
 #include <a2d/audio/audio_clip.hpp>
+#include <a2d/audio/audio_source.hpp>
 
 // Core
 #include <a2d/core/component.hpp>
@@ -28,9 +29,9 @@
 #include <a2d/renderer/renderer.hpp>
 #include <a2d/renderer/shader.hpp>
 #include <a2d/renderer/sprite_batch.hpp>
-#include <a2d/renderer/texture.hpp>
-#include <a2d/renderer/texture_buffer.hpp>
-#include <a2d/renderer/texture_region.hpp>
+#include <a2d/renderer/texture/texture.hpp>
+#include <a2d/renderer/texture/texture_buffer.hpp>
+#include <a2d/renderer/texture/texture_region.hpp>
 #include <a2d/renderer/material.hpp>
 
 // Input
@@ -43,7 +44,6 @@
 #include <a2d/core/camera.hpp>
 #include <a2d/renderer/sprite.hpp>
 #include <a2d/renderer/text.hpp>
-#include <a2d/renderer/animator.hpp>
 #include <a2d/physics/rigidbody.hpp>
 #include <a2d/renderer/line.hpp>
 #include <a2d/physics/rigidbody.hpp>
@@ -51,5 +51,7 @@
 #include <a2d/physics/circle_collider.hpp>
 #include <a2d/physics/polygon_collider.hpp>
 #include <a2d/physics/chain_collider.hpp>
+#include <a2d/core/animation/animator.hpp>
+#include <a2d/core/animation/animation.hpp>
 
 #endif //A2D_A2D_H

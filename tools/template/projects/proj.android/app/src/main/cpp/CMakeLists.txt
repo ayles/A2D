@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.4.1)
-project("%A2D_PROJECT_NAME% android")
+project("JustGame android")
 
 set(CORE_PROJECT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../../../../..")
 

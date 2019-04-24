@@ -2,15 +2,15 @@
 // Created by selya on 24.11.2018.
 //
 
-#ifndef A2D_DRAWABLE_H
-#define A2D_DRAWABLE_H
+#ifndef A2D_DRAWABLE_HPP
+#define A2D_DRAWABLE_HPP
 
 #include <a2d/core/component.hpp>
 #include <a2d/core/macro.hpp>
 #include <a2d/renderer/sprite_batch.hpp>
 #include <a2d/math/vector.hpp>
 #include <a2d/renderer/shader.hpp>
-#include <a2d/renderer/texture_region.hpp>
+#include <a2d/renderer/texture/texture_region.hpp>
 #include <a2d/renderer/material.hpp>
 
 namespace a2d {
@@ -80,7 +80,7 @@ protected:
     pTextureRegion texture_region;
     pMaterial material;
 
-    virtual void Draw(SpriteBatch &sprite_batch);
+    virtual void Draw(SpriteBatch &sprite_batch, const Vector4f &color);
 
     void Initialize() override;
     void OnDestroy() override;
@@ -88,4 +88,4 @@ protected:
 
 } //namespace a2d
 
-#endif //A2D_DRAWABLE_H
+#endif //A2D_DRAWABLE_HPP

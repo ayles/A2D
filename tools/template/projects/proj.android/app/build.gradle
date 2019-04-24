@@ -14,7 +14,7 @@ def getOsDefinitions() {
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "%A2D_APP_IDENTIFIER%"
+        applicationId "com.selya.justgame"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.3.2)
 
 set(CMAKE_CXX_STANDARD 11)
-project("%A2D_PROJECT_NAME% ios")
+project("JustGame ios")
 
 enable_language(Swift)
 include(BundleUtilities)
@@ -11,8 +11,8 @@ set(IOS TRUE)
 set(CODESIGNIDENTITY "iPhone Developer")
 set(DEPLOYMENT_TARGET 9.0)
 
-set(APP_NAME "%A2D_PROJECT_NAME%")
-set(BUNDLE_IDENTIFIER "%A2D_APP_IDENTIFIER%")
+set(APP_NAME "JustGame")
+set(BUNDLE_IDENTIFIER "com.selya.justgame")
 set(PRODUCT_NAME ${APP_NAME})
 set(EXECUTABLE_NAME ${APP_NAME})
 set(MACOSX_BUNDLE_EXECUTABLE_NAME ${APP_NAME})

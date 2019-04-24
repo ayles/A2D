@@ -22,7 +22,7 @@ void Text::SetColor(float r, float g, float b, float a) {
 }
 
 void Text::SetOutlineColor(const Vector4f &outline_color) {
-    SetColor(outline_color.x, outline_color.y, outline_color.z, outline_color.w);
+    SetOutlineColor(outline_color.x, outline_color.y, outline_color.z, outline_color.w);
 }
 
 void Text::SetOutlineColor(float r, float g, float b, float a) {
@@ -101,7 +101,7 @@ void Text::InternalUpdate() {
     }
 }
 
-void Text::Draw(SpriteBatch &sprite_batch) {
+void Text::Draw(SpriteBatch &sprite_batch, const Vector4f &color) {
     Vector2f p1, p2, p3, p4;
     float x1 = -size.x * origin.x;
     float y1 = -size.y * origin.y;
@@ -118,7 +118,7 @@ void Text::Draw(SpriteBatch &sprite_batch) {
         p4.Set(x, y + t->texture_region->GetHeight());
         sprite_batch.Draw(outline_material,
                 t->texture_region->GetUVLower(), t->texture_region->GetUVUpper(),
-                p1, p2, p3, p4, GetObject2D()->GetTransformMatrix(), outline_color);
+                p1, p2, p3, p4, GetObject2D()->GetTransformMatrix(), outline_color * color);
         current_x += t->advance_x;
     }
 
@@ -137,7 +137,7 @@ void Text::Draw(SpriteBatch &sprite_batch) {
         p4.Set(x, y + t->texture_region->GetHeight());
         sprite_batch.Draw(material,
                           t->texture_region->GetUVLower(), t->texture_region->GetUVUpper(),
-                          p1, p2, p3, p4, GetObject2D()->GetTransformMatrix(), color);
+                          p1, p2, p3, p4, GetObject2D()->GetTransformMatrix(), this->color * color);
         current_x += t->advance_x;
     }
 }

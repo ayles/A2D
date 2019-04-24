@@ -24,7 +24,7 @@ def main():
 
     args = parser.parse_args()
 
-    app_identifier = input("Input application identifier in format 'domain.company.app':\n")
+    app_identifier = input("Input application identifier in format 'domain.company.app': ")
 
     path = args.dest
     name = args.name

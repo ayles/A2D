@@ -2,8 +2,8 @@
 // Created by selya on 27.12.2018.
 //
 
-#ifndef A2D_MATH_DEFINES_H
-#define A2D_MATH_DEFINES_H
+#ifndef A2D_MATH_DEFINES_HPP
+#define A2D_MATH_DEFINES_HPP
 
 #include <type_traits>
 #include <cmath>
@@ -22,4 +22,4 @@ template<class U = T, class = typename std::enable_if<std::is_floating_point<U>:
 #define A2D_MATH_ATAN2(y, x)        std::atan2(y, x)
 #define A2D_MATH_ACOS(t)            std::acos(t)
 
-#endif //A2D_MATH_DEFINES_H
+#endif //A2D_MATH_DEFINES_HPP

@@ -2,8 +2,8 @@
 // Created by selya on 10.01.2019.
 //
 
-#ifndef A2D_LAMBDA_COMMAND_H
-#define A2D_LAMBDA_COMMAND_H
+#ifndef A2D_LAMBDA_COMMAND_HPP
+#define A2D_LAMBDA_COMMAND_HPP
 
 #include <a2d/core/command.hpp>
 
@@ -27,4 +27,4 @@ public:
 
 } //namespace a2d
 
-#endif //A2D_LAMBDA_COMMAND_H
+#endif //A2D_LAMBDA_COMMAND_HPP

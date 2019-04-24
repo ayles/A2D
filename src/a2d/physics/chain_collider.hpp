@@ -2,8 +2,8 @@
 // Created by selya on 05.02.2019.
 //
 
-#ifndef A2D_CHAIN_COLLIDER_H
-#define A2D_CHAIN_COLLIDER_H
+#ifndef A2D_CHAIN_COLLIDER_HPP
+#define A2D_CHAIN_COLLIDER_HPP
 
 #include <a2d/physics/physics_collider.hpp>
 
@@ -76,7 +76,11 @@ protected:
     b2Shape *CalculateShape(b2Body *body) override {
         if (vertices.size() < 2) return nullptr;
 #ifndef NDEBUG
-        if (!line) line = GetObject2D()->AddComponent<Line>();
+        if (!line) {
+            auto o = Object2D::Create();
+            o->Attach(GetObject2D());
+            line = o->AddComponent<Line>();
+        }
         line->vertices.clear();
         for (auto &vertex : vertices) {
             line->vertices.emplace_back(vertex, Vector4f(0, 1, 0, 1));
@@ -114,4 +118,4 @@ protected:
 
 }
 
-#endif //A2D_CHAIN_COLLIDER_H
+#endif //A2D_CHAIN_COLLIDER_HPP

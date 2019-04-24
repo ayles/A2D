@@ -2,8 +2,8 @@
 // Created by selya on 14.11.2018.
 //
 
-#ifndef A2D_SHADER_H
-#define A2D_SHADER_H
+#ifndef A2D_SHADER_HPP
+#define A2D_SHADER_HPP
 
 #include <a2d/core/macro.hpp>
 #include <a2d/math/math.hpp>
@@ -106,4 +106,4 @@ private:
 
 } //namespace a2d
 
-#endif //A2D_SHADER_H
+#endif //A2D_SHADER_HPP

@@ -2,12 +2,12 @@
 // Created by selya on 05.11.2018.
 //
 
-#ifndef A2D_SPRITE_H
-#define A2D_SPRITE_H
+#ifndef A2D_SPRITE_HPP
+#define A2D_SPRITE_HPP
 
 #include <a2d/renderer/drawable.hpp>
 #include <a2d/math/math.hpp>
-#include <a2d/renderer/texture_region.hpp>
+#include <a2d/renderer/texture/texture_region.hpp>
 #include <a2d/renderer/shader.hpp>
 
 namespace a2d {
@@ -29,9 +29,9 @@ protected:
     Sprite();
     ~Sprite() override;
 
-    void Draw(SpriteBatch &sprite_batch) override;
+    void Draw(SpriteBatch &sprite_batch, const Vector4f &color) override;
 };
 
 } //namespace a2d
 
-#endif //A2D_SPRITE_H
+#endif //A2D_SPRITE_HPP

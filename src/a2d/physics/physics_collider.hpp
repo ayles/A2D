@@ -2,8 +2,8 @@
 // Created by selya on 25.12.2018.
 //
 
-#ifndef A2D_PHYSICS_COLLIDER_H
-#define A2D_PHYSICS_COLLIDER_H
+#ifndef A2D_PHYSICS_COLLIDER_HPP
+#define A2D_PHYSICS_COLLIDER_HPP
 
 #include <a2d/core/component.hpp>
 #include <a2d/core/object2d.hpp>
@@ -113,4 +113,4 @@ protected:
 
 } //namespace a2d
 
-#endif //A2D_PHYSICS_COLLIDER_H
+#endif //A2D_PHYSICS_COLLIDER_HPP
