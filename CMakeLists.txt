@@ -88,9 +88,6 @@ set(A2D_HEADERS
 add_library(a2d_engine_library STATIC ${A2D_SOURCES} ${A2D_HEADERS})
 target_include_directories(a2d_engine_library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-include(src/cmake/precompiled_header.cmake)
-add_precompiled_header(a2d_engine_library src/a2d/a2d.hpp)
-
 # Prepare variables
 if (ANDROID OR IOS)
     if (ANDROID)
