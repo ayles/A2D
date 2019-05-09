@@ -110,7 +110,8 @@ shader_id(CompileProgram(
     GLint max_attribute_name_length = 0;
     glGetProgramiv(shader_id, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &max_attribute_name_length);
 
-    std::vector<GLchar> name_data(std::max(max_uniform_name_length, max_attribute_name_length));
+    std::vector<GLchar> name_data(max_uniform_name_length > max_attribute_name_length
+    ? max_uniform_name_length : max_attribute_name_length);
 
     GLsizei length;
     GLint size;
