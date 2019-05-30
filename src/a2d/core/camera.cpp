@@ -76,6 +76,9 @@ Vector2f Camera::ScreenToWorld(const Vector2f &screen) {
 }
 
 void Camera::Render() {
+#if TARGET_ANDROID
+    if (!Renderer::surface) return;
+#endif
     ASSERT_MAIN_THREAD
     if (framebuffer) {
         framebuffer->Bind();

@@ -19,12 +19,23 @@ class Camera;
 class Renderer {
     friend class Engine;
     friend class Input;
-    friend class NativeBridge;
+    friend class PlatformToNative;
+    friend class Camera;
 
     static int width;
     static int height;
     static std::string window_title;
     static intrusive_ptr<Camera> main_camera;
+
+#if TARGET_ANDROID
+private:
+    static bool window_changed;
+    static EGLNativeWindowType window;
+    static EGLSurface surface;
+    static EGLDisplay display;
+    static EGLContext context;
+    static EGLConfig config;;
+#endif
 
 #if TARGET_DESKTOP
     static GLFWwindow *window;

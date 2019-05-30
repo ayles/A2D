@@ -11,7 +11,7 @@
 namespace a2d {
 
 class CircleCollider : public PhysicsCollider {
-#ifndef NDEBUG
+#if PHYSICS_DEBUG_DRAW
     intrusive_ptr<Line> line;
 #endif
 
@@ -30,7 +30,7 @@ public:
 
 protected:
     b2Shape *CalculateShape(b2Body *body) override {
-#ifndef NDEBUG
+#if PHYSICS_DEBUG_DRAW
         if (!line) {
             auto o = Object2D::Create();
             o->Attach(GetObject2D());

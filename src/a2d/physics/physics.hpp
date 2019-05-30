@@ -20,7 +20,7 @@ class CollisionContact;
 
 class Physics {
     friend class Rigidbody;
-    friend class NativeBridge;
+    friend class PlatformToNative;
     friend class ContactListener;
     friend class CollisionContact;
     friend class PhysicsCollider;

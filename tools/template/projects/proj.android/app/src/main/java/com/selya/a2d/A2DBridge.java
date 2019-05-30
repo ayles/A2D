@@ -1,9 +1,9 @@
 package com.selya.a2d;
 
-import android.arch.core.util.Function;
 import android.content.res.AssetManager;
 import android.support.v4.util.Consumer;
 import android.view.MotionEvent;
+import android.view.Surface;
 
 public final class A2DBridge {
 
@@ -19,14 +19,12 @@ public final class A2DBridge {
     public static Consumer<Integer> setOrientationCallback = null;
     public static Supplier<Integer> getOrientationCallback = null;
 
-    public static native boolean onSurfaceCreated();
-    public static native boolean onDrawFrame();
-    public static native void onPause();
-    public static native void onResume();
-    public static native void onSurfaceChanged(int width, int height);
-    public static native void onDestroy();
-    public static native void registerAssetManager(AssetManager asset_manager);
-    public static native void onTouchEvent(MotionEvent motion_event);
+    public static native void start(Surface surface, AssetManager assetManager);
+    public static native void terminate();
+    public static native void pause();
+    public static native void resume();
+    public static native void setSurface(Surface surface);
+    public static native void sendTouchEvent(MotionEvent motionEvent);
 
     public static void setOrientation(int orientation) {
         if (setOrientationCallback != null) {

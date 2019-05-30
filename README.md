@@ -49,11 +49,12 @@ namespace a2d {
 
 class RootComponent : public Component {
 public:
-    pObject2D text;
+    intrusive_ptr<Object2D> text;
+    intrusive_ptr<Camera> camera;
 
     void Initialize() override {
-        auto camera = Object2D::Create();
-        Renderer::SetMainCamera(camera->AddComponent<Camera>());
+        camera = Object2D::Create()->AddComponent<Camera>();
+        Renderer::SetMainCamera(camera);
 
         text = Object2D::Create();
         text->AddComponent<Text>()->SetFont(Resources::Get<BitmapFont>("impact"));
@@ -75,6 +76,7 @@ public:
 
 - Rework audio
 - Add support for texture atlas creation on-the-fly
+- Add Emscripten support
 - And more...
 
 # Contact & Contribute

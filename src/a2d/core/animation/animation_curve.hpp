@@ -20,6 +20,8 @@ public:
     }
 
     static const std::function<float (float)> Linear;
+    static const std::function<float (float)> Circle;
+    static const std::function<float (float)> CircleOut;
 };
 
 }

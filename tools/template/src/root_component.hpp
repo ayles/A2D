@@ -14,8 +14,8 @@ namespace a2d {
 
 class RootComponent : public Component {
 public:
-    pObject2D text;
-    pCamera camera;
+    intrusive_ptr<Object2D> text;
+    intrusive_ptr<Camera> camera;
 
     void Initialize() override {
         camera = Object2D::Create()->AddComponent<Camera>();

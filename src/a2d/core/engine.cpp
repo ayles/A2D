@@ -12,6 +12,7 @@
 namespace a2d {
 
 unsigned long long Engine::frame_index = 0;
+std::chrono::time_point<std::chrono::system_clock> Engine::frame_start_time;
 float Engine::delta_time = 0.0f;
 intrusive_ptr<Object2D> Engine::root = nullptr;
 std::thread::id Engine::main_thread_id;
@@ -48,10 +49,8 @@ bool Engine::Initialize() {
 }
 
 bool Engine::Update() {
-    static auto start = std::chrono::system_clock::now();
-
-    delta_time = std::chrono::duration<float>(std::chrono::system_clock::now() - start).count();
-    start = std::chrono::system_clock::now();
+    delta_time = std::chrono::duration<float>(std::chrono::system_clock::now() - frame_start_time).count();
+    frame_start_time = std::chrono::system_clock::now();
 
     for (auto &component : components) {
         if (!component->IsActiveTransitive()) continue;
@@ -80,6 +79,7 @@ void Engine::Pause() {
 void Engine::Resume() {
     if (playing) return;
     playing = true;
+    frame_start_time = std::chrono::system_clock::now();
     for (auto &component : components) component->OnResume();
 }
 

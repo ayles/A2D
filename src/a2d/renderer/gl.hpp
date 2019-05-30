@@ -7,6 +7,7 @@
 
 #if TARGET_ANDROID
 #include <GLES2/gl2.h>
+#include <EGL/egl.h>
 #elif TARGET_IOS
 #include <OpenGLES/ES2/gl.h>
 #elif TARGET_DESKTOP

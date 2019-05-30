@@ -46,7 +46,7 @@ void Material::SetVector4i(const std::string &name, const Vector4i &value) {
     InvalidateHash();
 }
 
-Vector4f Material::GetVector4i(const std::string &name) {
+Vector4i Material::GetVector4i(const std::string &name) {
     auto value = GetValue<Vector4i>(name, Shader::ValueType::VECTOR_4_INT);
     return !value ? Vector4i() : value->value;
 }
@@ -57,7 +57,7 @@ void Material::SetVector3i(const std::string &name, const Vector3i &value) {
     InvalidateHash();
 }
 
-Vector3f Material::GetVector3i(const std::string &name) {
+Vector3i Material::GetVector3i(const std::string &name) {
     auto value = GetValue<Vector3i>(name, Shader::ValueType::VECTOR_3_INT);
     return !value ? Vector3i() : value->value;
 }
@@ -68,7 +68,7 @@ void Material::SetVector2i(const std::string &name, const Vector2i &value) {
     InvalidateHash();
 }
 
-Vector2f Material::GetVector2i(const std::string &name) {
+Vector2i Material::GetVector2i(const std::string &name) {
     auto value = GetValue<Vector2i>(name, Shader::ValueType::VECTOR_2_INT);
     return !value ? Vector2i() : value->value;
 }

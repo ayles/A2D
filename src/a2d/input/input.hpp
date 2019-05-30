@@ -13,7 +13,7 @@
 namespace a2d {
 
 class Input {
-    friend class NativeBridge;
+    friend class PlatformToNative;
 
 public:
     enum KeyCode {

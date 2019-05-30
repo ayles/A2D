@@ -46,7 +46,12 @@ void Animations::Frames::Start() {
 void Animations::Frames::Step(float time) {
     auto sprite = GetObject2D()->GetComponent<Sprite>();
     if (!sprite) return;
-    sprite->SetTextureRegion(frames[int(time * frames.size())]);
+    current_frame_index = int(time * frames.size());
+    sprite->SetTextureRegion(frames[current_frame_index]);
+}
+
+int Animations::Frames::GetCurrentFrameIndex() {
+    return current_frame_index;
 }
 
 }

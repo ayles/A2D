@@ -92,9 +92,9 @@ public:
     Vector2f GetVector2f(const std::string &name);
     Vector3f GetVector3f(const std::string &name);
     Vector4f GetVector4f(const std::string &name);
-    Vector2f GetVector2i(const std::string &name);
-    Vector3f GetVector3i(const std::string &name);
-    Vector4f GetVector4i(const std::string &name);
+    Vector2i GetVector2i(const std::string &name);
+    Vector3i GetVector3i(const std::string &name);
+    Vector4i GetVector4i(const std::string &name);
 
     size_t GetHash() const;
 

@@ -92,8 +92,8 @@ bool TextureRegion::IsFlippedVertically() const {
 
 void TextureRegion::RecalculateUV() {
     if (!texture) return;
-    uv_lower = Vector2f(offset) / Vector2f(float(texture->GetWidth()), float(texture->GetHeight()));
-    uv_upper = Vector2f(offset + size) / Vector2f(float(texture->GetWidth()), float(texture->GetHeight()));
+    uv_lower = Vector2f((float)offset.x, (float)offset.y) / Vector2f(float(texture->GetWidth()), float(texture->GetHeight()));
+    uv_upper = Vector2f(float(offset.x + size.x), float(offset.y + size.y)) / Vector2f(float(texture->GetWidth()), float(texture->GetHeight()));
 
     if (IsFlippedHorizontally()) {
         float temp = uv_lower.x;

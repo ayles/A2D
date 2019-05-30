@@ -45,6 +45,10 @@ public:
         Update();
     }
 
+    Animation &GetAnimation() {
+        return animation;
+    }
+
 private:
     void Update() override {
         if (delay > 0 && elapsed_delay < delay) {

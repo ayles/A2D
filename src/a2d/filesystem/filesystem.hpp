@@ -11,7 +11,7 @@
 namespace a2d {
 
 class FileSystem {
-    friend class NativeBridge;
+    friend class PlatformToNative;
 
 #if TARGET_ANDROID
     static void Initialize(void *asset_manager);

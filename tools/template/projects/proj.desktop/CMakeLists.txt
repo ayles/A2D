@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.2)
-project("JustGame")
+project("%A2D_PROJECT_NAME%")
 
 set(CORE_PROJECT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 set(EXECUTABLE_NAME ${PROJECT_NAME})

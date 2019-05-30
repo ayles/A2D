@@ -8,6 +8,8 @@ set(SHADERS_TEMPLATE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/src/a2d/renderer/shaders_
 set(SHADERS_GENERATED_FILE "${CMAKE_CURRENT_BINARY_DIR}/shaders_builtin.cpp")
 
 set(A2D_SOURCES
+        src/a2d/math/vector.cpp
+        src/a2d/math/matrix.cpp
         src/a2d/input/input.cpp
         src/a2d/core/engine.cpp
         src/a2d/core/object2d.cpp
@@ -33,7 +35,10 @@ set(A2D_SOURCES
         src/a2d/renderer/texture/texture_bind_manager.cpp
         src/a2d/core/animation/animation_curve.cpp
         src/a2d/core/animation/animation.cpp
-        ${SHADERS_GENERATED_FILE} src/a2d/renderer/material.cpp src/a2d/renderer/framebuffer.cpp src/a2d/renderer/texture/texture_atlas.cpp)
+        src/a2d/renderer/material.cpp
+        src/a2d/renderer/framebuffer.cpp
+        src/a2d/renderer/texture/texture_atlas.cpp
+        ${SHADERS_GENERATED_FILE})
 
 set(A2D_HEADERS
         src/a2d/a2d.hpp
@@ -89,17 +94,27 @@ add_library(a2d_engine_library STATIC ${A2D_SOURCES} ${A2D_HEADERS})
 target_include_directories(a2d_engine_library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Prepare variables
+target_compile_definitions(a2d_engine_library PUBLIC FORCE_DISCRETE_GPU=0)
+target_compile_definitions(a2d_engine_library PUBLIC PHYSICS_DEBUG_DRAW=0)
+
 if (ANDROID OR IOS)
     if (ANDROID)
         set(TARGET_ANDROID TRUE)
         set(SOLOUD_BACKEND_OPENSLES TRUE)
         target_compile_definitions(a2d_engine_library PUBLIC TARGET_ANDROID=1)
+        if (ANDROID_ON_WINDOWS)
+            message(STATUS "Compiling for Android on Windows")
+        elseif (ANDROID_ON_MACOS)
+            message(STATUS "Compiling for Android on macOS")
+        elseif (ANDROID_ON_LINUX)
+            message(STATUS "Compiling for Android on Linux")
+        endif ()
     elseif (IOS)
         set(TARGET_IOS TRUE)
         set(SOLOUD_BACKEND_COREAUDIO TRUE)
         target_compile_definitions(a2d_engine_library PUBLIC TARGET_IOS=1)
+        message(STATUS "Compiling for iOS on macOS")
     endif ()
-
     set(TARGET_MOBILE TRUE)
     set(RENDERER_GL_ES TRUE)
     set(SHADERS_TARGET_LANG gles)
@@ -110,16 +125,18 @@ elseif (WIN32 OR APPLE OR UNIX)
         set(TARGET_WINDOWS TRUE)
         set(SOLOUD_BACKEND_WINMM TRUE)
         target_compile_definitions(a2d_engine_library PUBLIC TARGET_WINDOWS=1)
+        message(STATUS "Compiling for Windows")
     elseif (APPLE)
         set(TARGET_MACOS TRUE)
         set(SOLOUD_BACKEND_COREAUDIO TRUE)
         target_compile_definitions(a2d_engine_library PUBLIC TARGET_MACOS=1)
+        message(STATUS "Compiling for macOS")
     elseif (UNIX)
         set(TARGET_LINUX TRUE)
         set(SOLOUD_BACKEND_ALSA TRUE)
         target_compile_definitions(a2d_engine_library PUBLIC TARGET_LINUX=1)
+        message(STATUS "Compiling for Linux")
     endif ()
-
     set(TARGET_DESKTOP TRUE)
     set(RENDERER_GL TRUE)
     set(SHADERS_TARGET_LANG glsl)
@@ -136,7 +153,6 @@ elseif (APPLE OR ANDROID_ON_MACOS)
 elseif (UNIX OR ANDROID_ON_LINUX)
     set(TOOLS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/tools/linux")
 endif ()
-message(STATUS ${TOOLS_PATH})
 
 set(SOLOUD_STATIC TRUE)
 

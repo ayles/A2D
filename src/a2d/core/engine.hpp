@@ -22,12 +22,13 @@ class Command;
 
 class Engine {
     friend class Renderer;
-    friend class NativeBridge;
+    friend class PlatformToNative;
     friend class Component;
     friend class Object2D;
     friend class Physics;
 
     static unsigned long long frame_index;
+    static std::chrono::time_point<std::chrono::system_clock> frame_start_time;
     static float delta_time;
     static intrusive_ptr<Object2D> root;
     static std::thread::id main_thread_id;

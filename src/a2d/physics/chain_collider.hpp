@@ -13,7 +13,7 @@
 namespace a2d {
 
 class ChainCollider : public PhysicsCollider {
-#ifndef NDEBUG
+#if PHYSICS_DEBUG_DRAW
     intrusive_ptr<Line> line;
 #endif
 
@@ -75,7 +75,7 @@ public:
 protected:
     b2Shape *CalculateShape(b2Body *body) override {
         if (vertices.size() < 2) return nullptr;
-#ifndef NDEBUG
+#if PHYSICS_DEBUG_DRAW
         if (!line) {
             auto o = Object2D::Create();
             o->Attach(GetObject2D());

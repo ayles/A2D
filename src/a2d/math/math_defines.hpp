@@ -8,10 +8,8 @@
 #include <type_traits>
 #include <cmath>
 
-#define A2D_MATH_ENABLE_IF_FLOATING_POINT \
-template<class U = T, class = typename std::enable_if<std::is_floating_point<U>::value>::type>
-
-#define A2D_MATH_INLINE inline
+#define A2D_MATH_ENABLE_IF_FLOATING_POINT(...) \
+typename std::enable_if<std::is_floating_point<T>::value, __VA_ARGS__>::type
 
 #define A2D_MATH_SIN(t)             std::sin(t)
 #define A2D_MATH_COS(t)             std::cos(t)

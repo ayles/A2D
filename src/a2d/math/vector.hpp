@@ -32,329 +32,75 @@ class Vector<2, T> {
 public:
     T x, y;
 
-    Vector() : x(0), y(0) {}
-
-    Vector(T scalar) : x(scalar), y(scalar) {}
-
-    Vector(T x, T y) : x(x), y(y) {}
-
-    template<class U>
-    Vector(const Vector<2, U> &other) : x((T)other.x), y((T)other.y) {}
+    Vector();
+    Vector(T scalar);
+    Vector(T x, T y);
+    Vector(const Vector<2, T> &other);
 
     //
     // Const member functions
     //
 
-    A2D_MATH_INLINE
-    T Length() const {
-        return A2D_MATH_SQRT(x * x + y * y);
-    }
+    // Unsafe for integer vectors
+    T Length() const;
+    T Distance(T x, T y) const;
+    T Distance(const Vector<2, T> &other) const;
+    T Dot(T x, T y) const;
+    T Dot(const Vector<2, T> &other) const;
+    T Determinant(T x, T y) const;
+    T Determinant(const Vector<2, T> &other) const;
+    T Angle(T x, T y) const;
+    T Angle(const Vector<2, T> &other) const;
+    Vector<2, T> Normalized() const;
 
-    A2D_MATH_INLINE
-    T LengthSquared() const {
-        return x * x + y * y;
-    }
+    T LengthSquared() const;
+    T DistanceSquared(T x, T y) const;
+    T DistanceSquared(const Vector<2, T> &other) const;
 
-    A2D_MATH_INLINE
-    T Distance(T x, T y) const {
-        T x_diff = this->x - x;
-        T y_diff = this->y - y;
-        return A2D_MATH_SQRT(x_diff * x_diff + y_diff * y_diff);
-    }
-
-    A2D_MATH_INLINE
-    T Distance(const Vector<2, T> &other) const {
-        T x_diff = x - other.x;
-        T y_diff = y - other.y;
-        return A2D_MATH_SQRT(x_diff * x_diff + y_diff * y_diff);
-    }
-
-    A2D_MATH_INLINE
-    T DistanceSquared(T x, T y) const {
-        T x_diff = this->x - x;
-        T y_diff = this->y - y;
-        return x_diff * x_diff + y_diff * y_diff;
-    }
-
-    A2D_MATH_INLINE
-    T DistanceSquared(const Vector<2, T> &other) const {
-        T x_diff = x - other.x;
-        T y_diff = y - other.y;
-        return x_diff * x_diff + y_diff * y_diff;
-    }
-
-    A2D_MATH_INLINE
-    T Dot(T x, T y) const {
-        return this->x * x + this->y * y;
-    }
-
-    A2D_MATH_INLINE
-    T Dot(const Vector<2, T> &other) const {
-        return x * other.x + y * other.y;
-    }
-
-    A2D_MATH_INLINE
-    T Determinant(T x, T y) const {
-        return this->x * y - this->y * x;
-    }
-
-    A2D_MATH_INLINE
-    T Determinant(const Vector<2, T> &other) const {
-        return x * other.y - y * other.x;
-    }
-
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    T Angle(T x, T y) const {
-        T dot = this->x * x + this->y * y;
-        T det = this->x * y - this->y * x;
-        return A2D_MATH_ATAN2(det, dot);
-    }
-
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    T Angle(const Vector<2, T> &other) const {
-        T dot = x * other.x + y * other.y;
-        T det = x * other.y - y * other.x;
-        return A2D_MATH_ATAN2(det, dot);
-    }
-
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    Vector<2, T> Normalized() const {
-        T length = A2D_MATH_SQRT(x * x + y * y);
-        return Vector<2, T>(x / length, y / length);
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> Perpendicular() const {
-        return Vector<2, T>(y, -x);
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> Min(T x, T y) const {
-        return Vector<2, T>(this->x > x ? x : this->x, this->y > y ? y : this->y);
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> Min(const Vector<2, T> &other) const {
-        return Vector<2, T>(x > other.x ? other.x : x, y > other.y ? other.y : y);
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> Max(T x, T y) const {
-        return Vector<2, T>(this->x > x ? this->x : x, this->y > y ? this->y : y);
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> Max(const Vector<2, T> &other) const {
-        return Vector<2, T>(x > other.x ? x : other.x, y > other.y ? y : other.y);
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> Lerp(T x, T y, double t) const {
-        return Vector<2, T>(this->x + (x - this->x) * t, this->y + (y - this->y) * t);
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> Lerp(const Vector<2, T> &other, double t) const {
-        return Vector<2, T>(x + (other.x - x) * t, y + (other.y - y) * t);
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> operator+(const Vector<2, T> &other) const {
-        return Vector<2, T>(x + other.x, y + other.y);
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> operator-(const Vector<2, T> &other) const {
-        return Vector<2, T>(x - other.x, y - other.y);
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> operator*(const Vector<2, T> &other) const {
-        return Vector<2, T>(x * other.x, y * other.y);
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> operator/(const Vector<2, T> &other) const {
-        return Vector<2, T>(x / other.x, y / other.y);
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> operator+(T scalar) const {
-        return Vector<2, T>(x + scalar, y + scalar);
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> operator-(T scalar) const {
-        return Vector<2, T>(x - scalar, y - scalar);
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> operator*(T scalar) const {
-        return Vector<2, T>(x * scalar, y * scalar);
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> operator/(T scalar) const {
-        return Vector<2, T>(x / scalar, y / scalar);
-    }
-
-    A2D_MATH_INLINE
-    bool operator==(const Vector<2, T> &other) const {
-        return (x == other.x && y == other.y);
-    }
-
-    A2D_MATH_INLINE
-    bool operator==(T scalar) const {
-        return (x == scalar && y == scalar);
-    }
+    Vector<2, T> Perpendicular() const;
+    Vector<2, T> Min(T x, T y) const;
+    Vector<2, T> Min(const Vector<2, T> &other) const;
+    Vector<2, T> Max(T x, T y) const;
+    Vector<2, T> Max(const Vector<2, T> &other) const;
+    Vector<2, T> Lerp(T x, T y, double t) const;
+    Vector<2, T> Lerp(const Vector<2, T> &other, double t) const;
+    Vector<2, T> operator+(const Vector<2, T> &other) const;
+    Vector<2, T> operator-(const Vector<2, T> &other) const;
+    Vector<2, T> operator*(const Vector<2, T> &other) const;
+    Vector<2, T> operator/(const Vector<2, T> &other) const;
+    Vector<2, T> operator+(T scalar) const;
+    Vector<2, T> operator-(T scalar) const;
+    Vector<2, T> operator*(T scalar) const;
+    Vector<2, T> operator/(T scalar) const;
+    bool operator==(const Vector<2, T> &other) const;
+    bool operator==(T scalar) const;
 
     //
     // Non-const member functions
     //
 
 
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    Vector<2, T> &Normalize() {
-        T length = A2D_MATH_SQRT(x * x + y * y);
-        x /= length;
-        y /= length;
-        return *this;
-    }
+    // Unsafe for integer vectors
+    Vector<2, T> &Normalize();
+    Vector<2, T> &Floor();
+    Vector<2, T> &Ceil();
+    Vector<2, T> &Round();
 
-    A2D_MATH_INLINE
-    Vector<2, T> &Zero() {
-        x = 0;
-        y = 0;
-        return *this;
-    }
-
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    Vector<2, T> &Floor() {
-        x = A2D_MATH_FLOOR(x);
-        y = A2D_MATH_FLOOR(y);
-        return *this;
-    }
-
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    Vector<2, T> &Ceil() {
-        x = A2D_MATH_CEIL(x);
-        y = A2D_MATH_CEIL(y);
-        return *this;
-    }
-
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    Vector<2, T> &Round() {
-        x = A2D_MATH_ROUND(x);
-        y = A2D_MATH_ROUND(y);
-        return *this;
-    }
-
-
-    A2D_MATH_INLINE
-    Vector<2, T> &Set(T x, T y) {
-        this->x = x;
-        this->y = y;
-        return *this;
-    }
-
-    template<class U>
-    A2D_MATH_INLINE
-    Vector<2, T> &Set(const Vector<2, U> &other) {
-        x = (T)other.x;
-        y = (T)other.y;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> &Set(T scalar) {
-        x = scalar;
-        y = scalar;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> &operator-() {
-        x = -x;
-        y = -y;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> &operator=(const Vector<2, T> &other) {
-        x = other.x;
-        y = other.y;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> &operator+=(const Vector<2, T> &other) {
-        x += other.x;
-        y += other.y;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> &operator-=(const Vector<2, T> &other) {
-        x -= other.x;
-        y -= other.y;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> &operator*=(const Vector<2, T> &other) {
-        x *= other.x;
-        y *= other.y;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> &operator/=(const Vector<2, T> &other) {
-        x /= other.x;
-        y /= other.y;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> &operator=(T scalar) {
-        x = scalar;
-        y = scalar;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> &operator+=(T scalar) {
-        x += scalar;
-        y += scalar;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> &operator-=(T scalar) {
-        x -= scalar;
-        y -= scalar;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> &operator*=(T scalar) {
-        x *= scalar;
-        y *= scalar;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<2, T> &operator/=(T scalar) {
-        x /= scalar;
-        y /= scalar;
-        return *this;
-    }
+    Vector<2, T> &Zero();
+    Vector<2, T> &Set(T x, T y);
+    Vector<2, T> &Set(const Vector<2, T> &other);
+    Vector<2, T> &Set(T scalar);
+    Vector<2, T> &operator-();
+    Vector<2, T> &operator=(const Vector<2, T> &other);
+    Vector<2, T> &operator+=(const Vector<2, T> &other);
+    Vector<2, T> &operator-=(const Vector<2, T> &other);
+    Vector<2, T> &operator*=(const Vector<2, T> &other);
+    Vector<2, T> &operator/=(const Vector<2, T> &other);
+    Vector<2, T> &operator=(T scalar);
+    Vector<2, T> &operator+=(T scalar);
+    Vector<2, T> &operator-=(T scalar);
+    Vector<2, T> &operator*=(T scalar);
+    Vector<2, T> &operator/=(T scalar);
 };
 
 template<class T>
@@ -362,319 +108,75 @@ class Vector<3, T> {
 public:
     T x, y, z;
 
-    Vector() : x(0), y(0), z(0) {}
-    Vector(T scalar) : x(scalar), y(scalar), z(scalar) {}
-    Vector(T x, T y, T z) : x(x), y(y), z(z) {}
-    template<class U>
-    Vector(const Vector<3, U> &other) : x((T)other.x), y((T)other.y), z((T)other.z) {}
-    template<class U>
-    Vector(const Vector<2, U> &v2, T z) : x((T)v2.x), y((T)v2.y), z(z) {}
+    Vector();
+    Vector(T scalar);
+    Vector(T x, T y, T z);
+    Vector(const Vector<3, T> &other);
+    Vector(const Vector<2, T> &v2, T z);
 
     //
     // Const member functions
     //
 
-    A2D_MATH_INLINE
-    T Length() const {
-        return A2D_MATH_SQRT(x * x + y * y + z * z);
-    }
+    // Unsafe for integer vectors
+    T Length() const;
+    T Distance(const Vector<3, T> &other) const;
+    T Distance(T x, T y, T z) const;
+    T Dot(const Vector<3, T> &other) const;
+    T AngleCos(const Vector<3, T> &other) const;
+    T Angle(const Vector<3, T> &other) const;
+    Vector<3, T> Normalized() const;
 
-    A2D_MATH_INLINE
-    T LengthSquared() const {
-        return x * x + y * y + z * z;
-    }
+    T LengthSquared() const;
+    T DistanceSquared(const Vector<3, T> &other) const;
 
-    A2D_MATH_INLINE
-    T Distance(const Vector<3, T> &other) const {
-        T x_diff = x - other.x;
-        T y_diff = y - other.y;
-        T z_diff = z - other.z;
-        return A2D_MATH_SQRT(x_diff * x_diff + y_diff * y_diff + z_diff * z_diff);
-    }
+    Vector<3, T> Cross(const Vector<3, T> &other) const;
+    Vector<3, T> Min(const Vector<3, T> &other) const;
+    Vector<3, T> Max(const Vector<3, T> &other) const;
+    Vector<3, T> Lerp(const Vector<3, T> &other, double t) const;
 
-    A2D_MATH_INLINE
-    T Distance(T x, T y, T z) const {
-        T x_diff = this->x - x;
-        T y_diff = this->y - y;
-        T z_diff = this->z - z;
-        return A2D_MATH_SQRT(x_diff * x_diff + y_diff * y_diff + z_diff * z_diff);
-    }
+    Vector<3, T> operator+(const Vector<3, T> &other) const;
+    Vector<3, T> operator-(const Vector<3, T> &other) const;
+    Vector<3, T> operator*(const Vector<3, T> &other) const;
+    Vector<3, T> operator/(const Vector<3, T> &other) const;
 
-    A2D_MATH_INLINE
-    T DistanceSquared(const Vector<3, T> &other) const {
-        T x_diff = x - other.x;
-        T y_diff = y - other.y;
-        T z_diff = z - other.z;
-        return x_diff * x_diff + y_diff * y_diff + z_diff * z_diff;
-    }
+    Vector<3, T> operator+(T scalar) const;
+    Vector<3, T> operator-(T scalar) const;
+    Vector<3, T> operator*(T scalar) const;
+    Vector<3, T> operator/(T scalar) const;
 
-    A2D_MATH_INLINE
-    T Dot(const Vector<3, T> &other) const {
-        return x * other.x + y * other.y + z * other.z;
-    }
-
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    T AngleCos(const Vector<3, T> &other) const {
-        return (x * other.x + y * other.y + z * other.z) /
-               A2D_MATH_SQRT((x * x + y * y + z * z) * (other.x * other.x + other.y * other.y + other.z * other.z));
-    }
-
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    T Angle(const Vector<3, T> &other) const {
-        double cos = (x * other.x + y * other.y + z * other.z) /
-                     A2D_MATH_SQRT((x * x + y * y + z * z) * (other.x * other.x + other.y * other.y + other.z * other.z));
-        // This is because sometimes cos goes above 1 or below -1 because of lost precision
-        cos = cos < 1 ? cos : 1;
-        cos = cos > -1 ? cos : -1;
-        return (T) A2D_MATH_ACOS(cos);
-    }
-
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    Vector<3, T> Normalized() const {
-        T length = A2D_MATH_SQRT(x * x + y * y + z * z);
-        return Vector<3, T>(x / length, y / length, z / length);
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> Cross(const Vector<3, T> &other) const {
-        return Vector<3, T>(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x);
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> Min(const Vector<3, T> &other) const {
-        return Vector<3, T>(x > other.x ? other.x : x, y > other.y ? other.y : y, z > other.z ? other.z : z);
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> Max(const Vector<3, T> &other) const {
-        return Vector<3, T>(x > other.x ? x : other.x, y > other.y ? y : other.y, z > other.z ? z : other.z);
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> Lerp(const Vector<3, T> &other, double t) const {
-        return Vector<3, T>(x + (other.x - x) * t, y + (other.y - y) * t, z + (other.z - z) * t);
-    }
-
-
-    A2D_MATH_INLINE
-    Vector<3, T> operator+(const Vector<3, T> &other) const {
-        return Vector<3, T>(x + other.x, y + other.y, z + other.z);
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> operator-(const Vector<3, T> &other) const {
-        return Vector<3, T>(x - other.x, y - other.y, z - other.z);
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> operator*(const Vector<3, T> &other) const {
-        return Vector<3, T>(x * other.x, y * other.y, z * other.z);
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> operator/(const Vector<3, T> &other) const {
-        return Vector<3, T>(x / other.x, y / other.y, z / other.z);
-    }
-
-
-    A2D_MATH_INLINE
-    Vector<3, T> operator+(T scalar) const {
-        return Vector<3, T>(x + scalar, y + scalar, z + scalar);
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> operator-(T scalar) const {
-        return Vector<3, T>(x - scalar, y - scalar, z - scalar);
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> operator*(T scalar) const {
-        return Vector<3, T>(x * scalar, y * scalar, z * scalar);
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> operator/(T scalar) const {
-        return Vector<3, T>(x / scalar, y / scalar, z / scalar);
-    }
-
-
-    A2D_MATH_INLINE
-    bool operator==(const Vector<3, T> &other) const {
-        return (x == other.x && y == other.y && z == other.z);
-    }
-
-    A2D_MATH_INLINE
-    bool operator==(T scalar) const {
-        return (x == scalar && y == scalar && z == scalar);
-    }
+    bool operator==(const Vector<3, T> &other) const;
+    bool operator==(T scalar) const;
 
 //
 // Non-const member functions
 //
 
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    Vector<3, T> &Normalize() {
-        T length = A2D_MATH_SQRT(x * x + y * y + z * z);
-        x /= length;
-        y /= length;
-        z /= length;
-        return *this;
-    }
+    // Unsafe for integer vectors
+    Vector<3, T> &Normalize();
+    Vector<3, T> &Floor();
+    Vector<3, T> &Ceil();
+    Vector<3, T> &Round();
 
-    A2D_MATH_INLINE
-    Vector<3, T> &Zero() {
-        x = 0;
-        y = 0;
-        z = 0;
-        return *this;
-    }
+    Vector<3, T> &Zero();
+    Vector<3, T> &Set(T x, T y, T z);
+    Vector<3, T> &Set(const a2d::Vector<3, T> &other);
+    Vector<3, T> &Set(const a2d::Vector<2, T> &other, T z);
+    Vector<3, T> &Set(T scalar);
+    Vector<3, T> &operator-();
+    Vector<3, T> &operator=(const Vector<3, T> &other);
 
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    Vector<3, T> &Floor() {
-        x = A2D_MATH_FLOOR(x);
-        y = A2D_MATH_FLOOR(y);
-        z = A2D_MATH_FLOOR(z);
-        return *this;
-    }
+    Vector<3, T> &operator+=(const Vector<3, T> &other);
+    Vector<3, T> &operator-=(const Vector<3, T> &other);
+    Vector<3, T> &operator*=(const Vector<3, T> &other);
+    Vector<3, T> &operator/=(const Vector<3, T> &other);
 
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    Vector<3, T> &Ceil() {
-        x = A2D_MATH_CEIL(x);
-        y = A2D_MATH_CEIL(y);
-        z = A2D_MATH_CEIL(z);
-        return *this;
-    }
+    Vector<3, T> &operator=(T scalar);
 
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    Vector<3, T> &Round() {
-        x = A2D_MATH_ROUND(x);
-        y = A2D_MATH_ROUND(y);
-        z = A2D_MATH_ROUND(z);
-        return *this;
-    }
-
-
-    A2D_MATH_INLINE
-    Vector<3, T> &Set(T x, T y, T z) {
-        this->x = x;
-        this->y = y;
-        this->z = z;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> &Set(const a2d::Vector<2, T> &other, T z) {
-        this->x = other.x;
-        this->y = other.y;
-        this->z = z;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> &Set(T scalar) {
-        x = scalar;
-        y = scalar;
-        z = scalar;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> &operator-() {
-        x = -x;
-        y = -y;
-        z = -z;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> &operator=(const Vector<3, T> &other) {
-        x = other.x;
-        y = other.y;
-        z = other.z;
-        return *this;
-    }
-
-
-    A2D_MATH_INLINE
-    Vector<3, T> &operator+=(const Vector<3, T> &other) {
-        x += other.x;
-        y += other.y;
-        z += other.z;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> &operator-=(const Vector<3, T> &other) {
-        x -= other.x;
-        y -= other.y;
-        z -= other.z;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> &operator*=(const Vector<3, T> &other) {
-        x *= other.x;
-        y *= other.y;
-        z *= other.z;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> &operator/=(const Vector<3, T> &other) {
-        x /= other.x;
-        y /= other.y;
-        z /= other.z;
-        return *this;
-    }
-
-
-    A2D_MATH_INLINE
-    Vector<3, T> &operator=(T scalar) {
-        x = scalar;
-        y = scalar;
-        z = scalar;
-        return *this;
-    }
-
-
-    A2D_MATH_INLINE
-    Vector<3, T> &operator+=(T scalar) {
-        x += scalar;
-        y += scalar;
-        z += scalar;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> &operator-=(T scalar) {
-        x -= scalar;
-        y -= scalar;
-        z -= scalar;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> &operator*=(T scalar) {
-        x *= scalar;
-        y *= scalar;
-        z *= scalar;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<3, T> &operator/=(T scalar) {
-        x /= scalar;
-        y /= scalar;
-        z /= scalar;
-        return *this;
-    }
+    Vector<3, T> &operator+=(T scalar);
+    Vector<3, T> &operator-=(T scalar);
+    Vector<3, T> &operator*=(T scalar);
+    Vector<3, T> &operator/=(T scalar);
 };
 
 template<class T>
@@ -682,341 +184,75 @@ class Vector<4, T> {
 public:
     T x, y, z, w;
 
-    Vector() : x(0), y(0), z(0), w(0) {}
-    Vector(T scalar) : x(scalar), y(scalar), z(scalar), w(scalar) {}
-    Vector(T x, T y, T z, T w) : x(x), y(y), z(z), w(w) {}
-    template<class U>
-    Vector(const Vector<4, U> &other) : x((T)other.x), y((T)other.y), z((T)other.z), w((T)other.w) {}
-    template<class U>
-    Vector(const Vector<3, U> &v3, T w) : x((T)v3.x), y((T)v3.y), z((T)v3.z), w(w) {}
-    template<class U>
-    Vector(const Vector<2, U> &v2, T z, T w) : x((T)v2.x), y((T)v2.y), z(z), w(w) {}
+    Vector();
+    Vector(T scalar);
+    Vector(T x, T y, T z, T w);
+    Vector(const Vector<4, T> &other);
+    Vector(const Vector<3, T> &v3, T w);
+    Vector(const Vector<2, T> &v2, T z, T w);
 
 //
 // Const member functions
 //
 
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    T Length() const {
-        return A2D_MATH_SQRT(x * x + y * y + z * z + w * w);
-    }
+    // Unsafe for integer vectors
+    T Length() const;
+    T Distance(const Vector<4, T> &other) const;
+    T AngleCos(const Vector<4, T> &other) const;
+    T Angle(const Vector<4, T> &other) const;
+    Vector<4, T> Normalized() const;
 
-    A2D_MATH_INLINE
-    T LengthSquared() const {
-        return x * x + y * y + z * z + w * w;
-    }
+    T LengthSquared() const;
+    T DistanceSquared(const Vector<4, T> &other) const;
+    T Dot(const Vector<4, T> &other) const;
 
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    T Distance(const Vector<4, T> &other) const {
-        T x_diff = x - other.x;
-        T y_diff = y - other.y;
-        T z_diff = z - other.z;
-        T w_diff = w - other.w;
-        return A2D_MATH_SQRT(x_diff * x_diff + y_diff * y_diff + z_diff * z_diff + w_diff * w_diff);
-    }
+    Vector<4, T> Min(const Vector<4, T> &other) const;
+    Vector<4, T> Max(const Vector<4, T> &other) const;
+    Vector<4, T> Lerp(const Vector<4, T> &other, double t) const;
 
-    A2D_MATH_INLINE
-    T DistanceSquared(const Vector<4, T> &other) const {
-        T x_diff = x - other.x;
-        T y_diff = y - other.y;
-        T z_diff = z - other.z;
-        T w_diff = w - other.w;
-        return x_diff * x_diff + y_diff * y_diff + z_diff * z_diff + w_diff * w_diff;
-    }
+    Vector<4, T> operator+(const Vector<4, T> &other) const;
+    Vector<4, T> operator-(const Vector<4, T> &other) const;
+    Vector<4, T> operator*(const Vector<4, T> &other) const;
+    Vector<4, T> operator/(const Vector<4, T> &other) const;
 
-    A2D_MATH_INLINE
-    T Dot(const Vector<4, T> &other) const {
-        return x * other.x + y * other.y + z * other.z + w * other.w;
-    }
+    Vector<4, T> operator+(T scalar) const;
+    Vector<4, T> operator-(T scalar) const;
+    Vector<4, T> operator*(T scalar) const;
+    Vector<4, T> operator/(T scalar) const;
 
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    T AngleCos(const Vector<4, T> &other) const {
-        return (x * other.x + y * other.y + z * other.z + w * other.w) /
-               A2D_MATH_SQRT((x * x + y * y + z * z + w * w) * (other.x * other.x + other.y * other.y + other.z * other.z + other.w * other.w));
-    }
-
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    T Angle(const Vector<4, T> &other) const {
-        double cos = (x * other.x + y * other.y + z * other.z + w * other.w) /
-                     A2D_MATH_SQRT((x * x + y * y + z * z + w * w) * (other.x * other.x + other.y * other.y + other.z * other.z + other.w * other.w));
-        // This is because sometimes cos goes above 1 or below -1 because of lost precision
-        cos = cos < 1 ? cos : 1;
-        cos = cos > -1 ? cos : -1;
-        return (T) A2D_MATH_ACOS(cos);
-    }
-
-
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    Vector<4, T> Normalized() const {
-        T length = A2D_MATH_SQRT(x * x + y * y + z * z + w * w);
-        return Vector<4, T>(x / length, y / length, z / length, w / length);
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> Min(const Vector<4, T> &other) const {
-        return Vector<4, T>(x > other.x ? other.x : x, y > other.y ? other.y : y, z > other.z ? other.z : z, w > other.w ? other.w : w);
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> Max(const Vector<4, T> &other) const {
-        return Vector<4, T>(x > other.x ? x : other.x, y > other.y ? y : other.y, z > other.z ? z : other.z, w > other.w ? w : other.w);
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> Lerp(const Vector<4, T> &other, double t) const {
-        return Vector<4, T>(x + (other.x - x) * t, y + (other.y - y) * t, z + (other.z - z) * t, w + (other.w - w) * t);
-    }
-
-
-    A2D_MATH_INLINE
-    Vector<4, T> operator+(const Vector<4, T> &other) const {
-        return Vector<4, T>(x + other.x, y + other.y, z + other.z, w + other.w);
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> operator-(const Vector<4, T> &other) const {
-        return Vector<4, T>(x - other.x, y - other.y, z - other.z, w - other.w);
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> operator*(const Vector<4, T> &other) const {
-        return Vector<4, T>(x * other.x, y * other.y, z * other.z, w * other.w);
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> operator/(const Vector<4, T> &other) const {
-        return Vector<4, T>(x / other.x, y / other.y, z / other.z, w / other.w);
-    }
-
-
-    A2D_MATH_INLINE
-    Vector<4, T> operator+(T scalar) const {
-        return Vector<4, T>(x + scalar, y + scalar, z + scalar, w + scalar);
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> operator-(T scalar) const {
-        return Vector<4, T>(x - scalar, y - scalar, z - scalar, w - scalar);
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> operator*(T scalar) const {
-        return Vector<4, T>(x * scalar, y * scalar, z * scalar, w * scalar);
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> operator/(T scalar) const {
-        return Vector<4, T>(x / scalar, y / scalar, z / scalar, w / scalar);
-    }
-
-
-    A2D_MATH_INLINE
-    bool operator==(const Vector<4, T> &other) const {
-        return (x == other.x && y == other.y && z == other.z && w == other.w);
-    }
-
-    A2D_MATH_INLINE
-    bool operator==(T scalar) const {
-        return (x == scalar && y == scalar && z == scalar && w == scalar);
-    }
+    bool operator==(const Vector<4, T> &other) const;
+    bool operator==(T scalar) const;
 
 //
 // Non-const member functions
 //
 
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    Vector<4, T> &Normalize() {
-        T length = A2D_MATH_SQRT(x * x + y * y + z * z + w * w);
-        x /= length;
-        y /= length;
-        z /= length;
-        w /= length;
-        return *this;
-    }
+    // Unsafe for integer vectors
+    Vector<4, T> &Normalize();
+    Vector<4, T> &Floor();
+    Vector<4, T> &Ceil();
+    Vector<4, T> &Round();
 
-    A2D_MATH_INLINE
-    Vector<4, T> &Zero() {
-        x = 0;
-        y = 0;
-        z = 0;
-        w = 0;
-        return *this;
-    }
+    Vector<4, T> &Zero();
+    Vector<4, T> &Set(T x, T y, T z, T w);
+    Vector<4, T> &Set(const a2d::Vector<4, T> &other);
+    Vector<4, T> &Set(const a2d::Vector<3, T> &other, T w);
+    Vector<4, T> &Set(const a2d::Vector<2, T> &other, T z, T w);
+    Vector<4, T> &Set(T scalar);
+    Vector<4, T> &operator-();
+    Vector<4, T> &operator=(const Vector<4, T> &other);
 
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    Vector<4, T> &Floor() {
-        x = A2D_MATH_FLOOR(x);
-        y = A2D_MATH_FLOOR(y);
-        z = A2D_MATH_FLOOR(z);
-        w = A2D_MATH_FLOOR(w);
-        return *this;
-    }
+    Vector<4, T> &operator+=(const Vector<4, T> &other);
+    Vector<4, T> &operator-=(const Vector<4, T> &other);
+    Vector<4, T> &operator*=(const Vector<4, T> &other);
+    Vector<4, T> &operator/=(const Vector<4, T> &other);
 
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    Vector<4, T> &Ceil() {
-        x = A2D_MATH_CEIL(x);
-        y = A2D_MATH_CEIL(y);
-        z = A2D_MATH_CEIL(z);
-        w = A2D_MATH_CEIL(w);
-        return *this;
-    }
+    Vector<4, T> &operator=(T scalar);
 
-    A2D_MATH_ENABLE_IF_FLOATING_POINT
-    A2D_MATH_INLINE
-    Vector<4, T> &Round() {
-        x = A2D_MATH_ROUND(x);
-        y = A2D_MATH_ROUND(y);
-        z = A2D_MATH_ROUND(z);
-        w = A2D_MATH_ROUND(w);
-        return *this;
-    }
-
-
-    A2D_MATH_INLINE
-    Vector<4, T> &Set(T x, T y, T z, T w) {
-        this->x = x;
-        this->y = y;
-        this->z = z;
-        this->w = w;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> &Set(const a2d::Vector<3, T> &v3, T w) {
-        this->x = v3.x;
-        this->y = v3.y;
-        this->z = v3.z;
-        this->w = w;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> &Set(const a2d::Vector<2, T> &v2, T z, T w) {
-        this->x = v2.x;
-        this->y = v2.y;
-        this->z = z;
-        this->w = w;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> &Set(T scalar) {
-        x = scalar;
-        y = scalar;
-        z = scalar;
-        w = scalar;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> &operator-() {
-        x = -x;
-        y = -y;
-        z = -z;
-        w = -w;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> &operator=(const Vector<4, T> &other) {
-        x = other.x;
-        y = other.y;
-        z = other.z;
-        w = other.w;
-        return *this;
-    }
-
-
-    A2D_MATH_INLINE
-    Vector<4, T> &operator+=(const Vector<4, T> &other) {
-        x += other.x;
-        y += other.y;
-        z += other.z;
-        w += other.w;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> &operator-=(const Vector<4, T> &other) {
-        x -= other.x;
-        y -= other.y;
-        z -= other.z;
-        w -= other.w;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> &operator*=(const Vector<4, T> &other) {
-        x *= other.x;
-        y *= other.y;
-        z *= other.z;
-        w *= other.w;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> &operator/=(const Vector<4, T> &other) {
-        x /= other.x;
-        y /= other.y;
-        z /= other.z;
-        w /= other.w;
-        return *this;
-    }
-
-
-    A2D_MATH_INLINE
-    Vector<4, T> &operator=(T scalar) {
-        x = scalar;
-        y = scalar;
-        z = scalar;
-        w = scalar;
-        return *this;
-    }
-
-
-    A2D_MATH_INLINE
-    Vector<4, T> &operator+=(T scalar) {
-        x += scalar;
-        y += scalar;
-        z += scalar;
-        w += scalar;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> &operator-=(T scalar) {
-        x -= scalar;
-        y -= scalar;
-        z -= scalar;
-        w -= scalar;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> &operator*=(T scalar) {
-        x *= scalar;
-        y *= scalar;
-        z *= scalar;
-        w *= scalar;
-        return *this;
-    }
-
-    A2D_MATH_INLINE
-    Vector<4, T> &operator/=(T scalar) {
-        x /= scalar;
-        y /= scalar;
-        z /= scalar;
-        w /= scalar;
-        return *this;
-    }
+    Vector<4, T> &operator+=(T scalar);
+    Vector<4, T> &operator-=(T scalar);
+    Vector<4, T> &operator*=(T scalar);
+    Vector<4, T> &operator/=(T scalar);
 };
 
 } //namespace a2d

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.selya.justgame">
+          package="%A2D_APP_IDENTIFIER%">
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="JustGame"
-        android:supportsRtl="true">
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="%A2D_PROJECT_NAME%"
+            android:supportsRtl="true">
         <activity android:name="com.selya.a2d.MainActivity"
-            android:theme="@style/NoActionBarTheme"
-            android:configChanges="orientation|screenSize">
+                  android:theme="@style/NoActionBarTheme"
+                  android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

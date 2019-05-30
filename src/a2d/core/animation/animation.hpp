@@ -53,12 +53,14 @@ public:
 
     class Frames : public Animation {
         std::vector<intrusive_ptr<TextureRegion>> frames;
+        int current_frame_index = 0;
 
     public:
         Frames(const std::vector<intrusive_ptr<TextureRegion>> &frames);
 
         void Start() override;
         void Step(float time) override;
+        int GetCurrentFrameIndex();
     };
 };
 
